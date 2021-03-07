@@ -1,0 +1,10 @@
+Traceback (most recent call last):
+  File "C:\Program Files\PsychoPy3\lib\site-packages\psychopy\app\builder\builder.py", line 1183, in compileScript
+    self.generateScript(experimentPath=fullPath, exp=self.exp)
+  File "C:\Program Files\PsychoPy3\lib\site-packages\psychopy\scripts\psyexpCompile.py", line 73, in generateScript
+    compileScript(infile=exp, version=None, outfile=filename)
+  File "C:\Program Files\PsychoPy3\lib\site-packages\psychopy\scripts\psyexpCompile.py", line 242, in compileScript
+    _makeTarget(thisExp, outfile, targetOutput)
+  File "C:\Program Files\PsychoPy3\lib\site-packages\psychopy\scripts\psyexpCompile.py", line 232, in _makeTarget
+    with io.open(eval(scripts), 'w', encoding='utf-8-sig') as f:
+PermissionError: [Errno 13] Permission denied: 'untitled.py'
