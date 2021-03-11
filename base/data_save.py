@@ -21,14 +21,19 @@ class DataSaver:
                                  "time_from_experiment_start",
                                  ]  # TODO: заполнить в каком порядке сохранять данные + добавить НОМЕР СОЧЕТАНИЯ
 
-        self._task_trial: int = 0
-        self._probe_trial: int = 0
-
-    def new_task(self):
+        self._task: Optional[str] = None
         self._task_trial: int = 0
 
-    def new_probe(self):
+        self._probe: Optional[str] = None
         self._probe_trial: int = 0
+
+    def new_task(self, task_name: str):
+        self._task_trial: int = 0
+        self._task = task_name
+
+    def new_probe(self, probe_name: str):
+        self._probe_trial: int = 0
+        self._probe = probe_name
 
     def save_probe_practice(self,
                             probe_name: str,
