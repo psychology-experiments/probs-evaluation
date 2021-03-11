@@ -196,6 +196,9 @@ class WisconsinTest:  # SwitchTask
         return self._is_finished_by_trial() or self._is_finished_by_rule_change()
 
     def next_task(self) -> None:
+        if self._trial_correctness is None and not self.is_task_finished():
+            raise ValueError("WisconsinTest must be used in next sequence (is_correct, next_task). But it was not.")
+
         if self.is_task_finished():
             self._prepare_for_new_task()
             self._trials = 0
@@ -204,9 +207,7 @@ class WisconsinTest:  # SwitchTask
         if self._first_trial_after_rule_change:
             self._first_trial_after_rule_change = False
 
-        if self._trial_correctness is None:
-            raise ValueError("WisconsinTest must be used in next sequence (is_correct, next_task). But it was not.")
-        elif self._trial_correctness:
+        if self._trial_correctness:
             self.streak += 1
         else:
             self.streak = 0
