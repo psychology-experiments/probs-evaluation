@@ -19,6 +19,10 @@ class TestUpdateTask:
                     possible_sequences=(3, 4),
                     blocks_before_task_finished=5)
 
+    @pytest.fixture
+    def default_task(self, task_settings):
+        return task_presenters.UpdateTask(**task_settings)
+
     @staticmethod
     def iterate_over_all_stimuli(task) -> Tuple[str, str]:
         while True:
