@@ -93,8 +93,8 @@ class TestUpdateTask:
                                                        f"but was {trial}"
 
     @pytest.mark.parametrize("stimulus", ["example", "word"])
-    def test_trial_stimuli_change(self, stimulus, task_settings):
-        task = task_presenters.UpdateTask(**task_settings)
+    def test_trial_stimuli_change(self, stimulus, default_task):
+        task = default_task
 
         previous_stimulus = None
         results = []
@@ -112,8 +112,8 @@ class TestUpdateTask:
         assert all(results), message
 
     @pytest.mark.parametrize("method_name", ["is_answer_time", "is_task_finished"])
-    def test_is_method_result_does_not_change_after_n_calls(self, method_name, task_settings):
-        task = task_presenters.UpdateTask(**task_settings)
+    def test_is_method_result_does_not_change_after_n_calls(self, method_name, default_task):
+        task = default_task
         method = getattr(task, method_name)
         trials = self.TRIALS_TO_CONCLUDE
 
@@ -126,8 +126,8 @@ class TestUpdateTask:
         side_effect_error_message = f"UpdateTask's {method_name} return different result after several calls"
         assert all(result), side_effect_error_message
 
-    def test_len(self, task_settings):
-        task = task_presenters.UpdateTask(**task_settings)
+    def test_len(self, default_task):
+        task = default_task
         trials = self.TRIALS_TO_CONCLUDE * 5
 
         all_tasks = len(task._all_examples)
@@ -155,16 +155,16 @@ class TestUpdateTask:
         assert not error, error_message
 
     @pytest.mark.parametrize("method_name", ["is_answer_time", "is_task_finished"])
-    def test_first_trial_of_is_method_is_false(self, method_name, task_settings):
-        task = task_presenters.UpdateTask(**task_settings)
+    def test_first_trial_of_is_method_is_false(self, method_name, default_task):
+        task = default_task
         method = getattr(task, method_name)
         is_answer_time = method()
 
         message = f"UpdateTask' {method_name} return True on the first trial"
         assert not is_answer_time, message
 
-    def test_is_there_answer_time(self, task_settings):
-        task = task_presenters.UpdateTask(**task_settings)
+    def test_is_there_answer_time(self, default_task):
+        task = default_task
         trials = self.TRIALS_TO_CONCLUDE
 
         was_answer_time = False
@@ -333,8 +333,8 @@ class TestUpdateTask:
 
         assert all(finish_only_on_answers), incongruent_error_message
 
-    def test_task_finish_and_reset(self, task_settings):
-        task = task_presenters.UpdateTask(**task_settings)
+    def test_task_finish_and_reset(self, default_task):
+        task = default_task
         repeat = 7
 
         prev, cur = None, task.is_answer_time()
@@ -355,8 +355,8 @@ class TestUpdateTask:
                         f"but get {[prev, cur]}"
         assert not incorrect_order, error_message
 
-    def test_word_and_equation_do_not_change_at_answer_time(self, task_settings):
-        task = task_presenters.UpdateTask(**task_settings)
+    def test_word_and_equation_do_not_change_at_answer_time(self, default_task):
+        task = default_task
 
         is_changed = False
 
@@ -387,8 +387,8 @@ class TestUpdateTask:
                         f"Equation should be {previous_equation}, but was {answer_equation}"
         assert not is_changed, error_message
 
-    def test_word_and_equation_do_not_change_when_task_finished(self, task_settings):
-        task = task_presenters.UpdateTask(**task_settings)
+    def test_word_and_equation_do_not_change_when_task_finished(self, default_task):
+        task = default_task
         trials = self.TRIALS_TO_CONCLUDE * 5
 
         is_changed = False
