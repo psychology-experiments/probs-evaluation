@@ -40,58 +40,6 @@ class TestUpdateTask:
         with pytest.raises(ValueError, match=r"Sequence of groups with length less than one are prohibited"):
             task_presenters.UpdateTask(**task_settings)
 
-    def test_all_steps_of_default_use_yield_correct_result(self, task_settings):  # TODO: возможно излишне так проверять
-        blocks = 3
-        sequence_len = 3
-        one_block_trials = sequence_len + 1
-
-        task_settings["blocks_before_task_finished"] = blocks
-        task_settings["possible_sequences"] = (sequence_len,)
-        task = task_presenters.UpdateTask(**task_settings)
-
-        trial = 1
-        answers = 0
-        word = None
-        equation = None
-
-        assert task.word is None
-        assert task.example is None
-
-        task.next_task()
-        while not task.is_task_finished():
-            if trial % one_block_trials != 0:
-                assert task.word != word, f"UpdateTask word did not change on trial {trial}. " \
-                                          f"Previous word {word}, current {task.word}"
-
-                assert task.example != equation, f"UpdateTask equation did not change on trial {trial}. " \
-                                                 f"Previous equation {equation}, current {task.example}"
-
-                assert not task.is_answer_time(), f"UpdateTask should have answer_time on every 4 trial, " \
-                                                  f"but had at {trial}"
-                assert not task.is_task_finished(), f"UpdateTask should not be finished at {trial} trial"
-
-            if trial % one_block_trials == 0:
-                assert task.is_answer_time(), f"UpdateTask did not had answer_time at {trial} trial"
-                assert task.word == word, f"word should not be changed at answer"
-                assert task.example == equation, f"equation should not be changed at answer"
-                answers += 1
-
-            word = task.word
-            equation = task.example
-
-            task.next_task()
-            trial += 1
-
-            if trial % (one_block_trials * blocks + 1) == 0:
-                assert task.is_task_finished(), f"UpdateTask must be finished at {one_block_trials * blocks}, " \
-                                                f"but it is not"
-                assert task.word == word, f"word should not be changed at final"
-                assert task.example == equation, f"equation should not be changed at final"
-
-        assert answers == blocks
-        assert trial == one_block_trials * blocks + 1, f"For UpdateTask should be {one_block_trials * blocks} " \
-                                                       f"but was {trial}"
-
     @pytest.mark.parametrize("stimulus", ["example", "word"])
     def test_trial_stimuli_change(self, stimulus, default_task):
         task = default_task
@@ -419,6 +367,58 @@ class TestUpdateTask:
                         f"Word should be {previous_word}, but was {answer_word}\n" \
                         f"Equation should be {previous_equation}, but was {answer_equation}"
         assert not is_changed, error_message
+
+    def test_all_steps_of_default_use_yield_correct_result(self, task_settings):  # TODO: возможно излишне так проверять
+        blocks = 3
+        sequence_len = 3
+        one_block_trials = sequence_len + 1
+
+        task_settings["blocks_before_task_finished"] = blocks
+        task_settings["possible_sequences"] = (sequence_len,)
+        task = task_presenters.UpdateTask(**task_settings)
+
+        trial = 1
+        answers = 0
+        word = None
+        equation = None
+
+        assert task.word is None
+        assert task.example is None
+
+        task.next_task()
+        while not task.is_task_finished():
+            if trial % one_block_trials != 0:
+                assert task.word != word, f"UpdateTask word did not change on trial {trial}. " \
+                                          f"Previous word {word}, current {task.word}"
+
+                assert task.example != equation, f"UpdateTask equation did not change on trial {trial}. " \
+                                                 f"Previous equation {equation}, current {task.example}"
+
+                assert not task.is_answer_time(), f"UpdateTask should have answer_time on every 4 trial, " \
+                                                  f"but had at {trial}"
+                assert not task.is_task_finished(), f"UpdateTask should not be finished at {trial} trial"
+
+            if trial % one_block_trials == 0:
+                assert task.is_answer_time(), f"UpdateTask did not had answer_time at {trial} trial"
+                assert task.word == word, f"word should not be changed at answer"
+                assert task.example == equation, f"equation should not be changed at answer"
+                answers += 1
+
+            word = task.word
+            equation = task.example
+
+            task.next_task()
+            trial += 1
+
+            if trial % (one_block_trials * blocks + 1) == 0:
+                assert task.is_task_finished(), f"UpdateTask must be finished at {one_block_trials * blocks}, " \
+                                                f"but it is not"
+                assert task.word == word, f"word should not be changed at final"
+                assert task.example == equation, f"equation should not be changed at final"
+
+        assert answers == blocks
+        assert trial == one_block_trials * blocks + 1, f"For UpdateTask should be {one_block_trials * blocks} " \
+                                                       f"but was {trial}"
 
 
 class TestInhibitionTask:
