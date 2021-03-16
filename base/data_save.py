@@ -31,9 +31,8 @@ class DataSaver:
         self._task_trial: int = 0
         self._task = task_name
 
-    def new_probe(self, probe_name: str):
+    def new_probe(self):
         self._probe_trial: int = 0
-        self._probe = probe_name
 
     def save_probe_practice(self,
                             probe_name: str,
