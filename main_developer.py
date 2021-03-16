@@ -1,4 +1,5 @@
 import collections
+import configparser
 import itertools
 
 from psychopy import core, event, visual
@@ -6,14 +7,26 @@ from psychopy.hardware import keyboard
 
 from base import data_save, experiment_organisation_logic, experiment_organisation_stimuli, probe_views, task_views
 
-FULL_SCREEN = True
-SKIP_INSTRUCTION = True
-SKIP_PROBE_TRAINING = True
-SKIP_TASK_TRAINING = True
-SKIP_EXPERIMENTAL_TASK = False
-TEST = True
+TEST = False
+
+SETTING_FILE = 'production.ini' if not TEST else 'development.ini'
+SETTINGS_FP = f"configurations/{SETTING_FILE}"
+SETTINGS_PARSER = configparser.ConfigParser()
+SETTINGS_PARSER.read(SETTINGS_FP, encoding="UTF-8")
+SETTINGS = SETTINGS_PARSER["DEFAULT"]
+
+FULL_SCREEN = SETTINGS.getboolean("full_screen")
+SKIP_INSTRUCTION = SETTINGS.getboolean("skip_instruction")
+SKIP_PROBE_TRAINING = SETTINGS.getboolean("skip_probe_training")
+SKIP_TASK_TRAINING = SETTINGS.getboolean("skip_task_training")
+SKIP_EXPERIMENTAL_TASK = SETTINGS.getboolean("skip_experimental_task")
+
 TRAINING_TRAILS_QTY = dict(Обновление=1, Переключение=10, Торможение=2)
-EXPERIMENTAL_TASK_ONE_SOLUTION = dict(Обновление=5, Переключение=dict(Проб=144, Правил=8), Торможение=5)
+EXPERIMENTAL_TASK_ONE_SOLUTION_SETTINGS = dict(Обновление=dict(blocks_finishing_task=5),
+                                               Переключение=dict(trials_finishing_task=72,
+                                                                 rule_changes_finishing_task=4),
+                                               Торможение=dict(trials_finishing_task=5),
+                                               )
 
 FRAME_TOLERANCE = 0.001  # how close to onset before 'same' frame TODO: проверить что используется правильно
 PROBE_START = 0.1
@@ -47,11 +60,11 @@ def finish_experiment(window: visual.Window):
     PsychoPy выдаёт ошибки при завершении скрипта, которые никак не мешают исполнению, но мешают отладке.
     Данный код попытка их игнорировать
     """
-    try:
+    from contextlib import suppress
+
+    with suppress(Exception):
         window.close()
         core.quit()
-    except ImportError:
-        pass
 
 
 win = visual.Window(size=(1200, 800), color="white", units="pix", fullscr=FULL_SCREEN)
@@ -144,25 +157,22 @@ training_tasks = collections.OrderedDict((
 task_update = task_views.UpdateTaskView(window=win,
                                         stimuli_fp="text/Operation span task experimental.csv",
                                         word_show_time=0.750,
-                                        blocks_finishing_task=EXPERIMENTAL_TASK_ONE_SOLUTION["Обновление"],
                                         possible_task_sequences=(3, 4),
                                         position=EXPERIMENTAL_TASK_POSITION,
+                                        **EXPERIMENTAL_TASK_ONE_SOLUTION_SETTINGS["Обновление"]
                                         )
 
 task_switch = task_views.WisconsinTestTaskView(window=win,
                                                image_path_dir="images/Висконсинский тест",
                                                mouse=mouse,
                                                max_streak=8,
-                                               trials_finishing_task=
-                                               EXPERIMENTAL_TASK_ONE_SOLUTION["Переключение"]["Проб"],
-                                               rule_changes_finishing_task=
-                                               EXPERIMENTAL_TASK_ONE_SOLUTION["Переключение"]["Правил"],
-                                               position=EXPERIMENTAL_TASK_POSITION)
+                                               position=EXPERIMENTAL_TASK_POSITION,
+                                               **EXPERIMENTAL_TASK_ONE_SOLUTION_SETTINGS["Переключение"])
 
 task_inhibition = task_views.InhibitionTaskView(window=win,
                                                 stimuli_fp="images/Tower of London",
-                                                trials_finishing_task=EXPERIMENTAL_TASK_ONE_SOLUTION["Торможение"],
-                                                position=EXPERIMENTAL_TASK_POSITION)
+                                                position=EXPERIMENTAL_TASK_POSITION,
+                                                **EXPERIMENTAL_TASK_ONE_SOLUTION_SETTINGS["Торможение"])
 
 experimental_tasks = collections.OrderedDict((
     ("Обновление", task_update),
@@ -243,7 +253,7 @@ for task_info, probe_info in experiment_sequence:
 
     # тренировка с задачами
     if task_info.instruction is not None and not SKIP_TASK_TRAINING:
-        data_saver.new_task()
+        data_saver.new_task(task_info.name)
         training_task = training_tasks[task_info.name]
 
         change_mouse_visibility(mouse, task_info.name, training_task)
@@ -293,7 +303,7 @@ for task_info, probe_info in experiment_sequence:
     organisation_message.show(LAST_PREPARATION_MESSAGE)
 
     # часть с экспериментальными заданиями
-    data_saver.new_task()
+    data_saver.new_task(task_info.name)
     data_saver.new_probe()
 
     task = experimental_tasks[task_info.name]
