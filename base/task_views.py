@@ -157,7 +157,7 @@ class UpdateTaskView(AbstractTaskView):
 
     def next_task(self):
         self._is_next_task = False
-        self._presenter.next_task()
+        self._presenter.next_subtask()
 
         if not self._presenter.is_answer_time():
             self._word_stimuli.text = self._presenter.word

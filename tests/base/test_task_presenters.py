@@ -2,7 +2,7 @@ import itertools
 from collections import Counter
 from random import choice, choices, randrange
 from pathlib import Path
-from typing import Dict, Tuple, Union
+from typing import Dict, Iterator, List, Tuple, Union
 
 import pytest
 
@@ -11,28 +11,41 @@ from base import task_presenters
 
 class TestUpdateTask:
     TRIALS_TO_CONCLUDE = 15
+    DEFAULT_STIMULI_FP = "test_files/tables/test_tasks.csv"
     DEFAULT_STIMULI_SHORT_FP = "test_files/tables/test_tasks_short.csv"
 
     @pytest.fixture
+    def default_stimuli_quantity(self) -> int:
+        with open(self.DEFAULT_STIMULI_FP, mode="r") as fin:
+            fin.readline()  # skip header
+            stimuli = len(fin.readlines())
+
+        return stimuli
+
+    @pytest.fixture
     def task_settings(self) -> Dict[str, Union[str, Tuple[int, ...], int]]:
-        return dict(stimuli_fp="test_files/tables/test_tasks.csv",
+        return dict(stimuli_fp=self.DEFAULT_STIMULI_FP,
                     possible_sequences=(3, 4),
                     blocks_before_task_finished=5)
 
     @pytest.fixture
-    def default_task(self, task_settings):
+    def default_task(self, task_settings: dict) -> task_presenters.UpdateTask:
         return task_presenters.UpdateTask(**task_settings)
 
     @staticmethod
-    def iterate_over_all_stimuli(task) -> Tuple[str, str]:
+    def iterate_over_all_stimuli(task: task_presenters.UpdateTask) -> Iterator[Tuple[str, str]]:
+        """Implemented this way to ensure that even if is_task_finished work incorrectly other test do not crash"""
         while True:
             try:
-                task.next_task()
+                task.next_subtask()
 
                 if not task.is_answer_time() and not task.is_task_finished():
                     yield task.example, task.word
+
+                if task.is_task_finished():
+                    task.new_task()
             except StopIteration:
-                return
+                break
 
     @pytest.mark.parametrize("sequences", [(0,), (3, 4, -1), (5, 7, 9, 0)])
     def test_error_on_zero_and_negative_sequence(self, sequences: Tuple[int, ...], task_settings):
@@ -48,7 +61,7 @@ class TestUpdateTask:
         results = []
         trials = 0
         while not task.is_task_finished():
-            task.next_task()
+            task.next_subtask()
 
             if not task.is_answer_time() and not task.is_task_finished():
                 current_stimulus = getattr(task, stimulus)
@@ -60,42 +73,53 @@ class TestUpdateTask:
         assert all(results), message
 
     @pytest.mark.parametrize("method_name", ["is_answer_time", "is_task_finished"])
-    def test_is_method_result_does_not_change_after_n_calls(self, method_name, default_task):
+    def test_is_methods_result_does_not_change_after_n_calls(self, method_name, default_task):
         task = default_task
         method = getattr(task, method_name)
-        trials = self.TRIALS_TO_CONCLUDE
 
         result = []
-        for trial in range(trials):
-            task.next_task()
+        while not task.is_task_finished():
+            task.next_subtask()
             first_result = method()
             result.append(all(method() == first_result for _ in range(randrange(2, 10))))
 
         side_effect_error_message = f"UpdateTask's {method_name} return different result after several calls"
         assert all(result), side_effect_error_message
 
-    def test_len(self, default_task):
+    def test_len_of_new_task(self, default_task, default_stimuli_quantity):
+        task = default_task
+
+        all_examples_read = len(task._all_examples)
+        all_words_read = len(task._all_words)
+
+        wrong_load_of_stimuli_message = f"UpdateTask get different quantity of words ({all_words_read})" \
+                                        f" and equations ({all_examples_read})"
+        assert all_words_read == all_examples_read, wrong_load_of_stimuli_message
+
+        current_tasks_number = len(task)
+        wrong_qty_of_stimuli = f"UpdateTask has different quantity of read equation ({all_examples_read})," \
+                               f"len method result ({current_tasks_number}) and real number of stimuli " \
+                               f"({default_stimuli_quantity})"
+        assert current_tasks_number == all_examples_read == default_stimuli_quantity, wrong_qty_of_stimuli
+
+    def test_len(self, default_task, default_stimuli_quantity):
         task = default_task
         trials = self.TRIALS_TO_CONCLUDE * 5
 
-        all_tasks = len(task._all_examples)
-        current_tasks = len(task)
-        assert current_tasks == all_tasks, f"UpdateTask have less tasks {current_tasks}, than should have {all_tasks}" \
-                                           f" before start"
         error = False
         error_message = "Everything work"
         for _ in range(trials):
-            task.next_task()
+            task.next_subtask()
 
             if not task.is_answer_time() and not task.is_task_finished():
-                if current_tasks - 1 != len(task):
+                if current_tasks_number - 1 != len(task):
                     error = True
-                    error_message = f"UpdateTask changed did not change length. It should be {current_tasks - 1}, " \
-                                    f"but was {len(task)}"
+                    error_message = f"UpdateTask changed did not change length. It should be " \
+                                    f"{current_tasks_number - 1}, but was {len(task)}"
                     break
-                current_tasks -= 1
+                current_tasks_number -= 1
             else:
-                if current_tasks != len(task):
+                if current_tasks_number != len(task):
                     error = True
                     error_message = "UpdateTask length changed on answer or finish"
                     break
@@ -117,7 +141,7 @@ class TestUpdateTask:
 
         was_answer_time = False
         for trial in range(trials):
-            task.next_task()
+            task.next_subtask()
 
             if task.is_answer_time():
                 was_answer_time = True
@@ -140,7 +164,7 @@ class TestUpdateTask:
         sequence_length_before_answer = set()
         all_sequences_used = False
         for trial in range(trials):
-            task.next_task()
+            task.next_subtask()
 
             if task.is_answer_time():
                 sequence_length_before_answer.add(qty_before_answer)
@@ -164,7 +188,7 @@ class TestUpdateTask:
         qty_before_answer = 0
         sequences_are_in_possible_sequences = []
         for trial in range(trials):
-            task.next_task()
+            task.next_subtask()
 
             if task.is_answer_time():
                 correctness_of_sequence_length = qty_before_answer in possible_sequences
@@ -262,7 +286,7 @@ class TestUpdateTask:
         answers = []
         result = []
         for trial in range(trials):
-            task.next_task()
+            task.next_subtask()
             answers.append(task.is_answer_time())
             result.append(task.is_task_finished())
 
@@ -289,7 +313,7 @@ class TestUpdateTask:
         incorrect_order = False
         for _ in range(repeat):
             while not task.is_task_finished():
-                task.next_task()
+                task.next_subtask()
 
                 prev = cur
                 cur = task.is_answer_time()
@@ -313,7 +337,7 @@ class TestUpdateTask:
         previous_equation = None
         answer_equation = None
         while not task.is_task_finished():
-            task.next_task()
+            task.next_subtask()
 
             if task.is_answer_time():
                 if previous_word != task.word:
@@ -346,7 +370,7 @@ class TestUpdateTask:
         previous_equation = None
         answer_equation = None
         for _ in range(trials):
-            task.next_task()
+            task.next_subtask()
 
             if task.is_task_finished():
                 if previous_word != task.word:
@@ -385,7 +409,7 @@ class TestUpdateTask:
         assert task.word is None
         assert task.example is None
 
-        task.next_task()
+        task.next_subtask()
         while not task.is_task_finished():
             if trial % one_block_trials != 0:
                 assert task.word != word, f"UpdateTask word did not change on trial {trial}. " \
@@ -407,7 +431,7 @@ class TestUpdateTask:
             word = task.word
             equation = task.example
 
-            task.next_task()
+            task.next_subtask()
             trial += 1
 
             if trial % (one_block_trials * blocks + 1) == 0:

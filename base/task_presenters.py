@@ -15,7 +15,11 @@ class Task(ABC):
         pass
 
     @abstractmethod
-    def next_task(self):
+    def next_subtask(self):
+        pass
+
+    @abstractmethod
+    def new_task(self):
         pass
 
 
@@ -73,7 +77,7 @@ class UpdateTask(Task):
     def is_task_finished(self) -> bool:
         return self._blocks_before_task_finished == self._blocks_finished
 
-    def next_task(self) -> None:
+    def next_subtask(self) -> None:
         if self.is_task_finished():
             self._blocks_finished = 0
 
@@ -87,8 +91,11 @@ class UpdateTask(Task):
             self.word = next(self._words_sequence)
             self._length -= 1
 
+    def new_task(self):
+        pass  # TODO: add error on unfinished task call
 
-class InhibitionTask:
+
+class InhibitionTask(Task):
     def __init__(self,
                  fp: str,
                  trials_before_task_finished: int):
@@ -135,7 +142,7 @@ class WisconsinCard:
         return self._features[rule]
 
 
-class WisconsinTest:  # SwitchTask
+class WisconsinTest(Task):  # SwitchTask
     def __init__(self, max_streak: int, max_trials: Optional[int], max_rules_changed: Optional[int]):
         self._max_streak: int = max_streak
         self._rules: Tuple[str, ...] = ("color", "shape", "quantity")
