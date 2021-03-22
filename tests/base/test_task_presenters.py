@@ -53,6 +53,10 @@ class TestUpdateTask:
         with pytest.raises(ValueError, match=r"Sequence of groups with length less than one are prohibited"):
             task_presenters.UpdateTask(**task_settings)
 
+    def test_error_on_call_to_new_task_for_unfinished(self, default_task):
+        with pytest.raises(RuntimeError, match="Call to new task is prohibited for unfinished task"):
+            default_task.new_task()
+
     @pytest.mark.parametrize("stimulus", ["example", "word"])
     def test_trial_stimuli_change(self, stimulus, default_task):
         task = default_task
@@ -329,7 +333,6 @@ class TestUpdateTask:
         prev, cur = None, task.is_answer_time()
         incorrect_order = False
         for _ in range(repeat):
-            task.new_task()
             while not task.is_task_finished():
                 task.next_subtask()
 
@@ -339,6 +342,8 @@ class TestUpdateTask:
             if not prev and cur:
                 incorrect_order = True
                 break
+
+            task.new_task()
 
         error_message = f"UpdateTask should finish after answer time, i.e. is_answer_time for " \
                         f"previous and current trial should be [True, False]" \
