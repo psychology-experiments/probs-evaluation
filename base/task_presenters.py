@@ -71,9 +71,6 @@ class UpdateTask(Task):
     def is_answer_time(self):
         return self._before_answer == 0
 
-    def _is_next_answer_time(self):
-        return self._before_answer == 1
-
     def is_task_finished(self) -> bool:
         return self._blocks_before_task_finished == self._blocks_finished
 

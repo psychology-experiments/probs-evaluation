@@ -370,13 +370,13 @@ for task_info, probe_info in experiment_sequence:
 
             task.draw()
 
-            if task.is_trial_finished():
-                # TODO: Для висконсинского теста неправильно сохраняет нажатия (если после выбора пощёлкать)
-                task.next_task()
-
             if task.is_task_finished():
                 task_finished = True
                 break
+
+            if task.is_trial_finished():
+                # TODO: Для висконсинского теста неправильно сохраняет нажатия (если после выбора пощёлкать)
+                task.next_task()
 
             win.flip()
 
