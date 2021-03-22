@@ -7,7 +7,7 @@ from psychopy.hardware import keyboard
 
 from base import data_save, experiment_organisation_logic, experiment_organisation_stimuli, probe_views, task_views
 
-TEST = False
+TEST = True
 
 SETTING_FILE = 'production.ini' if not TEST else 'development.ini'
 SETTINGS_FP = f"configurations/{SETTING_FILE}"
@@ -23,7 +23,7 @@ SKIP_EXPERIMENTAL_TASK = SETTINGS.getboolean("skip_experimental_task")
 
 TRAINING_TRAILS_QTY = dict(Обновление=1, Переключение=10, Торможение=2)
 EXPERIMENTAL_TASK_ONE_SOLUTION_SETTINGS = dict(Обновление=dict(blocks_finishing_task=5),
-                                               Переключение=dict(trials_finishing_task=72,
+                                               Переключение=dict(trials_finishing_task=20,
                                                                  rule_changes_finishing_task=4),
                                                Торможение=dict(trials_finishing_task=5),
                                                )
@@ -51,7 +51,7 @@ def change_mouse_visibility(mouse_component: event.Mouse,
         mouse_component.setVisible(False)
 
 
-def skip_irrelevant_tasks(task_name: str, show: str, skip=TEST) -> bool:
+def skip_all_tasks_except(task_name: str, show: str, skip=TEST) -> bool:
     return skip and task_name != show
 
 
@@ -248,7 +248,7 @@ for task_info, probe_info in experiment_sequence:
     organisation_message.show(FIRST_DOUBLE_TASK_PREPARATION_MESSAGE)
     instruction.show(path=task_info.instruction)
 
-    if skip_irrelevant_tasks(task_info.name, "Переключение"):
+    if skip_all_tasks_except(task_info.name, SETTINGS.get("show_task")):
         continue
 
     # тренировка с задачами

@@ -2,7 +2,7 @@ import itertools
 from collections import Counter
 from random import choice, choices, randrange
 from pathlib import Path
-from typing import Dict, Iterator, List, Tuple, Union
+from typing import Dict, Iterator, Tuple, Union
 
 import pytest
 
@@ -39,11 +39,11 @@ class TestUpdateTask:
             try:
                 task.next_subtask()
 
-                if not task.is_answer_time() and not task.is_task_finished():
+                if task.is_task_finished():
+                    task.new_task()  # TODO: new_task only reset object and not use new conditions
+                elif not task.is_answer_time():
                     yield task.example, task.word
 
-                if task.is_task_finished():
-                    task.new_task()
             except StopIteration:
                 break
 
@@ -102,32 +102,41 @@ class TestUpdateTask:
                                f"({default_stimuli_quantity})"
         assert current_tasks_number == all_examples_read == default_stimuli_quantity, wrong_qty_of_stimuli
 
-    def test_len(self, default_task, default_stimuli_quantity):
+    def test_len_changes_on_trial(self, default_task):
         task = default_task
         trials = self.TRIALS_TO_CONCLUDE * 5
+        current_tasks_number = len(task) - 1
 
-        error = False
-        error_message = "Everything work"
+        error_message = "UpdateTask changed did not change length. It should be " \
+                        "{}, but was {}"
         for _ in range(trials):
             task.next_subtask()
 
             if not task.is_answer_time() and not task.is_task_finished():
-                if current_tasks_number - 1 != len(task):
-                    error = True
-                    error_message = f"UpdateTask changed did not change length. It should be " \
-                                    f"{current_tasks_number - 1}, but was {len(task)}"
-                    break
+                assert current_tasks_number == len(task), error_message.format(current_tasks_number, len(task))
                 current_tasks_number -= 1
-            else:
-                if current_tasks_number != len(task):
-                    error = True
-                    error_message = "UpdateTask length changed on answer or finish"
-                    break
 
-        assert not error, error_message
+            if task.is_task_finished():
+                task.new_task()
+
+    def test_len_does_not_change_on_answer_or_finish(self, default_task):
+        task = default_task
+        trials = self.TRIALS_TO_CONCLUDE * 5
+        current_tasks_number = len(task) - 1
+
+        for _ in range(trials):
+            task.next_subtask()
+
+            if task.is_answer_time():
+                assert current_tasks_number != len(task), "UpdateTask length changed on answer"
+            elif task.is_task_finished():
+                assert current_tasks_number != len(task), "UpdateTask length changed on finish"
+                task.new_task()
+            else:
+                current_tasks_number -= 1
 
     @pytest.mark.parametrize("method_name", ["is_answer_time", "is_task_finished"])
-    def test_first_trial_of_is_method_is_false(self, method_name, default_task):
+    def test_is_method_on_first_trial_is_false(self, method_name, default_task):
         task = default_task
         method = getattr(task, method_name)
         is_answer_time = method()
@@ -137,17 +146,16 @@ class TestUpdateTask:
 
     def test_is_there_answer_time(self, default_task):
         task = default_task
-        trials = self.TRIALS_TO_CONCLUDE
 
         was_answer_time = False
-        for trial in range(trials):
+        while not task.is_task_finished():
             task.next_subtask()
 
             if task.is_answer_time():
                 was_answer_time = True
                 break
 
-        message = f"UpdateTask did not have answer time (in {trials} trials)"
+        message = f"UpdateTask did not have answer time before finish"
         assert was_answer_time, message
 
     @pytest.mark.parametrize("possible_sequences", [(1,), (3, 4), (2,), (5, 7, 11)])
@@ -176,6 +184,9 @@ class TestUpdateTask:
                 all_sequences_used = True
                 break
 
+            if task.is_task_finished():
+                task.new_task()
+
         message = f"For sequence {possible_sequences} were used {sorted(sequence_length_before_answer)}"
         assert all_sequences_used, message
 
@@ -200,6 +211,9 @@ class TestUpdateTask:
                 qty_before_answer = 0
             else:
                 qty_before_answer += 1
+
+            if task.is_task_finished():
+                task.new_task()
 
         message = f"For sequence {possible_sequences} were used sequence with length {qty_before_answer}"
         at_least_one_new_sequence = len(sequences_are_in_possible_sequences) != 0
@@ -290,6 +304,9 @@ class TestUpdateTask:
             answers.append(task.is_answer_time())
             result.append(task.is_task_finished())
 
+            if task.is_task_finished():
+                task.new_task()
+
         blocks_indexes = [idx + 1 for idx, answer in enumerate(answers[:-1]) if answer]
         # за последним ответом не будет завершения, так как одиннаковое количество запросов
 
@@ -312,6 +329,7 @@ class TestUpdateTask:
         prev, cur = None, task.is_answer_time()
         incorrect_order = False
         for _ in range(repeat):
+            task.new_task()
             while not task.is_task_finished():
                 task.next_subtask()
 
@@ -383,6 +401,8 @@ class TestUpdateTask:
 
                 if is_changed:
                     break
+
+                task.new_task()
 
             previous_word = task.word
             previous_equation = task.example
