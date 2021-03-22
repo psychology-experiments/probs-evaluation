@@ -78,9 +78,6 @@ class UpdateTask(Task):
         return self._blocks_before_task_finished == self._blocks_finished
 
     def next_subtask(self) -> None:
-        if self.is_task_finished():
-            self._blocks_finished = 0
-
         if self.is_answer_time():
             self._blocks_finished += 1
             self._before_answer = self._choose_group_size()
@@ -92,7 +89,10 @@ class UpdateTask(Task):
             self._length -= 1
 
     def new_task(self):
-        pass  # TODO: add error on unfinished task call
+        if not self.is_task_finished():
+            raise RuntimeError("Call to new task is prohibited for unfinished task")
+
+        self._blocks_finished = 0
 
 
 class InhibitionTask(Task):
