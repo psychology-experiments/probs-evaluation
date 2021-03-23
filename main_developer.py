@@ -267,7 +267,7 @@ for task_info, probe_info in experiment_sequence:
             win.callOnFlip(function=mouse.clickReset)  # TODO: попробовать сделать решения задачи ближе к реальному
             task_solution_clock.reset(-_timeToFirstFrame)  # TODO: различается сохранение в столбец с экспериментальным
             while True:
-                training_task.draw()
+                training_task.draw(win.getFutureFlipTime(clock="now"))
 
                 buttons_pressed, times = mouse.getPressed(getTime=True)
 
@@ -368,7 +368,7 @@ for task_info, probe_info in experiment_sequence:
                                                                solution_time=task_solution_clock.getTime(),
                                                                time_from_experiment_start=experiment_clock.getTime())
 
-            task.draw()
+            task.draw(win.getFutureFlipTime(clock="now"))
 
             if task.is_task_finished():
                 task_finished = True
