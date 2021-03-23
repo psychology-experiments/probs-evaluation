@@ -40,7 +40,7 @@ class TestUpdateTask:
                 task.next_subtask()
 
                 if task.is_task_finished():
-                    task.new_task()  # TODO: new_task only reset object and not use new conditions
+                    task.new_task()
                 elif not task.is_answer_time():
                     yield task.example, task.word
 
@@ -53,7 +53,15 @@ class TestUpdateTask:
         with pytest.raises(ValueError, match=r"Sequence of groups with length less than one are prohibited"):
             task_presenters.UpdateTask(**task_settings)
 
-    def test_error_on_call_to_new_task_for_unfinished(self, default_task):
+    def test_no_error_on_call_to_new_task_on_first_trial(self, default_task):
+        try:
+            default_task.new_task()
+        except RuntimeError:
+            pytest.fail("Raised RuntimeError on first trial for the task")
+
+    def test_error_on_call_to_new_task_for_unfinished_task(self, default_task):
+        default_task.new_task()
+        default_task.next_subtask()
         with pytest.raises(RuntimeError, match="Call to new task is prohibited for unfinished task"):
             default_task.new_task()
 
@@ -162,7 +170,7 @@ class TestUpdateTask:
         message = f"UpdateTask did not have answer time before finish"
         assert was_answer_time, message
 
-    @pytest.mark.parametrize("possible_sequences", [(1,), (3, 4), (2,), (5, 7, 11)])
+    @pytest.mark.parametrize("possible_sequences", [(1,), (3, 4), (2,), (5, 7, 11), (3, 10, 18, 32)])
     def test_is_right_sequence_of_solving_and_remembering(self,
                                                           possible_sequences: Tuple[int, ...],
                                                           task_settings):
@@ -175,6 +183,7 @@ class TestUpdateTask:
         qty_before_answer = 0
         sequence_length_before_answer = set()
         all_sequences_used = False
+        task.new_task()
         for trial in range(trials):
             task.next_subtask()
 
@@ -189,6 +198,7 @@ class TestUpdateTask:
                 break
 
             if task.is_task_finished():
+                qty_before_answer = 0
                 task.new_task()
 
         message = f"For sequence {possible_sequences} were used {sorted(sequence_length_before_answer)}"
@@ -202,6 +212,7 @@ class TestUpdateTask:
 
         qty_before_answer = 0
         sequences_are_in_possible_sequences = []
+        task.new_task()
         for trial in range(trials):
             task.next_subtask()
 
@@ -217,6 +228,7 @@ class TestUpdateTask:
                 qty_before_answer += 1
 
             if task.is_task_finished():
+                qty_before_answer = 0
                 task.new_task()
 
         message = f"For sequence {possible_sequences} were used sequence with length {qty_before_answer}"
@@ -303,6 +315,7 @@ class TestUpdateTask:
 
         answers = []
         result = []
+        task.new_task()
         for trial in range(trials):
             task.next_subtask()
             answers.append(task.is_answer_time())
@@ -333,6 +346,7 @@ class TestUpdateTask:
         prev, cur = None, task.is_answer_time()
         incorrect_order = False
         for _ in range(repeat):
+            task.new_task()
             while not task.is_task_finished():
                 task.next_subtask()
 
@@ -342,8 +356,6 @@ class TestUpdateTask:
             if not prev and cur:
                 incorrect_order = True
                 break
-
-            task.new_task()
 
         error_message = f"UpdateTask should finish after answer time, i.e. is_answer_time for " \
                         f"previous and current trial should be [True, False]" \
