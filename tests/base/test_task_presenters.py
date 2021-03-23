@@ -523,6 +523,7 @@ class TestInhibitionTask:
         current_stimulus = None
         used_stimulus = []
 
+        task.new_task()
         for _ in files:
             current_stimulus = task.next_subtask()
 
@@ -530,6 +531,9 @@ class TestInhibitionTask:
                 duplicated_stimulus_found = True
                 break
             used_stimulus.append(current_stimulus)
+
+            if task.is_task_finished():
+                task.new_task()
         else:
             duplicated_stimulus_found = False
 
