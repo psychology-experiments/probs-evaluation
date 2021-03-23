@@ -514,6 +514,12 @@ class TestInhibitionTask:
         with pytest.raises(RuntimeError, match="Call to new task is prohibited for unfinished task"):
             task.new_task()
 
+    def test_task_is_not_finished_on_first_trial(self, create_files_for_fp, task_settings):
+        tmpdir, _ = create_files_for_fp
+        task = task_presenters.InhibitionTask(fp=tmpdir.strpath, **task_settings)
+
+        assert not task.is_task_finished(), "InhibitionTask is finished on the first trial"
+
     def test_only_one_use_of_stimulus(self, create_files_for_fp, task_settings):
         tmpdir, files = create_files_for_fp
         task_settings["trials_before_task_finished"] = 999  # ensure that finished trials do not interfere
