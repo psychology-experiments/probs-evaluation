@@ -7,14 +7,6 @@ from typing import List, Optional, Tuple, Iterator
 
 class Task(ABC):
     @abstractmethod
-    def __len__(self):
-        pass
-
-    @abstractmethod
-    def is_answer_time(self):
-        pass
-
-    @abstractmethod
     def next_subtask(self):
         pass
 
@@ -53,8 +45,6 @@ class UpdateTask(Task):
         self._examples_sequence: Iterator[str] = iter(self._all_examples)
         self._words_sequence: Iterator[str] = iter(self._all_words)
 
-        self._the_first_trial = True
-
     def __len__(self):
         return self._length
 
@@ -76,6 +66,9 @@ class UpdateTask(Task):
     def is_task_finished(self) -> bool:
         return self._blocks_before_task_finished == self._blocks_finished
 
+    def _is_task_first_trial(self):
+        return self.example is None or self.word is None
+
     def next_subtask(self) -> None:
         if self.is_answer_time():
             self._blocks_finished += 1
@@ -91,14 +84,11 @@ class UpdateTask(Task):
             self._length -= 1
 
     def new_task(self):
-        if self._the_first_trial:
-            self._the_first_trial = False
-            return
+        if not self._is_task_first_trial():
+            if not self.is_task_finished():
+                raise RuntimeError("Call to new task is prohibited for unfinished task")
 
-        if not self.is_task_finished():
-            raise RuntimeError("Call to new task is prohibited for unfinished task")
-
-        self._blocks_finished = 0
+            self._blocks_finished = 0
 
 
 class InhibitionTask(Task):
@@ -124,7 +114,7 @@ class InhibitionTask(Task):
     def _load_stimuli(fp) -> List[str]:
         return [image_path.absolute().as_posix() for image_path in Path(fp).glob(pattern="*.png")]
 
-    def get_stimulus(self) -> Optional[str]:
+    def next_subtask(self) -> Optional[str]:
         if self.is_task_finished():
             self._trial = 0
 
@@ -138,6 +128,9 @@ class InhibitionTask(Task):
 
     def is_task_finished(self) -> bool:
         return self._trial == self._trials_before_task_finished + 1
+
+    def new_task(self):
+        pass
 
 
 class WisconsinCard:
@@ -208,7 +201,7 @@ class WisconsinTest(Task):  # SwitchTask
     def is_task_finished(self) -> bool:
         return self._is_finished_by_trial() or self._is_finished_by_rule_change()
 
-    def next_task(self) -> None:
+    def next_subtask(self) -> None:
         if self._trial_correctness is None and not self.is_task_finished():
             raise ValueError("WisconsinTest must be used in next sequence (is_correct, next_task). But it was not.")
 
@@ -232,3 +225,6 @@ class WisconsinTest(Task):  # SwitchTask
 
             if not self.is_task_finished():
                 self._prepare_for_new_task()
+
+    def new_task(self):
+        pass
