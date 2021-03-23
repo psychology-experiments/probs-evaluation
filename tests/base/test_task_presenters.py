@@ -498,6 +498,15 @@ class TestInhibitionTask:
     def task_settings(self) -> Dict[str, Union[int]]:
         return dict(trials_before_task_finished=5)
 
+    def test_does_not_raise_error_on_first_call(self, create_files_for_fp, task_settings):
+        tmpdir, _ = create_files_for_fp
+        try:
+            task = task_presenters.InhibitionTask(fp=tmpdir.strpath, **task_settings)
+            task.new_task()
+        except RuntimeError:
+            pytest.fail("InhibitionTask raised error on first call to new_task")
+
+
     def test_only_one_use_of_stimulus(self, create_files_for_fp, task_settings):
         tmpdir, files = create_files_for_fp
         task_settings["trials_before_task_finished"] = 999  # ensure that finished trials do not interfere
