@@ -506,6 +506,13 @@ class TestInhibitionTask:
         except RuntimeError:
             pytest.fail("InhibitionTask raised error on first call to new_task")
 
+    def test_raise_error_on_call_to_new_task_for_unfinished_task(self, create_files_for_fp, task_settings):
+        tmpdir, _ = create_files_for_fp
+        task = task_presenters.InhibitionTask(fp=tmpdir.strpath, **task_settings)
+        task.new_task()
+        task.next_subtask()
+        with pytest.raises(RuntimeError, match="Call to new task is prohibited for unfinished task"):
+            task.new_task()
 
     def test_only_one_use_of_stimulus(self, create_files_for_fp, task_settings):
         tmpdir, files = create_files_for_fp
