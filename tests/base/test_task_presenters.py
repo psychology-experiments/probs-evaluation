@@ -554,12 +554,14 @@ class TestInhibitionTask:
         trials = trials_to_finish * repeat
 
         result = []
+        task.new_task()
         for trial in range(trials):
             stimulus = task.next_subtask()
             is_finished = task.is_task_finished()
 
             if is_finished:
                 assert stimulus is None, f"InhibitionTask return {stimulus} instead of None"
+                task.new_task()
 
             result.append(is_finished)
 
