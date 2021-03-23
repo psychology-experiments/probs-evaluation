@@ -130,7 +130,8 @@ class InhibitionTask(Task):
         return self._trial == self._trials_before_task_finished + 1
 
     def new_task(self):
-        pass
+        if not self.is_task_finished():
+            raise RuntimeError("Call to new task is prohibited for unfinished task")
 
 
 class WisconsinCard:
