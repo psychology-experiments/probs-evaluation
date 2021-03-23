@@ -116,15 +116,12 @@ class InhibitionTask(Task):
 
     def next_subtask(self) -> Optional[str]:
         if self.is_task_finished():
-            self._trial = 0
+            return
 
         self._trial += 1
-        if not self.is_task_finished():
-            self._length -= 1
-            image_path = next(self._unused_stimuli)
-            return image_path
-        else:
-            return None
+        self._length -= 1
+        image_path = next(self._unused_stimuli)
+        return image_path
 
     def is_task_finished(self) -> bool:
         return self._trial == self._trials_before_task_finished + 1
@@ -132,6 +129,8 @@ class InhibitionTask(Task):
     def new_task(self):
         if not self.is_task_finished():
             raise RuntimeError("Call to new task is prohibited for unfinished task")
+
+        self._trial = 0
 
 
 class WisconsinCard:
