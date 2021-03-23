@@ -49,7 +49,7 @@ class AbstractTaskView(metaclass=ABCMeta):
         pass
 
     @abstractmethod
-    def draw(self) -> None:
+    def draw(self, t_to_next_flip: float) -> None:
         pass
 
     @staticmethod
@@ -79,7 +79,7 @@ class InhibitionTaskView(AbstractTaskView):
 
     def next_task(self):
         self._is_next_task = False
-        self._current_task.image = self._presenter.get_stimulus()
+        self._current_task.image = self._presenter.next_subtask()
 
     def is_trial_finished(self):
         return self._is_next_task
@@ -90,7 +90,7 @@ class InhibitionTaskView(AbstractTaskView):
     def get_data(self):
         return
 
-    def draw(self):
+    def draw(self, t_to_next_flip):
         self._current_task.draw()
 
 
@@ -107,6 +107,7 @@ class UpdateTaskView(AbstractTaskView):
         self._word_show_time = word_show_time
         self._ask_to_name_words = False
         self._is_next_task = False  # TODO: подумать здесь ли место этой логике
+        self._reset_word_timer = False
 
         if any(not isinstance(sequence, int) for sequence in possible_task_sequences):
             raise ValueError('For task "Обновление" sequence must include only int groups')
@@ -133,10 +134,10 @@ class UpdateTaskView(AbstractTaskView):
 
     def is_trial_finished(self) -> bool:
         # Если на экране слово отоброжается - пример ещё не закончен
-        if self._word_presenter_timer.getTime() > 0:
+        if self._word_presenter_timer.getTime() > 0 or self._reset_word_timer:
             return False
 
-        # если не было команды для перехода к следующей задаче - пример ещё не закончен
+        # если не было команды для перехода к следующей задаче - пример ещё не решен
         return self._is_next_task
 
     def is_task_finished(self) -> bool:
@@ -153,7 +154,7 @@ class UpdateTaskView(AbstractTaskView):
 
         # TODO: нужно или поправку внести или переделать, так как меньше, чем 750 мс предъявление
         if not self._presenter.is_answer_time():
-            self._word_presenter_timer.reset(t=self._word_show_time)
+            self._reset_word_timer = True
 
     def next_task(self):
         self._is_next_task = False
@@ -163,7 +164,11 @@ class UpdateTaskView(AbstractTaskView):
             self._word_stimuli.text = self._presenter.word
             self._example_stimuli.text = self._presenter.example
 
-    def draw(self):
+    def draw(self, next_flip_time):
+        if self._reset_word_timer:
+            self._reset_word_timer = False
+            self._word_presenter_timer.reset(t=self._word_show_time + next_flip_time)
+
         if self._word_presenter_timer.getTime() > 0:
             self._word_stimuli.draw()
             # print(self._timer.getTime())
@@ -373,7 +378,7 @@ class WisconsinTestTaskView(AbstractTaskView):
 
     def next_task(self):
         self._next_trial()
-        self._test_presenter.next_task()
+        self._test_presenter.next_subtask()
 
     def _prepare_feedback(self, is_correct_answer):
         if is_correct_answer:
@@ -406,7 +411,7 @@ class WisconsinTestTaskView(AbstractTaskView):
 
         return is_valid_click
 
-    def draw(self):
+    def draw(self, t_to_next_flip):  # TODO: Возможно стоит добавить использование времени
         if self._show_feedback:
             if self._feedback_countdown.getTime() >= 0:
                 self._feedback_text.draw()
