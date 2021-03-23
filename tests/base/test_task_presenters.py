@@ -508,7 +508,7 @@ class TestInhibitionTask:
         used_stimulus = []
 
         for _ in files:
-            current_stimulus = task.get_stimulus()
+            current_stimulus = task.next_subtask()
 
             if current_stimulus in used_stimulus:
                 duplicated_stimulus_found = True
@@ -535,7 +535,7 @@ class TestInhibitionTask:
 
         result = []
         for trial in range(trials):
-            stimulus = task.get_stimulus()
+            stimulus = task.next_subtask()
             is_finished = task.is_task_finished()
 
             if is_finished:
@@ -606,7 +606,7 @@ class TestSwitchTask:  # WisconsinTest
         for trial in range(trials):
             current_rule = task.rule
             rules.add(current_rule)
-            task.next_task(chosen_card=target_card, target_card=target_card)
+            task.next_subtask(chosen_card=target_card, target_card=target_card)
             current_streak += 1
 
             if current_streak < max_streak:
@@ -651,14 +651,14 @@ class TestSwitchTask:  # WisconsinTest
             current_result = []
             for possible_chosen_card_features in itertools.permutations(card_features):
                 chosen_card = task_presenters.WisconsinCard(possible_chosen_card_features)
-                current_result.append(task.next_task(chosen_card=chosen_card, target_card=target_card))
+                current_result.append(task.next_subtask(chosen_card=chosen_card, target_card=target_card))
 
             results.append(sum(current_result) / permutation_correction)
 
             if trial % max_streak == 0:  # change rule every max streak to ensure that test is correct
-                task.next_task(chosen_card=reset_card, target_card=target_card)
+                task.next_subtask(chosen_card=reset_card, target_card=target_card)
                 for _ in range(max_streak):
-                    task.next_task(chosen_card=target_card, target_card=target_card)
+                    task.next_subtask(chosen_card=target_card, target_card=target_card)
 
         message = f"SwitchTask (WisconsinTest) has more (or less) correct answers than 1\n{results}"
         assert all(result == 1 for result in results), message
@@ -685,7 +685,7 @@ class TestSwitchTask:  # WisconsinTest
             else:
                 chosen_card = correct_card
 
-            task.next_task(chosen_card=chosen_card, target_card=target_card)
+            task.next_subtask(chosen_card=chosen_card, target_card=target_card)
             current_result = task.streak
             results.append(current_result)
 
@@ -718,7 +718,7 @@ class TestSwitchTask:  # WisconsinTest
 
         is_first_trial_after_rule_change = []
         for trial in range(trials):
-            task.next_task(chosen_card=target_card, target_card=target_card)
+            task.next_subtask(chosen_card=target_card, target_card=target_card)
             is_first_trial_after_rule_change.append(task.is_first_trial_after_rule_change())
 
         real_number_of_detections = sum(is_first_trial_after_rule_change)
@@ -761,7 +761,7 @@ class TestSwitchTask:  # WisconsinTest
                 next_trial_after_finished = True
 
             previous_rule = task.rule
-            task.next_task(chosen_card=wrong_card, target_card=target_card)
+            task.next_subtask(chosen_card=wrong_card, target_card=target_card)
             is_finished = task.is_task_finished()
             result.append(is_finished)
 
@@ -799,7 +799,7 @@ class TestSwitchTask:  # WisconsinTest
                 next_trial_after_finished = True
 
             previous_rule = task.rule
-            task.next_task(chosen_card=target_card, target_card=target_card)
+            task.next_subtask(chosen_card=target_card, target_card=target_card)
             is_finished = task.is_task_finished()
             result.append(is_finished)
 
@@ -838,7 +838,7 @@ class TestSwitchTask:  # WisconsinTest
                 next_task_after_finished = True
 
             previous_rule = task.rule
-            task.next_task(chosen_card=target_card, target_card=target_card)
+            task.next_subtask(chosen_card=target_card, target_card=target_card)
             is_finished = task.is_task_finished()
             result.append(is_finished)
 
