@@ -107,6 +107,8 @@ class InhibitionTask(Task):
         shuffle(stimuli)
         self._unused_stimuli = iter(stimuli)
 
+        self._the_first_trial = True
+
     def __len__(self):
         return self._length
 
@@ -127,6 +129,10 @@ class InhibitionTask(Task):
         return self._trial == self._trials_before_task_finished + 1
 
     def new_task(self):
+        if self._the_first_trial:
+            self._the_first_trial = False
+            return
+
         if not self.is_task_finished():
             raise RuntimeError("Call to new task is prohibited for unfinished task")
 
