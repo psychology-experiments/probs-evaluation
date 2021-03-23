@@ -53,6 +53,8 @@ class UpdateTask(Task):
         self._examples_sequence: Iterator[str] = iter(self._all_examples)
         self._words_sequence: Iterator[str] = iter(self._all_words)
 
+        self._the_first_trial = True
+
     def __len__(self):
         return self._length
 
@@ -79,13 +81,20 @@ class UpdateTask(Task):
             self._blocks_finished += 1
             self._before_answer = self._choose_group_size()
 
+        if self.is_task_finished():
+            return
+
         self._before_answer -= 1
-        if not self.is_answer_time() and not self.is_task_finished():
+        if not self.is_answer_time():
             self.example = next(self._examples_sequence)
             self.word = next(self._words_sequence)
             self._length -= 1
 
     def new_task(self):
+        if self._the_first_trial:
+            self._the_first_trial = False
+            return
+
         if not self.is_task_finished():
             raise RuntimeError("Call to new task is prohibited for unfinished task")
 
