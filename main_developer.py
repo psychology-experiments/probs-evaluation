@@ -9,7 +9,7 @@ from base import data_save, experiment_organisation_logic, experiment_organisati
 
 TEST = True
 
-SETTING_FILE = 'production.ini' if not TEST else 'development.ini'
+SETTING_FILE = 'settings.ini' if not TEST else 'development.ini'
 SETTINGS_FP = f"configurations/{SETTING_FILE}"
 SETTINGS_PARSER = configparser.ConfigParser()
 SETTINGS_PARSER.read(SETTINGS_FP, encoding="UTF-8")
