@@ -7,13 +7,12 @@ from psychopy.hardware import keyboard
 
 from base import data_save, experiment_organisation_logic, experiment_organisation_stimuli, probe_views, task_views
 
-TEST = True
+MODE = "TEST"
 
-SETTING_FILE = 'settings.ini' if not TEST else 'development.ini'
-SETTINGS_FP = f"configurations/{SETTING_FILE}"
+SETTINGS_FP = f"configurations/settings.ini"
 SETTINGS_PARSER = configparser.ConfigParser()
 SETTINGS_PARSER.read(SETTINGS_FP, encoding="UTF-8")
-SETTINGS = SETTINGS_PARSER["DEFAULT"]
+SETTINGS = SETTINGS_PARSER[MODE]
 
 FULL_SCREEN = SETTINGS.getboolean("full_screen")
 SKIP_INSTRUCTION = SETTINGS.getboolean("skip_instruction")
@@ -51,8 +50,8 @@ def change_mouse_visibility(mouse_component: event.Mouse,
         mouse_component.setVisible(False)
 
 
-def skip_all_tasks_except(task_name: str, show: str, skip=TEST) -> bool:
-    return skip and task_name != show
+def skip_all_tasks_except(task_name: str, show: str, mode=MODE) -> bool:
+    return mode == "TEST" and task_name != show
 
 
 def finish_experiment(window: visual.Window):
