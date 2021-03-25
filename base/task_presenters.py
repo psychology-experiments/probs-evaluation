@@ -89,14 +89,13 @@ class UpdateTask(Task):
             self._length -= 1
 
     def new_task(self):
-        if not self._is_task_first_trial():
-            if not self.is_task_finished():
-                raise RuntimeError("Call to new_task is prohibited for unfinished task")
-            self._blocks_finished = 0
-        else:
+        if not self.is_task_finished() and self._task_was_initialized_before_first_trial:
+            raise RuntimeError("Call to new_task is prohibited for unfinished task")
+
+        if not self._task_was_initialized_before_first_trial:
             self._task_was_initialized_before_first_trial = True
 
-
+        self._blocks_finished = 0
 
 
 class InhibitionTask(Task):
