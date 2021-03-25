@@ -529,6 +529,18 @@ class TestInhibitionTask:
         with pytest.raises(RuntimeError, match="Call to new task is prohibited for unfinished task"):
             task.new_task()
 
+    def test_raise_error_if_finished_task_called_with_next_subtask(self, create_files_for_fp, task_settings):
+        tmpdir, _ = create_files_for_fp
+        task = task_presenters.InhibitionTask(fp=tmpdir.strpath, **task_settings)
+
+        task.new_task()
+        while not task.is_task_finished():
+            task.next_subtask()
+
+        with pytest.raises(RuntimeError, match="Call to next_subtask on finished task is prohibited. "
+                                               "Call new_task before"):
+            task.next_subtask()
+
     def test_task_is_not_finished_on_first_trial(self, create_files_for_fp, task_settings):
         tmpdir, _ = create_files_for_fp
         task = task_presenters.InhibitionTask(fp=tmpdir.strpath, **task_settings)
