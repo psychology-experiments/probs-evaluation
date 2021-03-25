@@ -35,6 +35,7 @@ class TestUpdateTask:
     @staticmethod
     def iterate_over_all_stimuli(task: task_presenters.UpdateTask) -> Iterator[Tuple[str, str]]:
         """Implemented this way to ensure that even if is_task_finished work incorrectly other test do not crash"""
+        task.new_task()
         while True:
             try:
                 task.next_subtask()
@@ -72,6 +73,7 @@ class TestUpdateTask:
         previous_stimulus = None
         results = []
         trials = 0
+        task.new_task()
         while not task.is_task_finished():
             task.next_subtask()
 
@@ -90,6 +92,7 @@ class TestUpdateTask:
         method = getattr(task, method_name)
 
         result = []
+        task.new_task()
         while not task.is_task_finished():
             task.next_subtask()
             first_result = method()
@@ -121,6 +124,7 @@ class TestUpdateTask:
 
         error_message = "UpdateTask changed did not change length. It should be " \
                         "{}, but was {}"
+        task.new_task()
         for _ in range(trials):
             task.next_subtask()
 
@@ -136,6 +140,7 @@ class TestUpdateTask:
         trials = self.TRIALS_TO_CONCLUDE * 5
         current_tasks_number = len(task) - 1
 
+        task.new_task()
         for _ in range(trials):
             task.next_subtask()
 
@@ -160,6 +165,7 @@ class TestUpdateTask:
         task = default_task
 
         was_answer_time = False
+        task.new_task()
         while not task.is_task_finished():
             task.next_subtask()
 
@@ -371,6 +377,8 @@ class TestUpdateTask:
         answer_word = None
         previous_equation = None
         answer_equation = None
+
+        task.new_task()
         while not task.is_task_finished():
             task.next_subtask()
 
@@ -404,6 +412,8 @@ class TestUpdateTask:
         answer_word = None
         previous_equation = None
         answer_equation = None
+
+        task.new_task()
         for _ in range(trials):
             task.next_subtask()
 
@@ -446,6 +456,7 @@ class TestUpdateTask:
         assert task.word is None
         assert task.example is None
 
+        task.new_task()
         task.next_subtask()
         while not task.is_task_finished():
             if trial % one_block_trials != 0:

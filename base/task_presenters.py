@@ -45,6 +45,8 @@ class UpdateTask(Task):
         self._examples_sequence: Iterator[str] = iter(self._all_examples)
         self._words_sequence: Iterator[str] = iter(self._all_words)
 
+        self._task_was_initialized_before_first_trial = False
+
     def __len__(self):
         return self._length
 
@@ -70,6 +72,9 @@ class UpdateTask(Task):
         return self.example is None or self.word is None
 
     def next_subtask(self) -> None:
+        if not self._task_was_initialized_before_first_trial:
+            raise RuntimeError("Call to next_subtask before new_task call is prohibited on first task")
+
         if self.is_answer_time():
             self._blocks_finished += 1
             self._before_answer = self._choose_group_size()
@@ -87,8 +92,11 @@ class UpdateTask(Task):
         if not self._is_task_first_trial():
             if not self.is_task_finished():
                 raise RuntimeError("Call to new_task is prohibited for unfinished task")
-
             self._blocks_finished = 0
+        else:
+            self._task_was_initialized_before_first_trial = True
+
+
 
 
 class InhibitionTask(Task):
