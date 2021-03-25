@@ -581,7 +581,7 @@ class TestInhibitionTask:
             is_finished = task.is_task_finished()
 
             if is_finished:
-                stimulus_file_name = stimulus.split('/')[-1] if stimulus is not None else stimulus
+                stimulus_file_name = None if stimulus is None else stimulus.split('/')[-1]
                 assert stimulus_file_name is None, f"InhibitionTask return {stimulus_file_name} instead of None"
                 task.new_task()
 
