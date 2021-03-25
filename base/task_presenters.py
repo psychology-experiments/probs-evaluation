@@ -171,7 +171,7 @@ class WisconsinTest(Task):  # SwitchTask
         self.rule_name: Optional[str] = None
         self._first_trial_after_rule_change: bool = False
         self.streak: int = 0
-        self._trial_correctness: Optional[bool] = False
+        self._trial_correctness: Optional[bool] = None
 
         if max_trials is None:
             max_trials = float("inf")
@@ -196,6 +196,7 @@ class WisconsinTest(Task):  # SwitchTask
         self.rule_name = self._rules[self.rule]
 
     def is_correct(self, chosen_card: WisconsinCard, target_card: WisconsinCard) -> bool:
+        print("correctness", self._trial_correctness)
         if self._trial_correctness is None:
             chosen_card_feature = chosen_card.get_rule_feature(self.rule)
             target_card_feature = target_card.get_rule_feature(self.rule)
@@ -238,6 +239,7 @@ class WisconsinTest(Task):  # SwitchTask
             self.streak += 1
         else:
             self.streak = 0
+        print("CHANGED TO NOE")
         self._trial_correctness = None
 
         self._trials += 1

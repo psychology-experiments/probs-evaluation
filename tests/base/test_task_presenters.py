@@ -641,6 +641,10 @@ class TestSwitchTask:  # WisconsinTest
 
         return settings
 
+    def test_task_is_not_finished_on_first_trial(self, task_settings):
+        task = task_presenters.WisconsinTest(**task_settings)
+        assert not task.is_task_finished()
+
     @pytest.mark.parametrize("max_streak", [1, 4, 8, 12])
     def test_all_rule_types_used(self, max_streak, task_settings):
         # TODO: правило меняется, выбирается из списка, меняется через N
@@ -659,10 +663,12 @@ class TestSwitchTask:  # WisconsinTest
         target_card = task_presenters.WisconsinCard(features=(0, 1, 2))
 
         previous_rule = task.rule
+        task.new_task()
         for trial in range(trials):
             current_rule = task.rule
             rules.add(current_rule)
-            task.next_subtask(chosen_card=target_card, target_card=target_card)
+            task.is_correct(chosen_card=target_card, target_card=target_card)
+            task.next_subtask()
             current_streak += 1
 
             if current_streak < max_streak:
