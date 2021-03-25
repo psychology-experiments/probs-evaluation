@@ -86,7 +86,7 @@ class UpdateTask(Task):
     def new_task(self):
         if not self._is_task_first_trial():
             if not self.is_task_finished():
-                raise RuntimeError("Call to new task is prohibited for unfinished task")
+                raise RuntimeError("Call to new_task is prohibited for unfinished task")
 
             self._blocks_finished = 0
 
