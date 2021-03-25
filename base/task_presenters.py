@@ -125,10 +125,10 @@ class InhibitionTask(Task):
         return [image_path.absolute().as_posix() for image_path in Path(fp).glob(pattern="*.png")]
 
     def next_subtask(self) -> Optional[str]:
+        self._trial += 1
         if self.is_task_finished():
             return
 
-        self._trial += 1
         self._length -= 1
         image_path = next(self._unused_stimuli)
         return image_path
