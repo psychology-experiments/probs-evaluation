@@ -94,6 +94,7 @@ class UpdateTask(Task):
 
         if not self._task_was_initialized_before_first_trial:
             self._task_was_initialized_before_first_trial = True
+            return
 
         self._blocks_finished = 0
 
