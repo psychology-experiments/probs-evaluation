@@ -66,6 +66,10 @@ class TestUpdateTask:
         with pytest.raises(RuntimeError, match="Call to new_task is prohibited for unfinished task"):
             default_task.new_task()
 
+    def test_error_on_next_subtask_before_new_task_for_first_trial(self, default_task):
+        with pytest.raises(RuntimeError, match="Call to next_subtask before new_task call is prohibited on first task"):
+            default_task.next_subtask()
+
     @pytest.mark.parametrize("stimulus", ["example", "word"])
     def test_trial_stimuli_change(self, stimulus, default_task):
         task = default_task
