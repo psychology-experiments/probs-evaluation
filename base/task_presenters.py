@@ -126,6 +126,10 @@ class InhibitionTask(Task):
 
     def next_subtask(self) -> Optional[str]:
         self._trial += 1
+
+        if self._is_more_trials_than_subtasks():
+            raise RuntimeError("Call to next_subtask on finished task is prohibited. Call new_task before")
+
         if self.is_task_finished():
             return
 
@@ -135,6 +139,9 @@ class InhibitionTask(Task):
 
     def is_task_finished(self) -> bool:
         return self._trial == self._trials_before_task_finished + 1
+
+    def _is_more_trials_than_subtasks(self):
+        return self._trial > self._trials_before_task_finished + 1
 
     def new_task(self):
         if self._the_first_trial:
