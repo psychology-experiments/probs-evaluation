@@ -219,6 +219,13 @@ class WisconsinTest(Task):  # SwitchTask
         self._first_trial_after_rule_change = True
         self._choose_rule()
 
+    def _update_streak(self):
+        if self._trial_correctness:
+            self.streak += 1
+            return
+
+        self.streak = 0
+
     def is_task_finished(self) -> bool:
         return self._is_finished_by_trial() or self._is_finished_by_rule_change()
 
@@ -234,10 +241,7 @@ class WisconsinTest(Task):  # SwitchTask
         if self._first_trial_after_rule_change:
             self._first_trial_after_rule_change = False
 
-        if self._trial_correctness:
-            self.streak += 1
-        else:
-            self.streak = 0
+        self._update_streak()
         self._trial_correctness = None
 
         self._trials += 1
