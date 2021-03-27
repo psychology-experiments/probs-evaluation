@@ -175,7 +175,7 @@ class WisconsinTest(Task):  # SwitchTask
 
         if max_trials is None:
             max_trials = float("inf")
-        self._max_trials:  Union[int, float] = max_trials
+        self._max_trials: Union[int, float] = max_trials
         self._trial: int = 0
 
         if max_rules_changed is None:
@@ -230,7 +230,7 @@ class WisconsinTest(Task):  # SwitchTask
 
     def next_subtask(self) -> None:
         if self._trial_correctness is None and not self.is_task_finished():
-            raise ValueError("WisconsinTest must be used in next sequence (is_correct, next_task). But it was not.")
+            raise RuntimeError("WisconsinTest must be used in next sequence: is_correct, next_task")
 
         if self._first_trial_after_rule_change:
             self._first_trial_after_rule_change = False
