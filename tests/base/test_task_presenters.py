@@ -614,10 +614,30 @@ class TestInhibitionTask:
 
 class TestSwitchTask:  # WisconsinTest
     TRIALS_TO_CONCLUDE = 15
+    UNREACHABLE_THRESHOLD = float("Inf")
 
     @pytest.fixture
-    def default_task_settings(self):
+    def default_task_settings(self) -> Dict[str, Union[int, float]]:
         return dict(max_streak=8, max_trials=144, max_rules_changed=8)
+
+    @pytest.fixture
+    def task_settings_without_all_thresholds(self, default_task_settings):
+        settings = default_task_settings.copy()
+        settings["max_trials"] = self.UNREACHABLE_THRESHOLD
+        settings["max_rules_changed"] = self.UNREACHABLE_THRESHOLD
+        return settings
+
+    @pytest.fixture
+    def task_settings_without_rule_thresholds(self, default_task_settings):
+        settings = default_task_settings.copy()
+        settings["max_rules_changed"] = self.UNREACHABLE_THRESHOLD
+        return settings
+
+    @pytest.fixture
+    def task_settings_without_trial_thresholds(self, default_task_settings):
+        settings = default_task_settings.copy()
+        settings["max_trials"] = self.UNREACHABLE_THRESHOLD
+        return settings
 
     @pytest.fixture
     def possible_answers(self):
