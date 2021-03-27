@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 import csv
 from pathlib import Path
 from random import choice, shuffle
-from typing import List, Optional, Tuple, Iterator
+from typing import List, Optional, Tuple, Iterator, Union
 
 
 class Task(ABC):
@@ -175,16 +175,15 @@ class WisconsinTest(Task):  # SwitchTask
 
         if max_trials is None:
             max_trials = float("inf")
-        self._max_trials: int = max_trials
+        self._max_trials:  Union[int, float] = max_trials
         self._trial: int = 0
 
         if max_rules_changed is None:
             max_rules_changed = float("inf")
-        self._max_rules_changed: int = max_rules_changed  # TODO: update type
+        self._max_rules_changed: Union[int, float] = max_rules_changed
         self._rules_changed: int = 0
 
         self._the_first_trial = True
-        # self._choose_rule()
 
     def _choose_rule(self) -> None:
         possible_rules = list(range(len(self._rules)))
