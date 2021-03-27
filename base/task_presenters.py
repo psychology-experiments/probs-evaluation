@@ -176,7 +176,7 @@ class WisconsinTest(Task):  # SwitchTask
         if max_trials is None:
             max_trials = float("inf")
         self._max_trials: int = max_trials
-        self._trials: int = 0
+        self._trial: int = 0
 
         if max_rules_changed is None:
             max_rules_changed = float("inf")
@@ -208,7 +208,7 @@ class WisconsinTest(Task):  # SwitchTask
         return self._first_trial_after_rule_change
 
     def _is_finished_by_trial(self):
-        return self._trials == self._max_trials + 1
+        return self._trial == self._max_trials + 1
 
     def _is_finished_by_rule_change(self):
         return self._rules_changed == self._max_rules_changed
@@ -234,7 +234,7 @@ class WisconsinTest(Task):  # SwitchTask
 
         if self.is_task_finished():
             self._prepare_for_new_task()
-            self._trials = 0
+            self._trial = 0
             self._rules_changed = 0
 
         if self._first_trial_after_rule_change:
@@ -243,7 +243,7 @@ class WisconsinTest(Task):  # SwitchTask
         self._update_streak()
         self._trial_correctness = None
 
-        self._trials += 1
+        self._trial += 1
         if self.streak == self._max_streak:
             self._rules_changed += 1
 
