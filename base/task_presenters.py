@@ -200,10 +200,9 @@ class WisconsinTest(Task):  # SwitchTask
             chosen_card_feature = chosen_card.get_rule_feature(self.rule)
             target_card_feature = target_card.get_rule_feature(self.rule)
             self._trial_correctness = chosen_card_feature == target_card_feature
-        else:
-            raise ValueError("WisconsinTest must be asked about correctness only once per trial")
+            return self._trial_correctness
 
-        return self._trial_correctness
+        raise ValueError("WisconsinTest must be asked about correctness only once per trial")
 
     def is_first_trial_after_rule_change(self) -> bool:
         return self._first_trial_after_rule_change
