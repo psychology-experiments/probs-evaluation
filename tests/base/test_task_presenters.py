@@ -666,12 +666,12 @@ class TestSwitchTask:  # WisconsinTest
         assert not task.is_task_finished()
 
     @pytest.mark.parametrize("max_streak", [1, 4, 8, 12])
-    def test_all_rule_types_used(self, max_streak, default_task_settings):
+    def test_all_rule_types_used(self, max_streak, task_settings_without_all_thresholds):
         # TODO: правило меняется, выбирается из списка, меняется через N
-        default_task_settings = self._remove_task_finish_threshold(default_task_settings, remove="all")
-        default_task_settings["max_streak"] = max_streak
+        task_settings = task_settings_without_all_thresholds
+        task_settings["max_streak"] = max_streak
         rule_types = (0, 1, 2)
-        task = task_presenters.WisconsinTest(**default_task_settings)
+        task = task_presenters.WisconsinTest(**task_settings)
         trials = max_streak * self.TRIALS_TO_CONCLUDE
 
         rules = set()
@@ -794,12 +794,12 @@ class TestSwitchTask:  # WisconsinTest
                                    )
         assert streak_zero_on_wrong, wrong_streak_error_message
 
-    def test_first_trial_after_change_is_detected(self, default_task_settings):
+    def test_first_trial_after_change_is_detected(self, task_settings_without_all_thresholds):
         trials = 60
         number_of_detections = 12
-        default_task_settings["max_streak"] = trials // number_of_detections
-        default_task_settings = self._remove_task_finish_threshold(default_task_settings, remove="all")
-        task = task_presenters.WisconsinTest(**default_task_settings)
+        task_settings = task_settings_without_all_thresholds
+        task_settings["max_streak"] = trials // number_of_detections
+        task = task_presenters.WisconsinTest(**task_settings)
 
         correct_card_features = (0, 1, 2)
         target_card = task_presenters.WisconsinCard(correct_card_features)
@@ -872,10 +872,12 @@ class TestSwitchTask:  # WisconsinTest
         assert all(finished_trials), wrong_trial_message
 
     @pytest.mark.parametrize("max_trials", [10, 30, 144])
-    def test_is_task_finished_correctly_trial_threshold_with_correct_answers(self, default_task_settings, max_trials):
-        default_task_settings["max_streak"] = 999  # ensure that is_task_finished would not be reset by RULE_CHANGE
-        default_task_settings["max_trials"] = max_trials
-        task = task_presenters.WisconsinTest(**default_task_settings)
+    def test_is_task_finished_correctly_trial_threshold_with_correct_answers(self,
+                                                                             task_settings_without_rule_thresholds,
+                                                                             max_trials):
+        task_settings = task_settings_without_rule_thresholds
+        task_settings["max_trials"] = max_trials
+        task = task_presenters.WisconsinTest(**task_settings)
 
         correct_card_features = (0, 1, 2)
         target_card = task_presenters.WisconsinCard(correct_card_features)
@@ -916,11 +918,13 @@ class TestSwitchTask:  # WisconsinTest
         assert all(finished_trials), wrong_trial_message
 
     @pytest.mark.parametrize("max_rules_changed", [3, 5, 8])
-    def test_is_task_finished_correctly_rule_threshold(self, default_task_settings, max_rules_changed):
-        max_streak = default_task_settings["max_streak"]
-        default_task_settings["max_rules_changed"] = max_rules_changed
-        default_task_settings["max_trials"] = 999  # ensure that is_task_finished would not be reset by TRIAL
-        task = task_presenters.WisconsinTest(**default_task_settings)
+    def test_is_task_finished_correctly_rule_threshold(self,
+                                                       task_settings_without_trial_thresholds,
+                                                       max_rules_changed):
+        task_settings = task_settings_without_trial_thresholds
+        max_streak = task_settings["max_streak"]
+        task_settings["max_rules_changed"] = max_rules_changed
+        task = task_presenters.WisconsinTest(**task_settings)
 
         correct_card_features = (0, 1, 2)
         target_card = task_presenters.WisconsinCard(correct_card_features)
