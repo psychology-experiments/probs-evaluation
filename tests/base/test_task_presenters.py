@@ -614,30 +614,22 @@ class TestInhibitionTask:
 
 class TestSwitchTask:  # WisconsinTest
     TRIALS_TO_CONCLUDE = 15
-    UNREACHABLE_THRESHOLD = float("Inf")
 
     @pytest.fixture
-    def default_task_settings(self) -> Dict[str, Union[int, float]]:
-        return dict(max_streak=8, max_trials=144, max_rules_changed=8)
+    def default_task_settings(self) -> Dict[str, int]:
+        return dict(max_streak=8, max_trials=72, max_rules_changed=4)
 
     @pytest.fixture
-    def task_settings_without_all_thresholds(self, default_task_settings):
-        settings = default_task_settings.copy()
-        settings["max_trials"] = self.UNREACHABLE_THRESHOLD
-        settings["max_rules_changed"] = self.UNREACHABLE_THRESHOLD
-        return settings
+    def task_settings_without_all_task_finished_thresholds(self) -> Dict[str, Union[int, float]]:
+        return dict(max_streak=8, max_trials=float("Inf"), max_rules_changed=float("Inf"))
 
     @pytest.fixture
-    def task_settings_without_rule_thresholds(self, default_task_settings):
-        settings = default_task_settings.copy()
-        settings["max_rules_changed"] = self.UNREACHABLE_THRESHOLD
-        return settings
+    def task_settings_without_rule_thresholds(self) -> Dict[str, Union[int, float]]:
+        return dict(max_streak=8, max_trials=72, max_rules_changed=float("Inf"))
 
     @pytest.fixture
-    def task_settings_without_trial_thresholds(self, default_task_settings):
-        settings = default_task_settings.copy()
-        settings["max_trials"] = self.UNREACHABLE_THRESHOLD
-        return settings
+    def task_settings_without_trial_thresholds(self) -> Dict[str, Union[int, float]]:
+        return dict(max_streak=8, max_trials=float("Inf"), max_rules_changed=4)
 
     @pytest.fixture
     def possible_answers(self):
@@ -653,9 +645,9 @@ class TestSwitchTask:  # WisconsinTest
         assert not task.is_task_finished()
 
     @pytest.mark.parametrize("max_streak", [1, 4, 8, 12])
-    def test_all_rule_types_used(self, max_streak, task_settings_without_all_thresholds):
+    def test_all_rule_types_used(self, max_streak, task_settings_without_all_task_finished_thresholds):
         # TODO: правило меняется, выбирается из списка, меняется через N
-        task_settings = task_settings_without_all_thresholds
+        task_settings = task_settings_without_all_task_finished_thresholds
         task_settings["max_streak"] = max_streak
         rule_types = (0, 1, 2)
         task = task_presenters.WisconsinTest(**task_settings)
@@ -781,10 +773,10 @@ class TestSwitchTask:  # WisconsinTest
                                    )
         assert streak_zero_on_wrong, wrong_streak_error_message
 
-    def test_first_trial_after_change_is_detected(self, task_settings_without_all_thresholds):
+    def test_first_trial_after_change_is_detected(self, task_settings_without_all_task_finished_thresholds):
         trials = 60
         number_of_detections = 12
-        task_settings = task_settings_without_all_thresholds
+        task_settings = task_settings_without_all_task_finished_thresholds
         task_settings["max_streak"] = trials // number_of_detections
         task = task_presenters.WisconsinTest(**task_settings)
 
