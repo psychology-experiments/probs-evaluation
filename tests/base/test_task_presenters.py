@@ -513,7 +513,7 @@ class TestInhibitionTask:
     def task_settings(self) -> Dict[str, Union[int]]:
         return dict(trials_before_task_finished=5)
 
-    def test_does_not_raise_error_on_first_call(self, create_files_for_fp, task_settings):
+    def test_does_not_raise_error_on_first_call_to_new_task(self, create_files_for_fp, task_settings):
         tmpdir, _ = create_files_for_fp
         try:
             task = task_presenters.InhibitionTask(fp=tmpdir.strpath, **task_settings)
