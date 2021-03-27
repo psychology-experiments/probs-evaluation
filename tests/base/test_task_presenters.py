@@ -2,7 +2,7 @@ import itertools
 from collections import Counter
 from random import choice, choices, randrange
 from pathlib import Path
-from typing import Dict, Iterator, Tuple, Union
+from typing import Dict, Iterator, Tuple, Union, Optional
 
 import pytest
 
@@ -615,21 +615,35 @@ class TestInhibitionTask:
 class TestSwitchTask:  # WisconsinTest
     TRIALS_TO_CONCLUDE = 15
 
-    @pytest.fixture
-    def default_task_settings(self) -> Dict[str, int]:
+    @staticmethod
+    def return_default_settings() -> Dict[str, int]:
         return dict(max_streak=8, max_trials=72, max_rules_changed=4)
 
     @pytest.fixture
-    def task_settings_without_all_task_finished_thresholds(self) -> Dict[str, Union[int, float]]:
-        return dict(max_streak=8, max_trials=float("Inf"), max_rules_changed=float("Inf"))
+    def default_task_settings(self) -> Dict[str, int]:
+        return self.return_default_settings()
 
     @pytest.fixture
-    def task_settings_without_rule_thresholds(self) -> Dict[str, Union[int, float]]:
-        return dict(max_streak=8, max_trials=72, max_rules_changed=float("Inf"))
+    def task_settings_without_all_task_finished_thresholds(self) -> Dict[str, Optional[int]]:
+        settings: Dict[str, Optional[int]] = self.return_default_settings()
+        settings["max_trials"] = None
+        settings["max_rules_changed"] = None
+
+        return settings
 
     @pytest.fixture
-    def task_settings_without_trial_thresholds(self) -> Dict[str, Union[int, float]]:
-        return dict(max_streak=8, max_trials=float("Inf"), max_rules_changed=4)
+    def task_settings_without_rule_thresholds(self) -> Dict[str, Optional[int]]:
+        settings: Dict[str, Optional[int]] = self.return_default_settings()
+        settings["max_rules_changed"] = None
+
+        return settings
+
+    @pytest.fixture
+    def task_settings_without_trial_thresholds(self) -> Dict[str, Optional[int]]:
+        settings: Dict[str, Optional[int]] = self.return_default_settings()
+        settings["max_trials"] = None
+
+        return settings
 
     @pytest.fixture
     def possible_answers(self):
