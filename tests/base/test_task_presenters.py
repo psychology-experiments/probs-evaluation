@@ -654,15 +654,15 @@ class TestSwitchTask:  # WisconsinTest
         trials = max_streak * self.TRIALS_TO_CONCLUDE
 
         rules = set()
-        current_streak = task.streak
+        current_streak = 0
 
         assert max_streak == task._max_streak, f"SwitchTask (WisconsinTest) max streak {max_streak} != " \
                                                f"task streak {task._max_streak}"
 
         target_card = task_presenters.WisconsinCard(features=(0, 1, 2))
 
-        previous_rule = task.rule
         task.new_task()
+        previous_rule = task.rule
         for trial in range(trials):
             current_rule = task.rule
             rules.add(current_rule)
@@ -670,19 +670,22 @@ class TestSwitchTask:  # WisconsinTest
             task.next_subtask()
             current_streak += 1
 
+            if task.is_task_finished():
+                task.new_task()
+
             if current_streak < max_streak:
-                if current_rule != previous_rule:
-                    changed_before_error_message = f"SwitchTask (WisconsinTest) rule changed earlier:\n" \
-                                                   f"max streak {max_streak}, but changed on {current_streak} " \
-                                                   f"correct answer"
-                    assert False, changed_before_error_message
+                changed_before_error_message = f"SwitchTask (WisconsinTest) rule changed earlier:\n" \
+                                               f"max streak {max_streak}, but changed on {current_streak} " \
+                                               f"correct answer"
+                assert current_rule == previous_rule, changed_before_error_message
+                assert task.streak > 0, f"SwitchTask (WisconsinTest) streak reset earlier: {current_streak}"
             elif current_streak == max_streak:
                 streak_reset_error_message = f"SwitchTask (WisconsinTest) did not reset streak. " \
                                              f"Current streak {task.streak}"
                 assert task.streak == 0, streak_reset_error_message
 
                 rule_change_error_message = f"SwitchTask (WisconsinTest) did not change the rule. " \
-                                            f"Current rule: {current_rule}, previous: {previous_rule}"
+                                            f"Current rule: {task.rule}, previous: {previous_rule}"
                 assert task.rule != previous_rule, rule_change_error_message
 
                 previous_rule = task.rule
