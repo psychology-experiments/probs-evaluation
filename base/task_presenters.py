@@ -213,7 +213,7 @@ class WisconsinTest(Task):  # SwitchTask
     def _is_finished_by_rule_change(self):
         return self._rules_changed == self._max_rules_changed
 
-    def _prepare_for_new_task(self):
+    def _next_subtask_with_new_rule(self):
         self.streak = 0
         self._first_trial_after_rule_change = True
         self._choose_rule()
@@ -233,7 +233,7 @@ class WisconsinTest(Task):  # SwitchTask
             raise ValueError("WisconsinTest must be used in next sequence (is_correct, next_task). But it was not.")
 
         if self.is_task_finished():
-            self._prepare_for_new_task()
+            self._next_subtask_with_new_rule()
             self._trial = 0
             self._rules_changed = 0
 
@@ -248,7 +248,7 @@ class WisconsinTest(Task):  # SwitchTask
             self._rules_changed += 1
 
             if not self.is_task_finished():
-                self._prepare_for_new_task()
+                self._next_subtask_with_new_rule()
 
     def new_task(self):
         pass
