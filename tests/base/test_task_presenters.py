@@ -709,18 +709,22 @@ class TestSwitchTask:  # WisconsinTest
         reset_card = task_presenters.WisconsinCard(wrong_card_features)  # 100% wrong card to reset streak
         permutation_correction = 2  # permutation create 2 correct answers
 
+        task.new_task()
         for trial in range(trials):
             current_result = []
             for possible_chosen_card_features in itertools.permutations(card_features):
                 chosen_card = task_presenters.WisconsinCard(possible_chosen_card_features)
-                current_result.append(task.next_subtask(chosen_card=chosen_card, target_card=target_card))
+                current_result.append(task.is_correct(chosen_card=chosen_card, target_card=target_card))
+                task.next_subtask()
 
             results.append(sum(current_result) / permutation_correction)
 
             if trial % max_streak == 0:  # change rule every max streak to ensure that test is correct
-                task.next_subtask(chosen_card=reset_card, target_card=target_card)
+                task.is_correct(chosen_card=reset_card, target_card=target_card)
+                task.next_subtask()
                 for _ in range(max_streak):
-                    task.next_subtask(chosen_card=target_card, target_card=target_card)
+                    task.is_correct(chosen_card=target_card, target_card=target_card)
+                    task.next_subtask()
 
         message = f"SwitchTask (WisconsinTest) has more (or less) correct answers than 1\n{results}"
         assert all(result == 1 for result in results), message
@@ -741,13 +745,15 @@ class TestSwitchTask:  # WisconsinTest
         wrong_card = task_presenters.WisconsinCard(wrong_card_features)
 
         results = []
+        task.new_task()
         for trial in range(trials):
             if trial in wrong_answer_steps:
                 chosen_card = wrong_card
             else:
                 chosen_card = correct_card
 
-            task.next_subtask(chosen_card=chosen_card, target_card=target_card)
+            task.is_correct(chosen_card=chosen_card, target_card=target_card)
+            task.next_subtask()
             current_result = task.streak
             results.append(current_result)
 
@@ -779,8 +785,10 @@ class TestSwitchTask:  # WisconsinTest
         target_card = task_presenters.WisconsinCard(correct_card_features)
 
         is_first_trial_after_rule_change = []
+        task.new_task()
         for trial in range(trials):
-            task.next_subtask(chosen_card=target_card, target_card=target_card)
+            task.is_correct(chosen_card=target_card, target_card=target_card)
+            task.next_subtask()
             is_first_trial_after_rule_change.append(task.is_first_trial_after_rule_change())
 
         real_number_of_detections = sum(is_first_trial_after_rule_change)
@@ -814,6 +822,7 @@ class TestSwitchTask:  # WisconsinTest
         result = []
         previous_rule = None
         next_trial_after_finished = False
+        task.new_task()
         for trial in range(max_trials * repeat):
             if next_trial_after_finished:
                 assert task.rule != previous_rule, "WisconsinTest must change rule when task is finished"
@@ -823,8 +832,13 @@ class TestSwitchTask:  # WisconsinTest
                 next_trial_after_finished = True
 
             previous_rule = task.rule
-            task.next_subtask(chosen_card=wrong_card, target_card=target_card)
+            task.is_correct(chosen_card=wrong_card, target_card=target_card)
+            task.next_subtask()
             is_finished = task.is_task_finished()
+
+            if is_finished:
+                task.new_task()
+
             result.append(is_finished)
 
         is_finished_qty = sum(result)
@@ -850,6 +864,7 @@ class TestSwitchTask:  # WisconsinTest
         result = []
         previous_rule = None
         next_trial_after_finished = False
+        task.new_task()
         for trial in range(max_trials * repeat):
             if next_trial_after_finished:
                 # 1 - because next trial was with correct card thus streak will be one
@@ -861,8 +876,13 @@ class TestSwitchTask:  # WisconsinTest
                 next_trial_after_finished = True
 
             previous_rule = task.rule
-            task.next_subtask(chosen_card=target_card, target_card=target_card)
+            task.is_correct(chosen_card=target_card, target_card=target_card)
+            task.next_subtask()
             is_finished = task.is_task_finished()
+
+            if is_finished:
+                task.new_task()
+
             result.append(is_finished)
 
         is_finished_qty = sum(result)
@@ -889,6 +909,7 @@ class TestSwitchTask:  # WisconsinTest
         result = []
         previous_rule = None
         next_task_after_finished = False
+        task.new_task()
         for trial in range(max_rules_changed * max_streak * repeat + 1):
             if next_task_after_finished:
                 # 1 - because next trial was with correct card thus streak will be one
@@ -900,8 +921,13 @@ class TestSwitchTask:  # WisconsinTest
                 next_task_after_finished = True
 
             previous_rule = task.rule
-            task.next_subtask(chosen_card=target_card, target_card=target_card)
+            task.is_correct(chosen_card=target_card, target_card=target_card)
+            task.next_subtask()
             is_finished = task.is_task_finished()
+
+            if is_finished:
+                task.new_task()
+
             result.append(is_finished)
 
         is_finished_qty = sum(result)
