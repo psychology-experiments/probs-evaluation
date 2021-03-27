@@ -648,19 +648,6 @@ class TestSwitchTask:  # WisconsinTest
         second_card = task_presenters.WisconsinCard(wrong_card_features)
         return dict(card_1=first_card, card_2=second_card)
 
-    @staticmethod
-    def _remove_task_finish_threshold(settings, remove: str):
-        threshold_settings = dict(all=["max_trials", "max_rules_changed"],
-                                  rule=["max_rules_changed"],
-                                  trial=["max_trials"])
-        change_settings = threshold_settings[remove]
-        unreachable_threshold = 1e500
-
-        for setting in change_settings:
-            settings[setting] = unreachable_threshold
-
-        return settings
-
     def test_task_is_not_finished_on_first_trial(self, default_task_settings):
         task = task_presenters.WisconsinTest(**default_task_settings)
         assert not task.is_task_finished()
