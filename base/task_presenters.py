@@ -180,10 +180,11 @@ class WisconsinTest(Task):  # SwitchTask
 
         if max_rules_changed is None:
             max_rules_changed = float("inf")
-        self._max_rules_changed: int = max_rules_changed
+        self._max_rules_changed: int = max_rules_changed  # TODO: update type
         self._rules_changed: int = 0
 
-        self._choose_rule()
+        self._the_first_trial = True
+        # self._choose_rule()
 
     def _choose_rule(self) -> None:
         possible_rules = list(range(len(self._rules)))
@@ -232,11 +233,6 @@ class WisconsinTest(Task):  # SwitchTask
         if self._trial_correctness is None and not self.is_task_finished():
             raise ValueError("WisconsinTest must be used in next sequence (is_correct, next_task). But it was not.")
 
-        if self.is_task_finished():
-            self._next_subtask_with_new_rule()
-            self._trial = 0
-            self._rules_changed = 0
-
         if self._first_trial_after_rule_change:
             self._first_trial_after_rule_change = False
 
@@ -251,4 +247,12 @@ class WisconsinTest(Task):  # SwitchTask
                 self._next_subtask_with_new_rule()
 
     def new_task(self):
-        pass
+        if not self.is_task_finished() and not self._the_first_trial:
+            raise RuntimeError
+
+        if self._the_first_trial:
+            self._the_first_trial = False
+
+        self._next_subtask_with_new_rule()
+        self._trial = 0
+        self._rules_changed = 0
