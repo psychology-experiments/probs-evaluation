@@ -616,7 +616,7 @@ class TestSwitchTask:  # WisconsinTest
     TRIALS_TO_CONCLUDE = 15
 
     @pytest.fixture
-    def task_settings(self):
+    def default_task_settings(self):
         return dict(max_streak=8, max_trials=144, max_rules_changed=8)
 
     @pytest.fixture
@@ -641,17 +641,17 @@ class TestSwitchTask:  # WisconsinTest
 
         return settings
 
-    def test_task_is_not_finished_on_first_trial(self, task_settings):
-        task = task_presenters.WisconsinTest(**task_settings)
+    def test_task_is_not_finished_on_first_trial(self, default_task_settings):
+        task = task_presenters.WisconsinTest(**default_task_settings)
         assert not task.is_task_finished()
 
     @pytest.mark.parametrize("max_streak", [1, 4, 8, 12])
-    def test_all_rule_types_used(self, max_streak, task_settings):
+    def test_all_rule_types_used(self, max_streak, default_task_settings):
         # TODO: правило меняется, выбирается из списка, меняется через N
-        task_settings = self._remove_task_finish_threshold(task_settings, remove="all")
-        task_settings["max_streak"] = max_streak
+        default_task_settings = self._remove_task_finish_threshold(default_task_settings, remove="all")
+        default_task_settings["max_streak"] = max_streak
         rule_types = (0, 1, 2)
-        task = task_presenters.WisconsinTest(**task_settings)
+        task = task_presenters.WisconsinTest(**default_task_settings)
         trials = max_streak * self.TRIALS_TO_CONCLUDE
 
         rules = set()
@@ -694,10 +694,10 @@ class TestSwitchTask:  # WisconsinTest
                                f"rules used {'; '.join(str(rule) for rule in rules)}"
         assert used_rules == 3, not_all_used_message
 
-    def test_single_correct_answer(self, task_settings):
+    def test_single_correct_answer(self, default_task_settings):
         max_streak = 3
-        task_settings["max_streak"] = max_streak
-        task = task_presenters.WisconsinTest(**task_settings)
+        default_task_settings["max_streak"] = max_streak
+        task = task_presenters.WisconsinTest(**default_task_settings)
         trials = self.TRIALS_TO_CONCLUDE
 
         results = []
@@ -729,10 +729,10 @@ class TestSwitchTask:  # WisconsinTest
         message = f"SwitchTask (WisconsinTest) has more (or less) correct answers than 1\n{results}"
         assert all(result == 1 for result in results), message
 
-    def test_incorrect_answer_reset_streak(self, task_settings):
+    def test_incorrect_answer_reset_streak(self, default_task_settings):
         max_streak = self.TRIALS_TO_CONCLUDE
-        task_settings["max_streak"] = max_streak
-        task = task_presenters.WisconsinTest(**task_settings)
+        default_task_settings["max_streak"] = max_streak
+        task = task_presenters.WisconsinTest(**default_task_settings)
 
         number_of_wrong_steps = randrange(1, max_streak)
         wrong_answer_steps = choices(range(1, max_streak), k=number_of_wrong_steps)
@@ -774,12 +774,12 @@ class TestSwitchTask:  # WisconsinTest
                                    )
         assert streak_zero_on_wrong, wrong_streak_error_message
 
-    def test_first_trial_after_change_is_detected(self, task_settings):
+    def test_first_trial_after_change_is_detected(self, default_task_settings):
         trials = 60
         number_of_detections = 12
-        task_settings["max_streak"] = trials // number_of_detections
-        task_settings = self._remove_task_finish_threshold(task_settings, remove="all")
-        task = task_presenters.WisconsinTest(**task_settings)
+        default_task_settings["max_streak"] = trials // number_of_detections
+        default_task_settings = self._remove_task_finish_threshold(default_task_settings, remove="all")
+        task = task_presenters.WisconsinTest(**default_task_settings)
 
         correct_card_features = (0, 1, 2)
         target_card = task_presenters.WisconsinCard(correct_card_features)
@@ -807,9 +807,9 @@ class TestSwitchTask:  # WisconsinTest
         pass
 
     @pytest.mark.parametrize("max_trials", [10, 30, 144])
-    def test_is_task_finished_correctly_trial_threshold_with_wrong_answers(self, task_settings, max_trials):
-        task_settings["max_trials"] = max_trials
-        task = task_presenters.WisconsinTest(**task_settings)
+    def test_is_task_finished_correctly_trial_threshold_with_wrong_answers(self, default_task_settings, max_trials):
+        default_task_settings["max_trials"] = max_trials
+        task = task_presenters.WisconsinTest(**default_task_settings)
 
         correct_card_features = (0, 1, 2)
         wrong_card_features = (1, 2, 0)
@@ -852,10 +852,10 @@ class TestSwitchTask:  # WisconsinTest
         assert all(finished_trials), wrong_trial_message
 
     @pytest.mark.parametrize("max_trials", [10, 30, 144])
-    def test_is_task_finished_correctly_trial_threshold_with_correct_answers(self, task_settings, max_trials):
-        task_settings["max_streak"] = 999  # ensure that is_task_finished would not be reset by RULE_CHANGE
-        task_settings["max_trials"] = max_trials
-        task = task_presenters.WisconsinTest(**task_settings)
+    def test_is_task_finished_correctly_trial_threshold_with_correct_answers(self, default_task_settings, max_trials):
+        default_task_settings["max_streak"] = 999  # ensure that is_task_finished would not be reset by RULE_CHANGE
+        default_task_settings["max_trials"] = max_trials
+        task = task_presenters.WisconsinTest(**default_task_settings)
 
         correct_card_features = (0, 1, 2)
         target_card = task_presenters.WisconsinCard(correct_card_features)
@@ -896,11 +896,11 @@ class TestSwitchTask:  # WisconsinTest
         assert all(finished_trials), wrong_trial_message
 
     @pytest.mark.parametrize("max_rules_changed", [3, 5, 8])
-    def test_is_task_finished_correctly_rule_threshold(self, task_settings, max_rules_changed):
-        max_streak = task_settings["max_streak"]
-        task_settings["max_rules_changed"] = max_rules_changed
-        task_settings["max_trials"] = 999  # ensure that is_task_finished would not be reset by TRIAL
-        task = task_presenters.WisconsinTest(**task_settings)
+    def test_is_task_finished_correctly_rule_threshold(self, default_task_settings, max_rules_changed):
+        max_streak = default_task_settings["max_streak"]
+        default_task_settings["max_rules_changed"] = max_rules_changed
+        default_task_settings["max_trials"] = 999  # ensure that is_task_finished would not be reset by TRIAL
+        task = task_presenters.WisconsinTest(**default_task_settings)
 
         correct_card_features = (0, 1, 2)
         target_card = task_presenters.WisconsinCard(correct_card_features)
