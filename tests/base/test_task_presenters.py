@@ -837,26 +837,28 @@ class TestSwitchTask:  # WisconsinTest
         repeat = 3
         result = []
         previous_rule = None
-        next_trial_after_finished = False
-        task.new_task()
-        for trial in range(max_trials * repeat):
-            if next_trial_after_finished:
-                assert task.rule != previous_rule, "WisconsinTest must change rule when task is finished"
-                next_trial_after_finished = False
+        print()
+        trials = 0
+        for _ in range(repeat):
+            task.new_task()
+            next_trial_after_finished = True
+            while not task.is_task_finished():
+                if next_trial_after_finished:
+                    assert task.rule != previous_rule, "WisconsinTest must change rule when task is finished"
+                    next_trial_after_finished = False
 
-            if task.is_task_finished():
-                next_trial_after_finished = True
+                previous_rule = task.rule
+                task.is_correct(chosen_card=wrong_card, target_card=target_card)
+                task.next_subtask()
+                is_finished = task.is_task_finished()
 
-            previous_rule = task.rule
-            task.is_correct(chosen_card=wrong_card, target_card=target_card)
-            task.next_subtask()
-            is_finished = task.is_task_finished()
+                result.append(is_finished)
+                trials += 1
+            print(trials)
+            trials = 0
 
-            if is_finished:
-                task.new_task()
-
-            result.append(is_finished)
-
+        print(result)
+        print([idx for idx, val in enumerate(result) if val])
         is_finished_qty = sum(result)
         wrong_quantity_message = f"WisconsinTest should return {repeat} True results for is_task_finished " \
                                  f"but returned {is_finished_qty} (check by TRIALS)"
