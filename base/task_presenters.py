@@ -47,10 +47,10 @@ class UpdateTask(Task):
 
         self._task_was_initialized_before_first_trial = False
 
-    def __len__(self):
+    def __len__(self) -> int:
         return self._length
 
-    def _load_stimuli(self, stimuli_fp):
+    def _load_stimuli(self, stimuli_fp) -> None:
         with open(stimuli_fp, mode="r", encoding="UTF-8") as fin:
             csv_file = csv.DictReader(fin, fieldnames=["examples", "words"])
 
@@ -59,16 +59,16 @@ class UpdateTask(Task):
                 self._all_examples.append(row["examples"])
                 self._all_words.append(row["words"])
 
-    def _choose_group_size(self):
+    def _choose_group_size(self) -> int:
         return choice(self._possible_sequences) + 1
 
-    def is_answer_time(self):
+    def is_answer_time(self) -> bool:
         return self._before_answer == 0
 
     def is_task_finished(self) -> bool:
         return self._blocks_before_task_finished == self._blocks_finished
 
-    def _is_task_first_trial(self):
+    def _is_task_first_trial(self) -> bool:
         return self.example is None or self.word is None
 
     def next_subtask(self) -> None:
@@ -88,7 +88,7 @@ class UpdateTask(Task):
             self.word = next(self._words_sequence)
             self._length -= 1
 
-    def new_task(self):
+    def new_task(self) -> None:
         if not self.is_task_finished() and self._task_was_initialized_before_first_trial:
             raise RuntimeError("Call to new_task is prohibited for unfinished task")
 
