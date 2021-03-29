@@ -221,9 +221,18 @@ class WisconsinTest(Task):  # SwitchTask
     def _update_streak(self):
         if self._trial_correctness:
             self.streak += 1
+            self._change_rule_on_max_streak(is_max_streak=self.streak == self._max_streak)
             return
 
         self.streak = 0
+
+    def _change_rule_on_max_streak(self, is_max_streak):
+        if not is_max_streak:
+            return
+
+        self._rules_changed += 1
+        if not self.is_task_finished():
+            self._next_subtask_with_new_rule()
 
     def is_task_finished(self) -> bool:
         return self._is_finished_by_trial() or self._is_finished_by_rule_change()
@@ -242,11 +251,6 @@ class WisconsinTest(Task):  # SwitchTask
         self._trial_correctness = None
 
         self._trial += 1
-        if self.streak == self._max_streak:
-            self._rules_changed += 1
-
-            if not self.is_task_finished():
-                self._next_subtask_with_new_rule()
 
     def new_task(self):
         if not self.is_task_finished() and not self._the_first_trial:
