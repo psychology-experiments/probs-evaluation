@@ -85,6 +85,9 @@ class InhibitionTaskView(AbstractTaskView):
         self._is_next_task = False
         self._current_task.image = self._presenter.next_subtask()
 
+    def new_task(self) -> None:
+        self._presenter.new_task()
+
     def is_trial_finished(self):
         return self._is_next_task
 
