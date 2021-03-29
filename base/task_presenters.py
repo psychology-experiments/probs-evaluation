@@ -117,7 +117,7 @@ class InhibitionTask(Task):
 
         self._the_first_trial = True
 
-    def __len__(self):
+    def __len__(self) -> int:
         return self._length
 
     @staticmethod
@@ -140,10 +140,10 @@ class InhibitionTask(Task):
     def is_task_finished(self) -> bool:
         return self._trial == self._trials_before_task_finished + 1
 
-    def _is_more_trials_than_subtasks(self):
+    def _is_more_trials_than_subtasks(self) -> bool:
         return self._trial > self._trials_before_task_finished + 1
 
-    def new_task(self):
+    def new_task(self) -> None:
         if self._the_first_trial:
             self._the_first_trial = False
             return
