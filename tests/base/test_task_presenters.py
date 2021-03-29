@@ -868,7 +868,7 @@ class TestSwitchTask:  # WisconsinTest
         finished_trials = result[max_trials::max_trials + 1]
         wrong_trial_message = f"WisconsinTest should return {repeat} True results for is_task_finished " \
                               f"according to max_trial but instead has discrepancy {finished_trials} (check by TRIALS)"
-        assert all(finished_trials), wrong_trial_message
+        assert finished_trials and all(finished_trials), wrong_trial_message
 
     @pytest.mark.parametrize("max_rules_changed", [3, 5, 8])
     def test_is_task_finished_correctly_rule_threshold(self,
