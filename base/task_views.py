@@ -182,7 +182,6 @@ class UpdateTaskView(AbstractTaskView):
 
         if self._word_presenter_timer.getTime() > 0:
             self._word_stimuli.draw()
-            # print(self._timer.getTime())
             return
 
         if not self._presenter.is_answer_time():
