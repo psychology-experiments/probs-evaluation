@@ -207,18 +207,18 @@ class WisconsinTest(Task):  # SwitchTask
     def is_first_trial_after_rule_change(self) -> bool:
         return self._first_trial_after_rule_change
 
-    def _is_finished_by_trial(self):
+    def _is_finished_by_trial(self) -> bool:
         return self._trial == self._max_trials + 1
 
-    def _is_finished_by_rule_change(self):
+    def _is_finished_by_rule_change(self) -> bool:
         return self._rules_changed == self._max_rules_changed
 
-    def _next_subtask_with_new_rule(self):
+    def _next_subtask_with_new_rule(self) -> None:
         self.streak = 0
         self._first_trial_after_rule_change = True
         self._choose_rule()
 
-    def _update_streak(self):
+    def _update_streak(self) -> None:
         if self._trial_correctness:
             self.streak += 1
             self._change_rule_on_max_streak(is_max_streak=self.streak == self._max_streak)
@@ -226,7 +226,7 @@ class WisconsinTest(Task):  # SwitchTask
 
         self.streak = 0
 
-    def _change_rule_on_max_streak(self, is_max_streak):
+    def _change_rule_on_max_streak(self, is_max_streak: bool) -> None:
         if not is_max_streak:
             return
 
@@ -249,7 +249,7 @@ class WisconsinTest(Task):  # SwitchTask
 
         self._trial += 1
 
-    def new_task(self):
+    def new_task(self) -> bool:
         if not self.is_task_finished() and not self._the_first_trial:
             raise RuntimeError("WisconsinTest new_task must be called on finished task")
 
