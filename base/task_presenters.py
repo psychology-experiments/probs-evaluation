@@ -110,7 +110,7 @@ class InhibitionTask(Task):
 
         self._length = len(stimuli)
         self._trials_before_task_finished = trials_before_task_finished
-        self._trial = 0
+        self._trial: Optional[int] = None
 
         shuffle(stimuli)
         self._unused_stimuli = iter(stimuli)
