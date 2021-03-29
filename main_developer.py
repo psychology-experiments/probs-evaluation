@@ -259,7 +259,7 @@ for task_info, probe_info in experiment_sequence:
 
         print(task_info.name)
         trial = 1  # testing variable
-        training_task.next_task()
+        training_task.new_task()
         while not training_task.is_task_finished():
             previous_buttons_state = mouse.getPressed()
             _timeToFirstFrame = win.getFutureFlipTime(clock="now")
@@ -283,7 +283,7 @@ for task_info, probe_info in experiment_sequence:
                                                           time_from_experiment_start=experiment_clock.getTime())
 
                 if training_task.is_trial_finished():
-                    training_task.next_task()
+                    training_task.next_subtask()
                     print("trial", trial)
                     trial += 1
                     # TODO: Для висконсинского теста неправильно сохраняет нажатия (если после выбора пощёлкать)
@@ -318,7 +318,7 @@ for task_info, probe_info in experiment_sequence:
     task_solution_clock.reset(-_timeToFirstFrame)
     print(task_info.name)
     print("before finished", task.is_task_finished())
-    task.next_task()
+    task.new_task()
     print("after finished", task.is_task_finished())
     while not task_finished:
         probe_started = False
@@ -375,7 +375,7 @@ for task_info, probe_info in experiment_sequence:
 
             if task.is_trial_finished():
                 # TODO: Для висконсинского теста неправильно сохраняет нажатия (если после выбора пощёлкать)
-                task.next_task()
+                task.next_subtask()
 
             win.flip()
 
