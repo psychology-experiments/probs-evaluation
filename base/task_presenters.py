@@ -249,7 +249,7 @@ class WisconsinTest(Task):  # SwitchTask
 
         self._trial += 1
 
-    def new_task(self) -> bool:
+    def new_task(self) -> None:
         if not self.is_task_finished() and not self._the_first_trial:
             raise RuntimeError("WisconsinTest new_task must be called on finished task")
 
