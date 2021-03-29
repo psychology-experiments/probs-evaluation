@@ -822,17 +822,21 @@ class TestSwitchTask:  # WisconsinTest
         # TODO: я думаю, что presenter должен думать о том, что отрисовывать и чтобы не было накладок
         pass
 
+    @pytest.mark.parametrize("answers", (("card_1", "card_1"), ("card_1", "card_2")),
+                             ids=["correct answers", "wrong answers"])
     @pytest.mark.parametrize("max_trials", [10, 30, 144])
-    def test_is_task_finished_correctly_trial_threshold_with_wrong_answers(self, default_task_settings, max_trials):
-        default_task_settings["max_trials"] = max_trials
-        task = task_presenters.WisconsinTest(**default_task_settings)
-
-        correct_card_features = (0, 1, 2)
-        wrong_card_features = (1, 2, 0)
+    def test_is_task_finished_correctly_trial_threshold(self,
+                                                        task_settings_without_rule_thresholds,
+                                                        possible_answers,
+                                                        max_trials,
+                                                        answers):
+        task_settings = task_settings_without_rule_thresholds
+        task_settings["max_trials"] = max_trials
+        task = task_presenters.WisconsinTest(**task_settings)
 
         # to check that streak did not interfere with calculation -> use only wrong cards
-        target_card = task_presenters.WisconsinCard(correct_card_features)
-        wrong_card = task_presenters.WisconsinCard(wrong_card_features)
+        first_card = possible_answers[answers[0]]
+        second_card = possible_answers[answers[1]]
 
         repeat = 3
         result = []
@@ -847,7 +851,7 @@ class TestSwitchTask:  # WisconsinTest
                     next_trial_after_finished = False
 
                 previous_rule = task.rule
-                task.is_correct(chosen_card=wrong_card, target_card=target_card)
+                task.is_correct(chosen_card=second_card, target_card=first_card)
                 task.next_subtask()
                 is_finished = task.is_task_finished()
 
@@ -862,52 +866,6 @@ class TestSwitchTask:  # WisconsinTest
 
         # add 1 because task should be finished AFTER n trial, not during
         finished_trials = result[max_trials::max_trials + 1]
-        wrong_trial_message = f"WisconsinTest should return {repeat} True results for is_task_finished " \
-                              f"according to max_trial but instead has discrepancy {finished_trials} (check by TRIALS)"
-        assert all(finished_trials), wrong_trial_message
-
-    @pytest.mark.parametrize("max_trials", [10, 30, 144])
-    def test_is_task_finished_correctly_trial_threshold_with_correct_answers(self,
-                                                                             task_settings_without_rule_thresholds,
-                                                                             max_trials):
-        task_settings = task_settings_without_rule_thresholds
-        task_settings["max_trials"] = max_trials
-        task = task_presenters.WisconsinTest(**task_settings)
-
-        correct_card_features = (0, 1, 2)
-        target_card = task_presenters.WisconsinCard(correct_card_features)
-
-        repeat = 3
-        result = []
-        previous_rule = None
-        next_trial_after_finished = False
-        task.new_task()
-        for trial in range(max_trials * repeat):
-            if next_trial_after_finished:
-                # 1 - because next trial was with correct card thus streak will be one
-                assert task.streak == 1, "WisconsinTest must reset streak when task is finished"
-                assert task.rule != previous_rule, "WisconsinTest must change rule when task is finished"
-                next_trial_after_finished = False
-
-            if task.is_task_finished():
-                next_trial_after_finished = True
-
-            previous_rule = task.rule
-            task.is_correct(chosen_card=target_card, target_card=target_card)
-            task.next_subtask()
-            is_finished = task.is_task_finished()
-
-            if is_finished:
-                task.new_task()
-
-            result.append(is_finished)
-
-        is_finished_qty = sum(result)
-        wrong_quantity_message = f"WisconsinTest should return {repeat} True results for is_task_finished " \
-                                 f"but returned {is_finished_qty} (check by TRIALS)"
-        assert is_finished_qty == repeat, wrong_quantity_message
-
-        finished_trials = result[max_trials - 1::max_trials]
         wrong_trial_message = f"WisconsinTest should return {repeat} True results for is_task_finished " \
                               f"according to max_trial but instead has discrepancy {finished_trials} (check by TRIALS)"
         assert all(finished_trials), wrong_trial_message
