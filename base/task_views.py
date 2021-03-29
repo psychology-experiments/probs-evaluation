@@ -28,7 +28,11 @@ def _ensure_creation_of_element(obj_creation_function: visual.basevisual):
 
 class AbstractTaskView(metaclass=ABCMeta):
     @abstractmethod
-    def next_task(self) -> None:
+    def next_subtask(self) -> None:
+        pass
+
+    @abstractmethod
+    def new_task(self) -> None:
         pass
 
     @abstractmethod
@@ -77,7 +81,7 @@ class InhibitionTaskView(AbstractTaskView):
     def finish_trial(self) -> None:
         self._is_next_task = True
 
-    def next_task(self):
+    def next_subtask(self):
         self._is_next_task = False
         self._current_task.image = self._presenter.next_subtask()
 
@@ -156,7 +160,7 @@ class UpdateTaskView(AbstractTaskView):
         if not self._presenter.is_answer_time():
             self._reset_word_timer = True
 
-    def next_task(self):
+    def next_subtask(self):
         self._is_next_task = False
         self._presenter.next_subtask()
 
@@ -376,7 +380,7 @@ class WisconsinTestTaskView(AbstractTaskView):
         self._mouse.setPos(newPos=self.target_pos)
         self._mouse.setVisible(True)
 
-    def next_task(self):
+    def next_subtask(self):
         self._next_trial()
         self._test_presenter.next_subtask()
 
