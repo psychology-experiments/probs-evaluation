@@ -171,6 +171,9 @@ class UpdateTaskView(AbstractTaskView):
             self._word_stimuli.text = self._presenter.word
             self._example_stimuli.text = self._presenter.example
 
+    def new_task(self) -> None:
+        self._presenter.new_task()
+
     def draw(self, next_flip_time):
         if self._reset_word_timer:
             self._reset_word_timer = False
