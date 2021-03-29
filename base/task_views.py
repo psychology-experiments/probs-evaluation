@@ -388,8 +388,8 @@ class WisconsinTestTaskView(AbstractTaskView):
         self._mouse.setVisible(True)
 
     def next_subtask(self):
-        self._next_trial()
         self._test_presenter.next_subtask()
+        self._next_trial()
 
     def new_task(self) -> None:
         self._test_presenter.new_task()
