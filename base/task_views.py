@@ -173,6 +173,7 @@ class UpdateTaskView(AbstractTaskView):
 
     def new_task(self) -> None:
         self._presenter.new_task()
+        self.next_subtask()
 
     def draw(self, next_flip_time):
         if self._reset_word_timer:
