@@ -207,7 +207,7 @@ class WisconsinTest(Task):  # SwitchTask
         return self._first_trial_after_rule_change
 
     def _is_finished_by_trial(self) -> bool:
-        return self._trial == self._max_trials + 1
+        return self._trial == self._max_trials
 
     def _is_finished_by_rule_change(self) -> bool:
         return self._rules_changed == self._max_rules_changed
