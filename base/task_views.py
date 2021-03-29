@@ -390,6 +390,9 @@ class WisconsinTestTaskView(AbstractTaskView):
         self._next_trial()
         self._test_presenter.next_subtask()
 
+    def new_task(self) -> None:
+        self._test_presenter.new_task()
+
     def _prepare_feedback(self, is_correct_answer):
         if is_correct_answer:
             self._feedback_text.text = u"ВЕРНО"
