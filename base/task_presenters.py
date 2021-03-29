@@ -241,9 +241,6 @@ class WisconsinTest(Task):  # SwitchTask
         if self._trial_correctness is None and not self.is_task_finished():
             raise RuntimeError("WisconsinTest must be used in next sequence: is_correct, next_task")
 
-        # if self.is_task_finished():
-        #     return
-
         if self._first_trial_after_rule_change:
             self._first_trial_after_rule_change = False
 
