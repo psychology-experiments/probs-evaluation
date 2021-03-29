@@ -144,12 +144,11 @@ class InhibitionTask(Task):
         return self._trial > self._trials_before_task_finished + 1
 
     def new_task(self) -> None:
+        if not self.is_task_finished() and not self._the_first_trial:
+            raise RuntimeError("Call to new task is prohibited for unfinished task")
+
         if self._the_first_trial:
             self._the_first_trial = False
-            return
-
-        if not self.is_task_finished():
-            raise RuntimeError("Call to new task is prohibited for unfinished task")
 
         self._trial = 0
 
