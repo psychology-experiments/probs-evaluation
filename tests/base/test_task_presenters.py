@@ -660,7 +660,6 @@ class TestSwitchTask:  # WisconsinTest
 
     @pytest.mark.parametrize("max_streak", [1, 4, 8, 12])
     def test_all_rule_types_used(self, max_streak, task_settings_without_all_task_finished_thresholds):
-        # TODO: правило меняется, выбирается из списка, меняется через N
         task_settings = task_settings_without_all_task_finished_thresholds
         task_settings["max_streak"] = max_streak
         rule_types = (0, 1, 2)
