@@ -864,8 +864,8 @@ class TestSwitchTask:  # WisconsinTest
                                  f"but returned {is_finished_qty} (check by TRIALS)"
         assert is_finished_qty == repeat, wrong_quantity_message
 
-        # add 1 because task should be finished AFTER n trial, not during
-        finished_trials = result[max_trials::max_trials + 1]
+        # minus 1 because 10th trial is on 9th place in list
+        finished_trials = result[max_trials - 1::max_trials]
         wrong_trial_message = f"WisconsinTest should return {repeat} True results for is_task_finished " \
                               f"according to max_trial but instead has discrepancy {finished_trials} (check by TRIALS)"
         assert finished_trials and all(finished_trials), wrong_trial_message
