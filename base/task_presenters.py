@@ -220,13 +220,13 @@ class WisconsinTest(Task):  # SwitchTask
     def _update_streak(self) -> None:
         if self._trial_correctness:
             self.streak += 1
-            self._change_rule_on_max_streak(is_max_streak=self.streak == self._max_streak)
+            self._change_rule_on_max_streak()
             return
 
         self.streak = 0
 
-    def _change_rule_on_max_streak(self, is_max_streak: bool) -> None:
-        if not is_max_streak:
+    def _change_rule_on_max_streak(self) -> None:
+        if self.streak != self._max_streak:
             return
 
         self._rules_changed += 1
