@@ -837,7 +837,6 @@ class TestSwitchTask:  # WisconsinTest
         repeat = 3
         result = []
         previous_rule = None
-        print()
         trials = 0
         for _ in range(repeat):
             task.new_task()
@@ -854,17 +853,14 @@ class TestSwitchTask:  # WisconsinTest
 
                 result.append(is_finished)
                 trials += 1
-            print(trials)
             trials = 0
 
-        print(result)
-        print([idx for idx, val in enumerate(result) if val])
         is_finished_qty = sum(result)
         wrong_quantity_message = f"WisconsinTest should return {repeat} True results for is_task_finished " \
                                  f"but returned {is_finished_qty} (check by TRIALS)"
         assert is_finished_qty == repeat, wrong_quantity_message
 
-        finished_trials = result[max_trials - 1::max_trials]
+        finished_trials = result[max_trials::max_trials + 1]
         wrong_trial_message = f"WisconsinTest should return {repeat} True results for is_task_finished " \
                               f"according to max_trial but instead has discrepancy {finished_trials} (check by TRIALS)"
         assert all(finished_trials), wrong_trial_message
