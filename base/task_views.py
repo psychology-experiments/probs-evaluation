@@ -229,7 +229,6 @@ SuitFeatures = namedtuple("SuitFeatures", "color shape figures_place")
 
 
 class WisconsinTestTaskView(AbstractTaskView):
-
     def __init__(self,
                  window: visual.Window,
                  position: Tuple[int, int],
