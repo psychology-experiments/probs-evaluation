@@ -40,6 +40,10 @@ class AbstractTaskView(metaclass=ABCMeta):
         # TODO: додумать что должно возвращать
         pass
 
+    @staticmethod
+    def is_valid_click() -> bool:
+        return True
+
     @abstractmethod
     def finish_trial(self) -> None:
         pass
@@ -55,10 +59,6 @@ class AbstractTaskView(metaclass=ABCMeta):
     @abstractmethod
     def draw(self, t_to_next_flip: float) -> None:
         pass
-
-    @staticmethod
-    def is_valid_click() -> bool:
-        return True
 
 
 class InhibitionTaskView(AbstractTaskView):
