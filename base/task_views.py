@@ -57,6 +57,11 @@ class AbstractTaskView(metaclass=ABCMeta):
         pass
 
     @abstractmethod
+    @property
+    def position(self):
+        pass
+
+    @abstractmethod
     def draw(self, t_to_next_flip: float) -> None:
         pass
 
