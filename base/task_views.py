@@ -49,6 +49,10 @@ class AbstractTaskView(metaclass=ABCMeta):
     def position(self):
         pass
 
+    @position.setter
+    def position(self, value):
+        pass
+
     @abstractmethod
     def finish_trial(self) -> None:
         pass
