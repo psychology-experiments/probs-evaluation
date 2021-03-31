@@ -1,6 +1,6 @@
 from abc import ABCMeta, abstractmethod
 from collections import namedtuple
-from typing import List, Tuple, Union
+from typing import List, Tuple
 from pathlib import Path
 
 import numpy as np
@@ -26,8 +26,7 @@ def _ensure_creation_of_element(obj_creation_function: visual.basevisual):
     return wrapper
 
 
-RealNumber = Union[int, float]
-ScreenPosition = Tuple[RealNumber, RealNumber]
+ScreenPosition = Tuple[float, float]
 
 
 class AbstractTaskView(metaclass=ABCMeta):
