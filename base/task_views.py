@@ -1,6 +1,6 @@
 from abc import ABCMeta, abstractmethod
 from collections import namedtuple
-from typing import List, Tuple
+from typing import List, Tuple, Optional
 from pathlib import Path
 
 import numpy as np
@@ -231,7 +231,7 @@ SuitFeatures = namedtuple("SuitFeatures", "color shape figures_place")
 class WisconsinTestTaskView(AbstractTaskView):
     def __init__(self,
                  window: visual.Window,
-                 position: Tuple[int, int],
+                 position: ScreenPosition,
                  image_path_dir: str,
                  mouse: event.Mouse,
                  trials_finishing_task: int,
@@ -239,6 +239,7 @@ class WisconsinTestTaskView(AbstractTaskView):
                  max_streak: int = 8,
                  feedback_time: float = 1.0):
         self._win = window
+        self.position = position
         self._center_position_x, self._center_position_y = position
         self._test_presenter = task_presenters.WisconsinTest(max_streak=max_streak,
                                                              max_trials=trials_finishing_task,
@@ -251,6 +252,7 @@ class WisconsinTestTaskView(AbstractTaskView):
         self._cards = []
         self._suit_elements = []
 
+        self.feedback_text_pos: Optional[ScreenPosition] = None
         self._feedback_text = visual.TextStim(self._win, pos=self.feedback_text_pos, height=30)
         self._feedback_countdown = core.CountdownTimer(start=feedback_time)
         self._mouse = mouse
@@ -457,6 +459,23 @@ class WisconsinTestTaskView(AbstractTaskView):
                     break
 
         return is_valid_click
+
+    @property
+    def position(self) -> ScreenPosition:
+        return self._position
+
+    @position.setter
+    def position(self, value: ScreenPosition) -> None:
+        self._position = value
+        raise NotImplementedError
+
+        # Посмотреть как именно утроенно задания местопложения карт и элементов на них
+        # self._cards
+        # self._suit_elements
+
+        # Должно быть последним, так просто использует новое значение от  положения целевой карты
+        # self.feedback_text_pos = (0, (self.target_pos[1] + self.card_y) / 2)
+        # self._feedback_text.pos = self.feedback_text_pos
 
     def draw(self, t_to_next_flip):  # TODO: Возможно стоит добавить использование времени
         if self._show_feedback:
