@@ -50,11 +50,11 @@ class AbstractTaskView(metaclass=ABCMeta):
 
     @property
     @abstractmethod
-    def position(self):
+    def position(self) -> ScreenPosition:
         pass
 
     @position.setter
-    def position(self, value):
+    def position(self, value: ScreenPosition) -> None:
         pass
 
     @abstractmethod
