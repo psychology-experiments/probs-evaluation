@@ -80,7 +80,8 @@ class InhibitionTaskView(AbstractTaskView):
                                                          trials_before_task_finished=trials_finishing_task)
 
         # TODO: заменить на нормальные изображения
-        self._current_task: visual.ImageStim = visual.ImageStim(window, size=(600, 600 * 1.0784), pos=position)
+        self.position = position
+        self._current_task: visual.ImageStim = visual.ImageStim(window, size=(600, 600 * 1.0784), pos=self.position)
 
         self._is_next_task = False  # TODO: подумать здесь ли место этой логике
 
@@ -106,6 +107,15 @@ class InhibitionTaskView(AbstractTaskView):
 
     def get_data(self):
         return
+
+    @property
+    def position(self):
+        return self._position
+
+    @position.setter
+    def position(self, value):
+        self._position = value
+        self._current_task.pos = self._position
 
     def draw(self, t_to_next_flip):
         self._current_task.draw()
