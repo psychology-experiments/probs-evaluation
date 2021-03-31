@@ -77,7 +77,7 @@ class AbstractTaskView(metaclass=ABCMeta):
 class InhibitionTaskView(AbstractTaskView):
     def __init__(self,
                  window: visual.Window,
-                 position: Tuple[int, int],
+                 position: ScreenPosition,
                  stimuli_fp: str,
                  trials_finishing_task: int):
         self._presenter = task_presenters.InhibitionTask(fp=stimuli_fp,
