@@ -113,11 +113,11 @@ class InhibitionTaskView(AbstractTaskView):
         return
 
     @property
-    def position(self):
+    def position(self) -> ScreenPosition:
         return self._position
 
     @position.setter
-    def position(self, value):
+    def position(self, value: ScreenPosition) -> None:
         self._position = value
         self._current_task.pos = self._position
 
