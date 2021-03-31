@@ -44,6 +44,11 @@ class AbstractTaskView(metaclass=ABCMeta):
     def is_valid_click() -> bool:
         return True
 
+    @property
+    @abstractmethod
+    def position(self):
+        pass
+
     @abstractmethod
     def finish_trial(self) -> None:
         pass
@@ -54,11 +59,6 @@ class AbstractTaskView(metaclass=ABCMeta):
 
     @abstractmethod
     def is_task_finished(self) -> bool:
-        pass
-
-    @abstractmethod
-    @property
-    def position(self):
         pass
 
     @abstractmethod
