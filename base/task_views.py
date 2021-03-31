@@ -128,7 +128,7 @@ class InhibitionTaskView(AbstractTaskView):
 class UpdateTaskView(AbstractTaskView):
     def __init__(self,
                  window: visual.Window,
-                 position: Tuple[int, int],
+                 position: ScreenPosition,
                  stimuli_fp: str,
                  word_show_time: float,
                  blocks_finishing_task: int,
@@ -147,16 +147,17 @@ class UpdateTaskView(AbstractTaskView):
                                                      possible_sequences=possible_task_sequences,
                                                      blocks_before_task_finished=blocks_finishing_task)
 
+        self.position = position
         self._word_stimuli: visual.TextStim = visual.TextStim(win=window,
-                                                              pos=position,
+                                                              pos=self.position,
                                                               text="",
                                                               color="black")
         self._example_stimuli: visual.TextStim = visual.TextStim(win=window,
-                                                                 pos=position,
+                                                                 pos=self.position,
                                                                  text="",
                                                                  color="black")
         self._answer_time_text: visual.TextStim = visual.TextStim(win=window,
-                                                                  pos=position,
+                                                                  pos=self.position,
                                                                   text="Назовите запомненные слова",
                                                                   color="black")
 
@@ -198,6 +199,17 @@ class UpdateTaskView(AbstractTaskView):
     def new_task(self) -> None:
         self._presenter.new_task()
         self.next_subtask()
+
+    @property
+    def position(self) -> ScreenPosition:
+        return self._position
+
+    @position.setter
+    def position(self, value: ScreenPosition) -> None:
+        self._position = value
+        self._word_stimuli.pos = self._position
+        self._example_stimuli.pos = self._position
+        self._answer_time_text.pos = self._position
 
     def draw(self, next_flip_time):
         if self._reset_word_timer:
