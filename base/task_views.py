@@ -83,7 +83,7 @@ class InhibitionTaskView(AbstractTaskView):
                                                          trials_before_task_finished=trials_finishing_task)
 
         # TODO: заменить на нормальные изображения
-        self.position = position
+        self._position = position
         self._current_task: visual.ImageStim = visual.ImageStim(window, size=(600, 600 * 1.0784), pos=self.position)
 
         self._is_next_task = False  # TODO: подумать здесь ли место этой логике
