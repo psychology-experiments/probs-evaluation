@@ -460,22 +460,31 @@ class WisconsinTestTaskView(AbstractTaskView):
 
         return is_valid_click
 
+    def _change_center_position_for_element(self,
+                                            element: visual.basevisual,
+                                            new_center_position: ScreenPosition):
+        # visual element pos is numpy array, thus we can subtract tuple from it
+        # result is relative position of element to the task
+        element.pos -= (self._center_position_x, self._center_position_y)
+        element.pos += new_center_position
+
     @property
     def position(self) -> ScreenPosition:
         return self._position
 
     @position.setter
     def position(self, value: ScreenPosition) -> None:
-        self._position = value
-        raise NotImplementedError
-
         # Посмотреть как именно утроенно задания местопложения карт и элементов на них
-        # self._cards
-        # self._suit_elements
+        for card, suit_elements in zip(self._cards, self._suit_elements):
+            self._change_center_position_for_element(card, new_center_position=value)
+            self._change_center_position_for_element(suit_elements, new_center_position=value)
 
-        # Должно быть последним, так просто использует новое значение от  положения целевой карты
-        # self.feedback_text_pos = (0, (self.target_pos[1] + self.card_y) / 2)
-        # self._feedback_text.pos = self.feedback_text_pos
+            # Должно быть последним, так просто использует новое значение от  положения целевой карты
+        self.feedback_text_pos = (0, (self.target_pos[1] + self.card_y) / 2)
+        self._feedback_text.pos = self.feedback_text_pos
+
+        self._center_position_x, self._center_position_y = value
+        self._position = value
 
     def draw(self, t_to_next_flip):  # TODO: Возможно стоит добавить использование времени
         if self._show_feedback:
