@@ -239,7 +239,7 @@ class WisconsinTestTaskView(AbstractTaskView):
                  max_streak: int = 8,
                  feedback_time: float = 1.0):
         self._win = window
-        self.position = position
+        self._position = position
         self._center_position_x, self._center_position_y = position
         self._test_presenter = task_presenters.WisconsinTest(max_streak=max_streak,
                                                              max_trials=trials_finishing_task,
