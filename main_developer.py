@@ -363,8 +363,7 @@ for task_info, probe_info in experiment_sequence:
                         task.finish_trial()
                         press_time = times[0]
                         print("saved", press_time)
-                        data_saver.save_experimental_task_data(task_name=task_info.name,
-                                                               solution_time=task_solution_clock.getTime(),
+                        data_saver.save_experimental_task_data(solution_time=task_solution_clock.getTime(),
                                                                time_from_experiment_start=experiment_clock.getTime())
 
             task.draw(win.getFutureFlipTime(clock="now"))
