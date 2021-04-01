@@ -72,6 +72,8 @@ class DataSaver:
 
         self._saver.addData("stage", "experimental")
 
+        self._saver.addData("task", self._task)
+
         self._saver.addData("probe_trial", self._probe_trial)
         self._saver.addData("probe", probe_name)
         self._saver.addData("RT", rt)
