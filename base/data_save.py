@@ -81,7 +81,6 @@ class DataSaver:
         self._saver.nextEntry()
 
     def save_experimental_task_data(self,
-                                    task_name: str,
                                     solution_time: Optional[float],
                                     time_from_experiment_start: float
                                     ):
@@ -90,7 +89,7 @@ class DataSaver:
         self._saver.addData("stage", "experimental")
 
         self._saver.addData("task_trial", self._task_trial)
-        self._saver.addData("task", task_name)
+        self._saver.addData("task", self._task)
         self._saver.addData("task_solution_time", solution_time)
 
         self._saver.addData("time_from_experiment_start", time_from_experiment_start)
