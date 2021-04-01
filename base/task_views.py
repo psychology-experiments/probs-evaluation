@@ -146,7 +146,7 @@ class UpdateTaskView(AbstractTaskView):
                                                      possible_sequences=possible_task_sequences,
                                                      blocks_before_task_finished=blocks_finishing_task)
 
-        self.position = position
+        self._position = position
         self._word_stimuli: visual.TextStim = visual.TextStim(win=window,
                                                               pos=self.position,
                                                               text="",
