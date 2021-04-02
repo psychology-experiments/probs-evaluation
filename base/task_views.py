@@ -183,7 +183,6 @@ class UpdateTaskView(AbstractTaskView):
     def finish_trial(self) -> None:
         self._is_next_task = True
 
-        # TODO: нужно или поправку внести или переделать, так как меньше, чем 750 мс предъявление
         if not self._presenter.is_answer_time():
             self._reset_word_timer = True
 
