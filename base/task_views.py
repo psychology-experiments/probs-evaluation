@@ -498,7 +498,6 @@ class WisconsinTestTaskView(AbstractTaskView):
         self._feedback_text.pos = self.feedback_text_pos
 
     def draw(self, t_to_next_flip):  # TODO: Возможно стоит добавить использование времени
-        self._feedback_text.draw()
         if self._show_feedback:
             if self._feedback_countdown.getTime() >= 0:
                 self._feedback_text.draw()
