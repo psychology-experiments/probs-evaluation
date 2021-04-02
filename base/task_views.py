@@ -240,10 +240,17 @@ class WisconsinTestTaskView(AbstractTaskView):
                  feedback_time: float = 1.0):
         self._win = window
         self._position = position
+        self.feedback_text_pos: Optional[ScreenPosition] = None
+        self.target_pos: Optional[ScreenPosition] = None
         self._center_position_x, self._center_position_y = position
         self._test_presenter = task_presenters.WisconsinTest(max_streak=max_streak,
                                                              max_trials=trials_finishing_task,
                                                              max_rules_changed=rule_changes_finishing_task)
+
+        self.card_x = self._win.size[1] * 0.1  # horizontal space between choice cards
+        self.card_w = self._win.size[1] * 0.1  # card width
+        self.card_h = self._win.size[1] * 0.15  # card height
+        self.card_y = -self.card_h * 0.33 + self._center_position_y  # vertical position of choice cards
 
         self._shapes: List[visual.basevisual] = []
         self._load_shapes(path=image_path_dir)
@@ -252,17 +259,15 @@ class WisconsinTestTaskView(AbstractTaskView):
         self._cards = []
         self._suit_elements = []
 
-        self.feedback_text_pos: Optional[ScreenPosition] = None
-        self._feedback_text = visual.TextStim(self._win, pos=self.feedback_text_pos, height=30)
-        self._feedback_countdown = core.CountdownTimer(start=feedback_time)
-        self._mouse = mouse
-        self._clock = core.Clock()
-
         self._fill_cards()
         self._target_card = self._cards[-1]
         self._presentation_cards = self._cards[:-1]
         self._chosen_card = None
 
+        self._feedback_text = visual.TextStim(self._win, pos=self.feedback_text_pos, height=40)
+        self._feedback_countdown = core.CountdownTimer(start=feedback_time)
+        self._mouse = mouse
+        self._clock = core.Clock()
         self._next_trial()
 
         self._show_feedback = False
@@ -280,12 +285,7 @@ class WisconsinTestTaskView(AbstractTaskView):
             self._shapes.append(image_path)
 
     def _calculate_correct_size(self):
-        self.card_x = self._win.size[1] * 0.1  # horizontal space between choice cards
-        self.card_w = self._win.size[1] * 0.1  # card width
-        self.card_h = self._win.size[1] * 0.15  # card height
-        self.card_y = -self.card_h * 0.33 + self._center_position_y  # vertical position of choice cards
         self.target_pos = (0, self.card_y - self.card_h * 1.75)  # position of the target card
-        self.feedback_text_pos = (0, (self.target_pos[1] + self.card_y) / 2)
         self.colors = ['red', 'green', 'blue', 'orange']
         self.suit_pos = [
             # one symbol
@@ -327,6 +327,9 @@ class WisconsinTestTaskView(AbstractTaskView):
 
             self._cards.append(card)
             self._suit_elements.append(suit_elements)
+
+        self.target_pos = tuple(self._cards[-1].pos)
+        self.feedback_text_pos = (self.target_pos[0], (self.target_pos[1] + self.card_y) / 2)
 
     def _create_card(self, position):
         x, y = position
@@ -460,13 +463,21 @@ class WisconsinTestTaskView(AbstractTaskView):
 
         return is_valid_click
 
-    def _change_center_position_for_element(self,
-                                            element: visual.basevisual,
-                                            new_center_position: ScreenPosition):
+    def _change_center_position_for_card(self,
+                                         card: visual.basevisual,
+                                         new_center_position: ScreenPosition):
         # visual element pos is numpy array, thus we can subtract tuple from it
         # result is relative position of element to the task
-        element.pos -= (self._center_position_x, self._center_position_y)
-        element.pos += new_center_position
+        card.pos -= (self._center_position_x, self._center_position_y)
+        card.pos += new_center_position
+
+    def _change_center_position_for_suit_elements(self,
+                                                  suit_elements: visual.basevisual,
+                                                  new_center_position: ScreenPosition):
+        # visual element pos is numpy array, thus we can subtract tuple from it
+        # result is relative position of element to the task
+        suit_elements.fieldPos -= (self._center_position_x, self._center_position_y)
+        suit_elements.fieldPos += new_center_position
 
     @property
     def position(self) -> ScreenPosition:
@@ -476,17 +487,19 @@ class WisconsinTestTaskView(AbstractTaskView):
     def position(self, value: ScreenPosition) -> None:
         # Посмотреть как именно утроенно задания местопложения карт и элементов на них
         for card, suit_elements in zip(self._cards, self._suit_elements):
-            self._change_center_position_for_element(card, new_center_position=value)
-            self._change_center_position_for_element(suit_elements, new_center_position=value)
+            self._change_center_position_for_card(card, new_center_position=value)
+            self._change_center_position_for_suit_elements(suit_elements, new_center_position=value)
 
-            # Должно быть последним, так просто использует новое значение от  положения целевой карты
-        self.feedback_text_pos = (0, (self.target_pos[1] + self.card_y) / 2)
-        self._feedback_text.pos = self.feedback_text_pos
-
+        # Должно быть последним, так просто использует новое значение от  положения целевой карты
         self._center_position_x, self._center_position_y = value
         self._position = value
+        self.target_pos = tuple(self._cards[-1].pos)
+        self.card_y = -self.card_h * 0.33 + self._center_position_y
+        self.feedback_text_pos = (self.target_pos[0], (self.target_pos[1] + self.card_y) / 2)
+        self._feedback_text.pos = self.feedback_text_pos
 
     def draw(self, t_to_next_flip):  # TODO: Возможно стоит добавить использование времени
+        self._feedback_text.draw()
         if self._show_feedback:
             if self._feedback_countdown.getTime() >= 0:
                 self._feedback_text.draw()
