@@ -200,7 +200,6 @@ if not SKIP_PROBE_TRAINING:
 
         print(number_of_trials)
         for trial in number_of_trials:
-            # TODO: считать время от момента начала нового предъявления зонда или от того момента, как отрисован зонд?
             # сейчас RT - от времени отрисовки зонда
 
             print(f"\n{probe_name}")
