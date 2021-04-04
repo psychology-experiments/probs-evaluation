@@ -411,7 +411,6 @@ class WisconsinTestTaskView(AbstractTaskView):
         if self._show_feedback:
             return False
 
-        self._is_next_task = False
         return True
 
     def is_task_finished(self) -> bool:
@@ -425,6 +424,7 @@ class WisconsinTestTaskView(AbstractTaskView):
         self._mouse.setVisible(True)
 
     def next_subtask(self):
+        self._is_next_task = False
         self._test_presenter.next_subtask()
         self._next_trial()
 
