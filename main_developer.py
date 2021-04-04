@@ -366,13 +366,13 @@ for task_info, probe_info in experiment_sequence:
                         data_saver.save_experimental_task_data(solution_time=task_solution_clock.getTime(),
                                                                time_from_experiment_start=experiment_clock.getTime())
 
-            if task.is_task_finished():
-                task_finished = True
-                break
-
             if task.is_trial_finished():
                 # TODO: Для висконсинского теста неправильно сохраняет нажатия (если после выбора пощёлкать)
                 task.next_subtask()
+
+            if task.is_task_finished():
+                task_finished = True
+                break
 
             task.draw(win.getFutureFlipTime(clock="now"))
             win.flip()
