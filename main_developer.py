@@ -359,7 +359,7 @@ for task_info, probe_info in experiment_sequence:
                 previous_buttons_state = buttons_pressed
 
                 if buttons_pressed[0]:
-                    if task.is_valid_click():  # TODO: решение для проблемы нескольких нажатий
+                    if task.is_valid_click():  # only first mouse press is used
                         task.finish_trial()
                         press_time = times[0]
                         print("saved", press_time)
