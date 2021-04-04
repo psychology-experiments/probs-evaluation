@@ -367,7 +367,6 @@ for task_info, probe_info in experiment_sequence:
                                                                time_from_experiment_start=experiment_clock.getTime())
 
             if task.is_trial_finished():
-                # TODO: Для висконсинского теста неправильно сохраняет нажатия (если после выбора пощёлкать)
                 task.next_subtask()
 
             if task.is_task_finished():
