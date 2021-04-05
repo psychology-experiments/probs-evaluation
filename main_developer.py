@@ -200,7 +200,6 @@ if not SKIP_PROBE_TRAINING:
 
         print(number_of_trials)
         for trial in number_of_trials:
-            # TODO: считать время от момента начала нового предъявления зонда или от того момента, как отрисован зонд?
             # сейчас RT - от времени отрисовки зонда
 
             print(f"\n{probe_name}")
@@ -274,7 +273,7 @@ for task_info, probe_info in experiment_sequence:
                     previous_buttons_state = buttons_pressed
 
                     if buttons_pressed[0]:
-                        if training_task.is_valid_click():  # TODO: решение для проблемы нескольких нажатий
+                        if training_task.is_valid_click():  # only first mouse press is used
                             training_task.finish_trial()
                             press_time = times[0]
                             print("saved", press_time)
@@ -286,7 +285,6 @@ for task_info, probe_info in experiment_sequence:
                     training_task.next_subtask()
                     print("trial", trial)
                     trial += 1
-                    # TODO: Для висконсинского теста неправильно сохраняет нажатия (если после выбора пощёлкать)
                     break
 
                 win.flip()
@@ -359,23 +357,21 @@ for task_info, probe_info in experiment_sequence:
                 previous_buttons_state = buttons_pressed
 
                 if buttons_pressed[0]:
-                    if task.is_valid_click():  # TODO: решение для проблемы нескольких нажатий
+                    if task.is_valid_click():  # only first mouse press is used
                         task.finish_trial()
                         press_time = times[0]
                         print("saved", press_time)
                         data_saver.save_experimental_task_data(solution_time=task_solution_clock.getTime(),
                                                                time_from_experiment_start=experiment_clock.getTime())
 
-            task.draw(win.getFutureFlipTime(clock="now"))
+            if task.is_trial_finished():
+                task.next_subtask()
 
             if task.is_task_finished():
                 task_finished = True
                 break
 
-            if task.is_trial_finished():
-                # TODO: Для висконсинского теста неправильно сохраняет нажатия (если после выбора пощёлкать)
-                task.next_subtask()
-
+            task.draw(win.getFutureFlipTime(clock="now"))
             win.flip()
 
             if quit_keyboard.getKeys(keyList=QUIT_KEYS):
