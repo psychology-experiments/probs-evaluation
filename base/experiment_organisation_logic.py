@@ -15,11 +15,14 @@ class TaskInfo(NamedTuple):
     instruction: Optional[str]
 
 
+FilePath = str
+
+
 class TrainingSequence:
     def __init__(self,
                  probes_sequence: Tuple[str, ...],
                  trials: Optional[Union[List[int], int]] = 30,
-                 probe_instructions_path: str = "text/probe instructions.csv"):
+                 probe_instructions_path: FilePath = "text/probe instructions.csv"):
 
         if trials is None:
             trials = [count() for _ in range(len(probes_sequence))]
@@ -64,8 +67,8 @@ class ExperimentWMSequence:
     def __init__(self,
                  tasks: Tuple[str, ...],
                  probes: Tuple[str, ...],
-                 task_instructions_path: str = "text/task instructions.csv",
-                 probe_instructions_path: str = "text/probe instructions.csv"):
+                 task_instructions_path: FilePath = "text/task instructions.csv",
+                 probe_instructions_path: FilePath = "text/probe instructions.csv"):
         tasks_and_probes = list(product(tasks, probes))
         shuffle(tasks_and_probes)
 
@@ -106,5 +109,10 @@ class ExperimentInsightTaskSequence:
     """
     Create sequence of insight task
     """
-    def __init__(self):
+
+    def __init__(self,
+                 tasks: FilePath,
+                 probes: Tuple[str, ...],
+                 task_instructions_path: FilePath = "text/task instructions.csv",
+                 probe_instructions_path: FilePath = "text/probe instructions.csv"):
         pass
