@@ -56,7 +56,10 @@ class TrainingSequence:
         return self._probes_info[item]
 
 
-class ExperimentSequence:
+class ExperimentWMSequence:
+    """
+    Create sequence to evaluate relationship between WM probes and tasks
+    """
     def __init__(self,
                  tasks: Tuple[str, ...],
                  probes: Tuple[str, ...],

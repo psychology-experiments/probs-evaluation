@@ -126,7 +126,7 @@ class TestExperimentSequence:
         actual_probes_task_sequences = []
 
         for trial in range(trials_to_check_randomisation):
-            sequence = experiment_organisation_logic.ExperimentSequence(**default_experiment_settings)
+            sequence = experiment_organisation_logic.ExperimentWMSequence(**default_experiment_settings)
             single_result = tuple((task.name, probe.name) for task, probe in sequence)
             actual_probes_task_sequences.append(single_result)
 
@@ -138,7 +138,7 @@ class TestExperimentSequence:
 
     def test_tasks_and_probe_instructions_are_correct(self, default_experiment_settings, instructions):
         right_task_instructions, right_probe_instructions = instructions
-        sequence = experiment_organisation_logic.ExperimentSequence(**default_experiment_settings)
+        sequence = experiment_organisation_logic.ExperimentWMSequence(**default_experiment_settings)
 
         tasks_instructions_showed = {task: 0 for task in default_experiment_settings["tasks"]}
         for idx, (task, probe) in enumerate(sequence):
