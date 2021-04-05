@@ -113,6 +113,5 @@ class ExperimentInsightTaskSequence:
     def __init__(self,
                  tasks: FilePath,
                  probes: Tuple[str, ...],
-                 task_instructions_path: FilePath = "text/task instructions.csv",
                  probe_instructions_path: FilePath = "text/probe instructions.csv"):
         pass
