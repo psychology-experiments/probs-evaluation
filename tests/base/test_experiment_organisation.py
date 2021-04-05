@@ -161,5 +161,9 @@ class TestExperimentWMSequence:
                    for times_showed in tasks_instructions_showed.values()), showed_too_many_times_error_message
 
 
+class TestExperimentInsightTaskSequence:
+    pass
+
+
 if __name__ == '__main__':
     pytest.main()
