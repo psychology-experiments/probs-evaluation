@@ -60,6 +60,7 @@ class ExperimentWMSequence:
     """
     Create sequence to evaluate relationship between WM probes and tasks
     """
+
     def __init__(self,
                  tasks: Tuple[str, ...],
                  probes: Tuple[str, ...],
@@ -99,3 +100,11 @@ class ExperimentWMSequence:
                         instruction=task_instruction)
 
         return task, probe
+
+
+class ExperimentInsightTaskSequence:
+    """
+    Create sequence of insight task
+    """
+    def __init__(self):
+        pass
