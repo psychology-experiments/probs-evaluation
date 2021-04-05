@@ -162,7 +162,17 @@ class TestExperimentWMSequence:
 
 
 class TestExperimentInsightTaskSequence:
-    pass
+    PROBE_INSTRUCTIONS_TEST_FILE = "test_files/tables/probe_instructions.csv"
+
+    @pytest.fixture
+    def default_tasks(self, tmpdir):
+        task_fp = tmpdir / "tasks"
+        task_fp.makedir()
+
+        return task_fp
+
+    def test_smth(self, default_tasks):
+        print(default_tasks)
 
 
 if __name__ == '__main__':
