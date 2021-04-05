@@ -88,7 +88,7 @@ class TestTrainingSequence:
             assert instruction == right_instruction, wrong_instruction_message
 
 
-class ExperimentWMSequence:
+class TestExperimentWMSequence:
     TASK_INSTRUCTIONS_TEST_FILE = "test_files/tables/task_instructions.csv"
     PROBE_INSTRUCTIONS_TEST_FILE = "test_files/tables/probe_instructions.csv"
 
