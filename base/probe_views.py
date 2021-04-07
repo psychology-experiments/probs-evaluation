@@ -16,6 +16,15 @@ class AbstractProbeViw(metaclass=ABCMeta):
     def get_press_correctness(self, pressed_key_name: str) -> bool:
         pass
 
+    @property
+    @abstractmethod
+    def position(self):
+        pass
+
+    @position.setter
+    def position(self, value):
+        pass
+
     @abstractmethod
     def draw(self, t: float) -> None:
         pass
