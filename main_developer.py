@@ -20,6 +20,7 @@ SKIP_PROBE_TRAINING = SETTINGS.getboolean("skip_probe_training")
 SKIP_TASK_TRAINING = SETTINGS.getboolean("skip_task_training")
 SKIP_EXPERIMENTAL_TASK = SETTINGS.getboolean("skip_experimental_task")
 
+TASKS_SIZE = dict(Обновление=dict(word_size=40, example_size=40, answer_size=30))
 TRAINING_TRAILS_QTY = dict(Обновление=1, Переключение=10, Торможение=2)
 EXPERIMENTAL_TASK_ONE_SOLUTION_SETTINGS = dict(Обновление=dict(blocks_finishing_task=5),
                                                Переключение=dict(trials_finishing_task=20,
@@ -129,6 +130,7 @@ mouse = event.Mouse(visible=False, win=win)
 # тренировочная серия
 task_update = task_views.UpdateTaskView(window=win,
                                         stimuli_fp="text/Operation span task practice.csv",
+                                        **TASKS_SIZE["Обновление"],
                                         word_show_time=0.750,
                                         blocks_finishing_task=TRAINING_TRAILS_QTY["Обновление"],
                                         possible_task_sequences=(4,),
@@ -156,6 +158,7 @@ training_tasks = collections.OrderedDict((
 # экспериментальная серия
 task_update = task_views.UpdateTaskView(window=win,
                                         stimuli_fp="text/Operation span task experimental.csv",
+                                        **TASKS_SIZE["Обновление"],
                                         word_show_time=0.750,
                                         possible_task_sequences=(3, 4),
                                         position=EXPERIMENTAL_TASK_POSITION,
