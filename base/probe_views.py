@@ -58,6 +58,7 @@ class ProbeView(AbstractProbeViw):
                                      )
             self.visual_probes.append(probe)
 
+        self._position = position
         self._current_probe = self.visual_probes[self._presenter_probe.get_probe_number()]
 
     def next_probe(self) -> None:
@@ -66,6 +67,16 @@ class ProbeView(AbstractProbeViw):
 
     def get_press_correctness(self, pressed_key_name: str) -> bool:
         return self._presenter_probe.get_press_correctness(pressed_key_name)
+
+    @property
+    def position(self):
+        return self._position
+
+    @position.setter
+    def position(self, value):
+        for probe in self.visual_probes:
+            probe.pos = value
+        self._position = value
 
     def draw(self, t: float) -> None:
         if t >= self._start_time:
