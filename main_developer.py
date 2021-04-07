@@ -80,14 +80,14 @@ probe_two_alternatives = probe_views.ProbeView(window=win,
                                                probe_type="TwoAlternatives",
                                                start_time=PROBE_START,
                                                image_path_dir="images/Выбор из 2 альтернатив/",
-                                               position=PROBES_POSITION)
+                                               position=PROBES_TRAINING_POSITION)
 probes_update = probe_views.ProbeView(window=win,
                                       probes=["1", "2", "3"],
                                       answers=None,
                                       probe_type="Update",
                                       start_time=PROBE_START,
                                       image_path_dir="images/Обновление/",
-                                      position=PROBES_POSITION)
+                                      position=PROBES_TRAINING_POSITION)
 
 probe_switch = probe_views.ProbeView(window=win,
                                      probes=list("12345678"),
@@ -95,7 +95,7 @@ probe_switch = probe_views.ProbeView(window=win,
                                      probe_type="Switch",
                                      start_time=PROBE_START,
                                      image_path_dir="images/Переключение/",
-                                     position=PROBES_POSITION)
+                                     position=PROBES_TRAINING_POSITION)
 
 inhibition_probes = ["".join(colorful_word) for colorful_word in itertools.product("RGBY", repeat=2)]
 inhibition_right_answers = dict(R="right", Y="right", G="left", B="left")
@@ -107,7 +107,7 @@ probe_inhibition = probe_views.ProbeView(window=win,
                                          probe_type="Inhibition",
                                          start_time=PROBE_START,
                                          image_path_dir="images/Торможение/",
-                                         position=PROBES_POSITION)
+                                         position=PROBES_TRAINING_POSITION)
 
 all_probes = collections.OrderedDict((
     ("Выбор из 2 альтернатив", probe_two_alternatives),
@@ -242,6 +242,9 @@ if not SKIP_PROBE_TRAINING:
                     finish_experiment(window=win)
 
 # ЭКСПЕРИМЕНТАЛЬНАЯ ЧАСТЬ
+for probe in experimental_probes:
+    probe.pos = EXPERIMENTAL_PROBE_POSITION
+
 for task_info, probe_info in experiment_sequence:
     # Часть с инструкциями
     organisation_message.show(FIRST_DOUBLE_TASK_PREPARATION_MESSAGE)
