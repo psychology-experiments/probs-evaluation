@@ -246,7 +246,7 @@ if not SKIP_PROBE_TRAINING:
 
 # ЭКСПЕРИМЕНТАЛЬНАЯ ЧАСТЬ
 for probe in experimental_probes.values():
-    probe.pos = EXPERIMENTAL_PROBE_POSITION
+    probe.position = EXPERIMENTAL_PROBE_POSITION
 
 for task_info, probe_info in experiment_sequence:
     # Часть с инструкциями
