@@ -128,6 +128,9 @@ class UpdateTaskView(AbstractTaskView):
     def __init__(self,
                  window: visual.Window,
                  position: ScreenPosition,
+                 word_size: int,
+                 example_size: int,
+                 answer_size: int,
                  stimuli_fp: str,
                  word_show_time: float,
                  blocks_finishing_task: int,
@@ -149,14 +152,17 @@ class UpdateTaskView(AbstractTaskView):
         self._position = position
         self._word_stimuli: visual.TextStim = visual.TextStim(win=window,
                                                               pos=self.position,
+                                                              height=word_size,
                                                               text="",
                                                               color="black")
         self._example_stimuli: visual.TextStim = visual.TextStim(win=window,
                                                                  pos=self.position,
+                                                                 height=example_size,
                                                                  text="",
                                                                  color="black")
         self._answer_time_text: visual.TextStim = visual.TextStim(win=window,
                                                                   pos=self.position,
+                                                                  height=answer_size,
                                                                   text="Назовите запомненные слова",
                                                                   color="black")
 
