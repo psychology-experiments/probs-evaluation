@@ -53,7 +53,7 @@ def change_mouse_visibility(mouse_component: event.Mouse,
 
 
 def skip_all_tasks_except(task_name: str, show: str, mode=MODE) -> bool:
-    return mode == "TEST" and task_name != show
+    return mode == "TEST" and task_name != show and show != "all"
 
 
 def finish_experiment(window: visual.Window):
