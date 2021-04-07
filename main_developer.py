@@ -293,6 +293,7 @@ for task_info, probe_info in experiment_sequence:
                     print("training: is_trial_finished")
                     training_task.next_subtask()
                     print("trial", trial)
+                    print()
                     trial += 1
                     break
 
@@ -376,10 +377,12 @@ for task_info, probe_info in experiment_sequence:
 
             if task.is_trial_finished():
                 print("experiment: is_trial_finished")
+                print()
                 task.next_subtask()
 
             if task.is_task_finished():
                 print("experiment: is_task_finished")
+                print("\n\n")
                 task_finished = True
                 break
 
