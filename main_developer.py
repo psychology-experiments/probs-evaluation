@@ -242,7 +242,7 @@ if not SKIP_PROBE_TRAINING:
                     finish_experiment(window=win)
 
 # ЭКСПЕРИМЕНТАЛЬНАЯ ЧАСТЬ
-for probe in experimental_probes:
+for probe in experimental_probes.values():
     probe.pos = EXPERIMENTAL_PROBE_POSITION
 
 for task_info, probe_info in experiment_sequence:
