@@ -30,9 +30,9 @@ EXPERIMENTAL_TASK_ONE_SOLUTION_SETTINGS = dict(Обновление=dict(blocks_
 
 FRAME_TOLERANCE = 0.001  # how close to onset before 'same' frame TODO: проверить что используется правильно
 PROBE_START = 0.1
-EXPERIMENTAL_PROBE_POSITION = (0, -200)
+EXPERIMENTAL_PROBE_POSITION = (0, -300)
 PROBES_TRAINING_POSITION = (0, 0)
-EXPERIMENTAL_TASK_POSITION = (0, 300)
+EXPERIMENTAL_TASK_POSITION = (0, 400)
 TRAINING_TASK_POSITION = (0, 0)
 
 FIRST_DOUBLE_TASK_PREPARATION_MESSAGE = "Сейчас вам нужно будет выполнять два задания одновременно.\n" \
