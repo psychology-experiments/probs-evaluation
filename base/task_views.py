@@ -457,6 +457,9 @@ class WisconsinTestTaskView(AbstractTaskView):
         self._show_feedback = True
 
     def is_valid_click(self) -> bool:
+        if self._is_next_task:
+            return False
+
         is_valid_click = False
         if not self._show_feedback:
             for idx, card in enumerate(self._presentation_cards):
