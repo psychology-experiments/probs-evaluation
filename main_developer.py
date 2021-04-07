@@ -281,6 +281,7 @@ for task_info, probe_info in experiment_sequence:
 
                     if buttons_pressed[0]:
                         if training_task.is_valid_click():  # only first mouse press is used
+                            print("training: is_valid_click")
                             training_task.finish_trial()
                             press_time = times[0]
                             print("saved", press_time)
@@ -289,6 +290,7 @@ for task_info, probe_info in experiment_sequence:
                                                           time_from_experiment_start=experiment_clock.getTime())
 
                 if training_task.is_trial_finished():
+                    print("training: is_trial_finished")
                     training_task.next_subtask()
                     print("trial", trial)
                     trial += 1
@@ -365,6 +367,7 @@ for task_info, probe_info in experiment_sequence:
 
                 if buttons_pressed[0]:
                     if task.is_valid_click():  # only first mouse press is used
+                        print("experiment: is_valid_click")
                         task.finish_trial()
                         press_time = times[0]
                         print("saved", press_time)
@@ -372,9 +375,11 @@ for task_info, probe_info in experiment_sequence:
                                                                time_from_experiment_start=experiment_clock.getTime())
 
             if task.is_trial_finished():
+                print("experiment: is_trial_finished")
                 task.next_subtask()
 
             if task.is_task_finished():
+                print("experiment: is_task_finished")
                 task_finished = True
                 break
 
