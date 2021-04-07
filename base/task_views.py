@@ -181,7 +181,7 @@ class UpdateTaskView(AbstractTaskView):
         return self._presenter.is_task_finished()
 
     def is_valid_click(self) -> bool:
-        return self._word_presenter_timer.getTime() <= 0
+        return not self._is_next_task
 
     def get_data(self):
         return
