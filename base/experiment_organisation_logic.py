@@ -44,7 +44,7 @@ class TrainingSequence:
         self._load_probe_instructions(probe_instructions_path)
 
     def _load_probe_instructions(self, path: str) -> None:
-        with open(path, mode="r") as instructions_file:
+        with open(path, mode="r", encoding="UTF-8") as instructions_file:
             reader = csv.DictReader(instructions_file)
             probes_instructions: Dict[str, str] = {row["probe"]: row["instruction"]
                                                    for row in reader}
@@ -84,7 +84,7 @@ class ExperimentWMSequence:
         self._task_showed = {task: False for task in tasks}
 
     def _load_instructions(self, path: str):
-        with open(path, mode="r") as instructions_file:
+        with open(path, mode="r", encoding="UTF-8") as instructions_file:
             reader = csv.DictReader(instructions_file)
             for row in reader:
                 self._task_instructions[row["task"]] = row["instruction"]
