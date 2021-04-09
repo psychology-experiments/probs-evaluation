@@ -20,6 +20,7 @@ SKIP_PROBE_TRAINING = SETTINGS.getboolean("skip_probe_training")
 SKIP_TASK_TRAINING = SETTINGS.getboolean("skip_task_training")
 SKIP_EXPERIMENTAL_TASK = SETTINGS.getboolean("skip_experimental_task")
 
+TASKS_SIZE = dict(Обновление=dict(word_size=40, example_size=40, answer_size=30))
 TRAINING_TRAILS_QTY = dict(Обновление=1, Переключение=10, Торможение=2)
 EXPERIMENTAL_TASK_ONE_SOLUTION_SETTINGS = dict(Обновление=dict(blocks_finishing_task=5),
                                                Переключение=dict(trials_finishing_task=20,
@@ -29,9 +30,9 @@ EXPERIMENTAL_TASK_ONE_SOLUTION_SETTINGS = dict(Обновление=dict(blocks_
 
 FRAME_TOLERANCE = 0.001  # how close to onset before 'same' frame TODO: проверить что используется правильно
 PROBE_START = 0.1
-EXPERIMENTAL_PROBE_POSITION = (0, -200)
+EXPERIMENTAL_PROBE_POSITION = (0, -300)
 PROBES_TRAINING_POSITION = (0, 0)
-EXPERIMENTAL_TASK_POSITION = (0, 300)
+EXPERIMENTAL_TASK_POSITION = (0, 400)
 TRAINING_TASK_POSITION = (0, 0)
 
 FIRST_DOUBLE_TASK_PREPARATION_MESSAGE = "Сейчас вам нужно будет выполнять два задания одновременно.\n" \
@@ -52,7 +53,7 @@ def change_mouse_visibility(mouse_component: event.Mouse,
 
 
 def skip_all_tasks_except(task_name: str, show: str, mode=MODE) -> bool:
-    return mode == "TEST" and task_name != show
+    return mode == "TEST" and task_name != show and show != "all"
 
 
 def finish_experiment(window: visual.Window):
@@ -129,6 +130,7 @@ mouse = event.Mouse(visible=False, win=win)
 # тренировочная серия
 task_update = task_views.UpdateTaskView(window=win,
                                         stimuli_fp="text/Operation span task practice.csv",
+                                        **TASKS_SIZE["Обновление"],
                                         word_show_time=0.750,
                                         blocks_finishing_task=TRAINING_TRAILS_QTY["Обновление"],
                                         possible_task_sequences=(4,),
@@ -156,6 +158,7 @@ training_tasks = collections.OrderedDict((
 # экспериментальная серия
 task_update = task_views.UpdateTaskView(window=win,
                                         stimuli_fp="text/Operation span task experimental.csv",
+                                        **TASKS_SIZE["Обновление"],
                                         word_show_time=0.750,
                                         possible_task_sequences=(3, 4),
                                         position=EXPERIMENTAL_TASK_POSITION,
@@ -243,7 +246,7 @@ if not SKIP_PROBE_TRAINING:
 
 # ЭКСПЕРИМЕНТАЛЬНАЯ ЧАСТЬ
 for probe in experimental_probes.values():
-    probe.pos = EXPERIMENTAL_PROBE_POSITION
+    probe.position = EXPERIMENTAL_PROBE_POSITION
 
 for task_info, probe_info in experiment_sequence:
     # Часть с инструкциями
@@ -278,6 +281,7 @@ for task_info, probe_info in experiment_sequence:
 
                     if buttons_pressed[0]:
                         if training_task.is_valid_click():  # only first mouse press is used
+                            print("training: is_valid_click")
                             training_task.finish_trial()
                             press_time = times[0]
                             print("saved", press_time)
@@ -286,8 +290,10 @@ for task_info, probe_info in experiment_sequence:
                                                           time_from_experiment_start=experiment_clock.getTime())
 
                 if training_task.is_trial_finished():
+                    print("training: is_trial_finished")
                     training_task.next_subtask()
                     print("trial", trial)
+                    print()
                     trial += 1
                     break
 
@@ -362,6 +368,7 @@ for task_info, probe_info in experiment_sequence:
 
                 if buttons_pressed[0]:
                     if task.is_valid_click():  # only first mouse press is used
+                        print("experiment: is_valid_click")
                         task.finish_trial()
                         press_time = times[0]
                         print("saved", press_time)
@@ -369,9 +376,13 @@ for task_info, probe_info in experiment_sequence:
                                                                time_from_experiment_start=experiment_clock.getTime())
 
             if task.is_trial_finished():
+                print("experiment: is_trial_finished")
+                print()
                 task.next_subtask()
 
             if task.is_task_finished():
+                print("experiment: is_task_finished")
+                print("\n\n")
                 task_finished = True
                 break
 
