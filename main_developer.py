@@ -395,3 +395,5 @@ for task_info, probe_info in experiment_sequence:
             if keys and keys[0] == "w":
                 task_finished = True
                 break
+
+# TODO: Добавить СПАСИБО (Спасибо за участие в эксперименте!) по центру
