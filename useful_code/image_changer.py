@@ -17,7 +17,7 @@ def get_name_and_ext(name):
 
 
 def save_as_png(image: Image,
-                width: int,
+                width:  Optional[int] = None,
                 height: Optional[int] = None,
                 convert_from: str = "jpg",
                 convert_to: str = "png"):
@@ -25,8 +25,14 @@ def save_as_png(image: Image,
     dir_path = os.path.dirname(file_path)
     name, extension = get_name_and_ext(file_path)
 
+    if height is None and width is None:
+        raise ValueError
+
     if height is None:
         height = int(width * image.height / image.width)
+
+    if width is None:
+        width = int(height * image.width / image.height)
 
     resized_image = image.resize((width, height), Image.ANTIALIAS)
     resized_image.save(f"{dir_path}/{name}.{convert_to}", convert_to)
@@ -59,5 +65,5 @@ for address, _, files in os.walk(START_FOLDER):
 # for file in os.listdir(DIRECTORY_TO_CHANGE_SIZE):
 #     fp = os.path.join(DIRECTORY_TO_CHANGE_SIZE, file)
 #     save_as_png(Image.open(fp),
-#                 width=int(1920 * 0.8),
+#                 height=512,
 #                 convert_from="png")
