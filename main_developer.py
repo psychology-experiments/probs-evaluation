@@ -272,8 +272,6 @@ for task_info, probe_info in experiment_sequence:
             win.callOnFlip(function=mouse.clickReset)  # TODO: попробовать сделать решения задачи ближе к реальному
             task_solution_clock.reset(-_timeToFirstFrame)  # TODO: различается сохранение в столбец с экспериментальным
             while True:
-                training_task.draw(win.getFutureFlipTime(clock="now"))
-
                 buttons_pressed, times = mouse.getPressed(getTime=True)
 
                 if buttons_pressed != previous_buttons_state:
@@ -297,6 +295,7 @@ for task_info, probe_info in experiment_sequence:
                     trial += 1
                     break
 
+                training_task.draw(win.getFutureFlipTime(clock="now"))
                 win.flip()
 
                 if quit_keyboard.getKeys(keyList=QUIT_KEYS):
