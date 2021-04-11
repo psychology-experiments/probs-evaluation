@@ -1,6 +1,7 @@
 import logging
 import os
 import sys
+from typing import Optional
 
 from PIL import Image
 
@@ -8,6 +9,7 @@ logging.basicConfig(stream=sys.stdout, level=logging.INFO)
 
 START_FOLDER = "../images"
 WIDTH = 100
+HEIGHT = 100
 
 
 def get_name_and_ext(name):
@@ -16,15 +18,17 @@ def get_name_and_ext(name):
 
 def save_as_png(image: Image,
                 width: int,
+                height: Optional[int] = None,
                 convert_from: str = "jpg",
                 convert_to: str = "png"):
     file_path = image.filename
     dir_path = os.path.dirname(file_path)
     name, extension = get_name_and_ext(file_path)
 
-    new_height = int(width * image.height / image.width)
+    if height is None:
+        height = int(width * image.height / image.width)
 
-    resized_image = image.resize((width, new_height), Image.ANTIALIAS)
+    resized_image = image.resize((width, height), Image.ANTIALIAS)
     resized_image.save(f"{dir_path}/{name}.{convert_to}", convert_to)
     resized_image.close()
     image.close()
@@ -41,11 +45,14 @@ def save_as_png(image: Image,
 
 
 for address, _, files in os.walk(START_FOLDER):
+    if address not in ("../images\Обновление", "../images\Переключение"):
+        continue
     for file in files:
         fp = os.path.join(address, file)
-        save_as_png(Image.open(fp),
-                    width=WIDTH)
 
+        save_as_png(Image.open(fp),
+                    width=WIDTH,
+                    height=HEIGHT)
 
 # TODO: падает качество при уменьшении. Сильно
 # DIRECTORY_TO_CHANGE_SIZE = "../images/Tower of London"
