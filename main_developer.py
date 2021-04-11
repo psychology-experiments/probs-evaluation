@@ -23,7 +23,7 @@ SKIP_EXPERIMENTAL_TASK = SETTINGS.getboolean("skip_experimental_task")
 TASKS_SIZE = dict(Обновление=dict(word_size=40, example_size=40, answer_size=30))
 TRAINING_TRAILS_QTY = dict(Обновление=1, Переключение=10, Торможение=2)
 EXPERIMENTAL_TASK_ONE_SOLUTION_SETTINGS = dict(Обновление=dict(blocks_finishing_task=5),
-                                               Переключение=dict(trials_finishing_task=20,
+                                               Переключение=dict(trials_finishing_task=72,
                                                                  rule_changes_finishing_task=4),
                                                Торможение=dict(trials_finishing_task=5),
                                                )
