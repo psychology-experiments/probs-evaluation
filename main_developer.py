@@ -30,9 +30,9 @@ EXPERIMENTAL_TASK_ONE_SOLUTION_SETTINGS = dict(Обновление=dict(blocks_
 
 FRAME_TOLERANCE = 0.001  # how close to onset before 'same' frame TODO: проверить что используется правильно
 PROBE_START = 0.1
-EXPERIMENTAL_PROBE_POSITION = (0, -300)
+EXPERIMENTAL_PROBE_POSITION = dict(Торможение=(0, -300), Обновление=(0, -209), Переключение=(0, -275))
 PROBES_TRAINING_POSITION = (0, 0)
-EXPERIMENTAL_TASK_POSITION = (0, 400)
+EXPERIMENTAL_TASK_POSITION = dict(Торможение=(0, 132), Обновление=(0, 43), Переключение=(0, 266))
 TRAINING_TASK_POSITION = (0, 0)
 
 FIRST_DOUBLE_TASK_PREPARATION_MESSAGE = "Сейчас Вам нужно будет выполнять два задания одновременно\n" \
@@ -161,7 +161,7 @@ task_update = task_views.UpdateTaskView(window=win,
                                         **TASKS_SIZE["Обновление"],
                                         word_show_time=0.750,
                                         possible_task_sequences=(3, 4),
-                                        position=EXPERIMENTAL_TASK_POSITION,
+                                        position=EXPERIMENTAL_TASK_POSITION["Обновление"],
                                         **EXPERIMENTAL_TASK_ONE_SOLUTION_SETTINGS["Обновление"]
                                         )
 
@@ -169,12 +169,12 @@ task_switch = task_views.WisconsinTestTaskView(window=win,
                                                image_path_dir="images/Висконсинский тест",
                                                mouse=mouse,
                                                max_streak=8,
-                                               position=EXPERIMENTAL_TASK_POSITION,
+                                               position=EXPERIMENTAL_TASK_POSITION["Переключение"],
                                                **EXPERIMENTAL_TASK_ONE_SOLUTION_SETTINGS["Переключение"])
 
 task_inhibition = task_views.InhibitionTaskView(window=win,
                                                 stimuli_fp="images/Tower of London",
-                                                position=EXPERIMENTAL_TASK_POSITION,
+                                                position=EXPERIMENTAL_TASK_POSITION["Торможение"],
                                                 **EXPERIMENTAL_TASK_ONE_SOLUTION_SETTINGS["Торможение"])
 
 experimental_tasks = collections.OrderedDict((
@@ -245,9 +245,6 @@ if not SKIP_PROBE_TRAINING:
                     finish_experiment(window=win)
 
 # ЭКСПЕРИМЕНТАЛЬНАЯ ЧАСТЬ
-for probe in experimental_probes.values():
-    probe.position = EXPERIMENTAL_PROBE_POSITION
-
 for task_info, probe_info in experiment_sequence:
     # Часть с инструкциями
     organisation_message.show(FIRST_DOUBLE_TASK_PREPARATION_MESSAGE)
@@ -318,6 +315,8 @@ for task_info, probe_info in experiment_sequence:
     change_mouse_visibility(mouse, task_info.name, task)
 
     probe = experimental_probes[probe_info.name]
+    # Подготовить позицию с зондами для задачи
+    probe.position = EXPERIMENTAL_PROBE_POSITION[task_info.name]
 
     previous_buttons_state = mouse.getPressed()
     win.callOnFlip(function=mouse.clickReset)  # TODO: попробовать сделать решения задачи ближе к реальному
