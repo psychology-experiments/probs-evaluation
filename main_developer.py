@@ -35,10 +35,10 @@ PROBES_TRAINING_POSITION = (0, 0)
 EXPERIMENTAL_TASK_POSITION = (0, 400)
 TRAINING_TASK_POSITION = (0, 0)
 
-FIRST_DOUBLE_TASK_PREPARATION_MESSAGE = "Сейчас вам нужно будет выполнять два задания одновременно.\n" \
-                                        "Для перехода к инструкции первого заданию нажмите ПРОБЕЛ"
-SECOND_DOUBLE_TASK_PREPARATION_MESSAGE = "Для перехода к инструкции второго заданию нажмите ПРОБЕЛ"
-LAST_PREPARATION_MESSAGE = "После нажатия на ПРОБЕЛ необходимо будет выполнять описанные ранее задания одновременно"
+FIRST_DOUBLE_TASK_PREPARATION_MESSAGE = "Сейчас Вам нужно будет выполнять два задания одновременно\n" \
+                                        "Для перехода к инструкции первого задания нажмите ПРОБЕЛ"
+SECOND_DOUBLE_TASK_PREPARATION_MESSAGE = "Для перехода к инструкции второго задания нажмите ПРОБЕЛ"
+LAST_PREPARATION_MESSAGE = "После нажатия на ПРОБЕЛ описанные задания нужно выполнять одновременно"
 
 QUIT_KEYS = ["escape"]
 
