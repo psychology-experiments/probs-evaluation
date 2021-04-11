@@ -35,6 +35,7 @@ PROBES_TRAINING_POSITION = (0, 0)
 EXPERIMENTAL_TASK_POSITION = dict(Торможение=(0, 132), Обновление=(0, 43), Переключение=(0, 266))
 TRAINING_TASK_POSITION = (0, 0)
 
+# TODO: переделать эти инструкции в изображения
 FIRST_DOUBLE_TASK_PREPARATION_MESSAGE = "Сейчас Вам нужно будет выполнять два задания одновременно\n" \
                                         "Для перехода к инструкции первого задания нажмите ПРОБЕЛ"
 SECOND_DOUBLE_TASK_PREPARATION_MESSAGE = "Для перехода к инструкции второго задания нажмите ПРОБЕЛ"
