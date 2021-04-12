@@ -11,6 +11,7 @@ class DataSaver:
                                              savePickle=False)
 
         self._saver.dataNames = ["stage",
+                                 "task_number",
                                  "task_trial",
                                  "task",
                                  "task_solution_time",
@@ -20,6 +21,8 @@ class DataSaver:
                                  "is_correct",
                                  "time_from_experiment_start",
                                  ]  # TODO: заполнить в каком порядке сохранять данные + добавить НОМЕР СОЧЕТАНИЯ
+
+        self._task_number: int = 0
 
         self._task: Optional[str] = None
         self._task_trial: int = 0
