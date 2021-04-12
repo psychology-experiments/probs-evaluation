@@ -77,6 +77,7 @@ class DataSaver:
         self._probe_trial += 1
 
         self._saver.addData("stage", "experimental")
+        self._saver.addData("combination_number", self._combination_number)
 
         self._saver.addData("task", self._task)
 
@@ -95,6 +96,7 @@ class DataSaver:
         self._task_trial += 1
 
         self._saver.addData("stage", "experimental")
+        self._saver.addData("combination_number", self._combination_number)
 
         self._saver.addData("task_trial", self._task_trial)
         self._saver.addData("task", self._task)
