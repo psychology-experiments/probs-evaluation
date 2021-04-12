@@ -256,7 +256,7 @@ for task_info, probe_info in experiment_sequence:
 
     # тренировка с задачами
     if task_info.instruction is not None and not SKIP_TASK_TRAINING:
-        data_saver.new_task(task_info.name)
+        data_saver.new_task(task_info.name, stage="task training")
         training_task = training_tasks[task_info.name]
 
         change_mouse_visibility(mouse, task_info.name, training_task)
@@ -307,7 +307,7 @@ for task_info, probe_info in experiment_sequence:
     organisation_message.show(LAST_PREPARATION_MESSAGE)
 
     # часть с экспериментальными заданиями
-    data_saver.new_task(task_info.name)
+    data_saver.new_task(task_info.name, stage="experimental")
     data_saver.new_probe()
 
     task = experimental_tasks[task_info.name]
