@@ -40,7 +40,7 @@ class InstructionImage:
 class InstructionText:
     def __init__(self, window: visual.Window, skip: bool):
         self._win = window
-        self._image_stimulus = visual.TextStim(win=self._win, color="black")
+        self._image_stimulus = visual.TextStim(win=self._win, color="black", height=30, wrapWidth=1000)
         self._keyboard = keyboard.Keyboard()
         self._skip = skip
 
