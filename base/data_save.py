@@ -30,9 +30,12 @@ class DataSaver:
         self._probe: Optional[str] = None
         self._probe_trial: int = 0
 
-    def new_task(self, task_name: str):
+    def new_task(self, task_name: str, stage: str):
         self._task_trial: int = 0
         self._task = task_name
+
+        if stage == "experimental":
+            self._task_number += 1
 
     def new_probe(self):
         self._probe_trial: int = 0
