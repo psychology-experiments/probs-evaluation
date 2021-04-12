@@ -6,12 +6,12 @@ from psychopy import data
 class DataSaver:
     def __init__(self, save_fp: str):
         self._saver = data.ExperimentHandler(dataFileName=save_fp,
-                                             version="2020.2.10",
+                                             version="2020.2.10",  # TODO: указать правильную версию
                                              autoLog=False,
                                              savePickle=False)
 
         self._saver.dataNames = ["stage",
-                                 "task_number",
+                                 "combination_number",
                                  "task_trial",
                                  "task",
                                  "task_solution_time",
@@ -22,7 +22,7 @@ class DataSaver:
                                  "time_from_experiment_start",
                                  ]  # TODO: заполнить в каком порядке сохранять данные + добавить НОМЕР СОЧЕТАНИЯ
 
-        self._task_number: int = 0
+        self._combination_number: int = 0
 
         self._task: Optional[str] = None
         self._task_trial: int = 0
@@ -35,7 +35,7 @@ class DataSaver:
         self._task = task_name
 
         if stage == "experimental":
-            self._task_number += 1
+            self._combination_number += 1
 
     def new_probe(self):
         self._probe_trial: int = 0
