@@ -45,7 +45,7 @@ def create_instruction_image(instruction_name, instruction_info, fp):
     if len(instruction_info) == 1:
         use_screen_center = True
     else:
-        y = int(INSTRUCTION_SIZE[1] * 0.03)
+        y = int(INSTRUCTION_SIZE[1] * 0.03) * 4.5
         use_screen_center = False
 
     screen_middle_x = INSTRUCTION_SIZE[0] // 2
@@ -69,6 +69,7 @@ def create_instruction_image(instruction_name, instruction_info, fp):
             y += int(y_size * shift_multiplier)
         elif part.content_type == "img":
             instruction_image_part = Image.open(part.content, mode="r")
+            instruction_image_part = instruction_image_part.resize((400, 400), Image.ANTIALIAS)
             x_size, y_size = instruction_image_part.size
 
             offset = (screen_middle_x - x_size // 2, int(y * 1.1))
@@ -164,7 +165,7 @@ if __name__ == '__main__':
 
     from psychopy import visual, event, core
 
-    win = visual.Window(size=INSTRUCTION_SIZE, color="white", units="pix")
+    win = visual.Window(size=INSTRUCTION_SIZE, color="white", units="pix", fullscr=True)
     explanation_message = visual.TextStim(win,
                                           pos=(-win.size[0] * 0.45, 0),
                                           ori=270,
