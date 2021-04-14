@@ -1,4 +1,6 @@
-from typing import Optional
+from itertools import cycle
+import os
+from typing import Optional, Iterator
 
 from psychopy.hardware import keyboard
 from psychopy import core, visual
@@ -37,24 +39,38 @@ class InstructionImage:
                 break
 
 
-class InstructionText:
-    def __init__(self, window: visual.Window, skip: bool):
+class GeneralInstructions:
+    def __init__(self,
+                 fp: str,
+                 window: visual.Window,
+                 skip: bool):
         self._win = window
-        self._image_stimulus = visual.TextStim(win=self._win, color="black", height=30, wrapWidth=1000)
+        self._images_fp = self._find_images(fp)
+        self._image_stimulus = visual.ImageStim(win=self._win)
         self._keyboard = keyboard.Keyboard()
         self._skip = skip
 
-    def show(self, text: Optional[str]) -> None:
+    @staticmethod
+    def _find_images(fp: str) -> Iterator[str]:
+        images_fp = [os.path.join(fp, image)
+                     for image in os.listdir(fp)
+                     if image.endswith(".png")]
+
+        if not images_fp:
+            raise ValueError(f"There is not png images in the directory {fp}")
+
+        return cycle(images_fp)
+
+    def show(self) -> None:
         """
         Show instruction if there is any. Otherwise do nothing.
 
-        :param text: text of instruction
         :return:
         """
-        if text is None or self._skip:
+        if self._skip:
             return
 
-        self._image_stimulus.text = text
+        self._image_stimulus.image = next(self._images_fp)
         self._keyboard.clearEvents()
 
         while True:
