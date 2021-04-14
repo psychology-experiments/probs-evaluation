@@ -13,6 +13,7 @@ class ProbeInfo(NamedTuple):
 class TaskInfo(NamedTuple):
     name: str
     instruction: Optional[str]
+    trained: bool
 
 
 FilePath = str
@@ -93,14 +94,15 @@ class ExperimentWMSequence:
         probe = self._probes_sequence[item]
 
         task_name = self._tasks_sequence[item]
-        task_instruction = None
+        task_instruction = self._task_instructions[task_name]
+        showed = self._task_showed[task_name]
 
         if not self._task_showed[task_name]:
-            task_instruction = self._task_instructions[task_name]
             self._task_showed[task_name] = True
 
         task = TaskInfo(name=task_name,
-                        instruction=task_instruction)
+                        instruction=task_instruction,
+                        trained=showed)
 
         return task, probe
 
