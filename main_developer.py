@@ -255,7 +255,7 @@ for task_info, probe_info in experiment_sequence:
         continue
 
     # тренировка с задачами
-    if task_info.instruction is not None and not SKIP_TASK_TRAINING:
+    if not task_info.trained and not SKIP_TASK_TRAINING:
         data_saver.new_task(task_info.name, stage="task training")
         training_task = training_tasks[task_info.name]
 
