@@ -11,9 +11,11 @@ INSTRUCTION_TEXT_FONT_INFO = dict(font='C:/Windows/fonts/Arial.ttf', size=25)
 
 TASK_INSTRUCTIONS_FP = "instructions/task instructions.txt"
 PROBE_INSTRUCTIONS_FP = "instructions/probe instructions.txt"
+GENERAL_INSTRUCTIONS_FP = "instructions/general instructions.txt"
 
 SAVE_TASK_INSTRUCTIONS_FP = "../images/Инструкции/Задания/"
 SAVE_PROBE_INSTRUCTIONS_FP = "../images/Инструкции/Зонды/"
+SAVE_GENERAL_INSTRUCTIONS_FP = "../images/Инструкции/Общие/"
 
 
 class InstructionPart(NamedTuple):
