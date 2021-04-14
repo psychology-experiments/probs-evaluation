@@ -73,7 +73,9 @@ win = visual.Window(size=(1200, 800), color="white", units="pix", fullscr=FULL_S
 data_saver = data_save.DataSaver(save_fp="data/test")
 # data_saver = data.ExperimentHandler(dataFileName="data/test", version="2020.2.10", autoLog=False, savePickle=False)
 instruction = experiment_organisation_stimuli.InstructionImage(window=win, skip=SKIP_INSTRUCTION)
-organisation_message = experiment_organisation_stimuli.InstructionText(window=win, skip=SKIP_INSTRUCTION)
+organisation_message = experiment_organisation_stimuli.GeneralInstructions(fp="images/Инструкции/Общие",
+                                                                           window=win,
+                                                                           skip=SKIP_INSTRUCTION)
 
 # Подготовка зондов для эксперимента
 probe_two_alternatives = probe_views.ProbeView(window=win,
@@ -248,7 +250,7 @@ if not SKIP_PROBE_TRAINING:
 # ЭКСПЕРИМЕНТАЛЬНАЯ ЧАСТЬ
 for task_info, probe_info in experiment_sequence:
     # Часть с инструкциями
-    organisation_message.show(FIRST_DOUBLE_TASK_PREPARATION_MESSAGE)
+    organisation_message.show()
     instruction.show(path=task_info.instruction)
 
     if skip_all_tasks_except(task_info.name, SETTINGS.get("show_task")):
@@ -302,9 +304,9 @@ for task_info, probe_info in experiment_sequence:
     if SKIP_EXPERIMENTAL_TASK:  # для отладки скрипта
         continue
 
-    organisation_message.show(SECOND_DOUBLE_TASK_PREPARATION_MESSAGE)
+    organisation_message.show()
     instruction.show(path=probe_info.instruction)
-    organisation_message.show(LAST_PREPARATION_MESSAGE)
+    organisation_message.show()
 
     # часть с экспериментальными заданиями
     data_saver.new_task(task_info.name, stage="experimental")
