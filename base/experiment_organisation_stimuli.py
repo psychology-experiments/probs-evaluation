@@ -70,7 +70,7 @@ class InstructionText:
                 break
 
 
-class SingleMousePress:
+class SingleMousePress:  # TODO: добавить в код main или убрать
     def __init__(self, mouse):
         self._released = False
         self._mouse = mouse
