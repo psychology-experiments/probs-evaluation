@@ -38,7 +38,7 @@ def get_text_dimensions(text_string, font, obj):
 
 
 def create_instruction_image(instruction_name, instruction_info, fp):
-    shift_multiplier = 1.05
+    shift_multiplier = 1.15
 
     instruction_image = Image.new(INSTRUCTION_COLOR_MODE, INSTRUCTION_SIZE, BASE_COLOR)
     instruction_font = ImageFont.truetype(**INSTRUCTION_TEXT_FONT_INFO)
