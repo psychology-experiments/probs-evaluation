@@ -7,6 +7,8 @@ import pytest
 from base import probe_presenters
 
 
+# TODO: for each probe add test to check that they work correctly
+
 class TestProbe:
     PROBE_TYPES = {
         "TwoAlternatives":
