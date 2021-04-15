@@ -402,4 +402,4 @@ for task_info, probe_info in experiment_sequence:
 
 experiment_organisation_stimuli.EndMessage(win).show(5, experiment_clock)
 data_saver.close()
-finish_experiment()
+finish_experiment(window=win)
