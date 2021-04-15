@@ -107,14 +107,14 @@ class EndMessage:
         self._end_message = visual.TextStim(window,
                                             color="black",
                                             height=40,
-                                            wrapWidth=window.size[1] * 0.9)
+                                            wrapWidth=window.size[0] * 0.9)
 
         self._end_phrase = sound.Sound(value="audio/final_message.wav")
         self._timer = core.CountdownTimer()
 
     @staticmethod
     def _show_time(clock: core.Clock):
-        total_seconds = clock.getTime() * 20
+        total_seconds = clock.getTime()
         minutes = int(total_seconds // 60)
         seconds = total_seconds % 60
         return f"{minutes:02} минут {seconds:.2f} секунд"
