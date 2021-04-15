@@ -122,4 +122,4 @@ class ExperimentInsightTaskSequence:
         with open(path, mode="r", encoding="UTF-8") as instructions_file:
             reader = csv.DictReader(instructions_file)
             for row in reader:
-                self._tasks[row["ID"]] = (row["many"], row["few"])
+                self._tasks[row["ID"]] = dict(Many=row["Many"], Few=row["Few"])
