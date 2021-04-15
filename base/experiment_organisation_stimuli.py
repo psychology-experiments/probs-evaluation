@@ -97,3 +97,36 @@ class SingleMousePress:  # TODO: добавить в код main или убра
         self._released = not left_button_pressed
 
         return self._mouse.isPressed()
+
+
+class EndMessage:
+    def __init__(self,
+                 window: visual.Window):
+        from psychopy import sound
+        self._win = window
+        self._end_message = visual.TextStim(window,
+                                            color="black",
+                                            height=40,
+                                            wrapWidth=window.size[1] * 0.9)
+
+        self._end_phrase = sound.Sound(value="audio/final_message.wav")
+        self._timer = core.CountdownTimer()
+
+    @staticmethod
+    def _show_time(clock: core.Clock):
+        total_seconds = clock.getTime() * 20
+        minutes = int(total_seconds // 60)
+        seconds = total_seconds % 60
+        return f"{minutes:02} минут {seconds:.2f} секунд"
+
+    def show(self,
+             time_to_show: float,
+             experiment_clock: core.Clock):
+
+        self._timer.reset(time_to_show)
+        self._end_phrase.play()
+
+        while self._end_phrase.status != -1 or self._timer.getTime() >= 0:
+            self._end_message.text = f"Спасибо за участие!\nЭксперимент шёл: {self._show_time(experiment_clock)}"
+            self._end_message.draw()
+            self._win.flip()
