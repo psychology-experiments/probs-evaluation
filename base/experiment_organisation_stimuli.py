@@ -114,7 +114,7 @@ class EndMessage:
 
     @staticmethod
     def _show_time(clock: core.Clock):
-        total_seconds = clock.getTime() * 20
+        total_seconds = clock.getTime()
         minutes = int(total_seconds // 60)
         seconds = total_seconds % 60
         return f"{minutes:02} минут {seconds:.2f} секунд"
