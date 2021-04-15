@@ -400,4 +400,4 @@ for task_info, probe_info in experiment_sequence:
                 task_finished = True
                 break
 
-# TODO: Добавить СПАСИБО (Спасибо за участие в эксперименте!) по центру
+experiment_organisation_stimuli.EndMessage(win).show(5, experiment_clock)
