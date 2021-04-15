@@ -4,7 +4,7 @@ from typing import List, Tuple, Optional
 from pathlib import Path
 
 import numpy as np
-from psychopy import core, event, visual
+from psychopy import core, event, sound, visual
 
 from base import task_presenters
 
@@ -122,6 +122,10 @@ class InhibitionTaskView(AbstractTaskView):
 
     def draw(self, t_to_next_flip):
         self._current_task.draw()
+
+
+class SoundPlayer:
+    pass
 
 
 class UpdateTaskView(AbstractTaskView):
