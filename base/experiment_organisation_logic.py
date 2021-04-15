@@ -109,7 +109,7 @@ class ExperimentWMSequence:
 
 class ExperimentInsightTaskSequence:
     """
-    Create sequence of insight task
+    Create sequence of insight task and probes
     """
 
     def __init__(self,
