@@ -133,6 +133,7 @@ mouse = event.Mouse(visible=False, win=win)
 # тренировочная серия
 task_update = task_views.UpdateTaskView(window=win,
                                         stimuli_fp="text/Operation span task practice.csv",
+                                        sounds_fp="audio/Update/Training",
                                         **TASKS_SIZE["Обновление"],
                                         word_show_time=0.750,
                                         blocks_finishing_task=TRAINING_TRAILS_QTY["Обновление"],
@@ -161,6 +162,7 @@ training_tasks = collections.OrderedDict((
 # экспериментальная серия
 task_update = task_views.UpdateTaskView(window=win,
                                         stimuli_fp="text/Operation span task experimental.csv",
+                                        sounds_fp="audio/Update/Experiment",
                                         **TASKS_SIZE["Обновление"],
                                         word_show_time=0.750,
                                         possible_task_sequences=(3, 4),
