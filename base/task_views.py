@@ -245,7 +245,6 @@ class UpdateTaskView(AbstractTaskView):
         if self._reset_word_timer:
             self._reset_word_timer = False
             self._word_presenter_timer.reset(t=self._word_show_time + next_flip_time)
-            print("ORA")
             self._sound_player.play()
 
         if self._word_presenter_timer.getTime() > 0:
