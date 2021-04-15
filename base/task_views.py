@@ -124,7 +124,7 @@ class InhibitionTaskView(AbstractTaskView):
         self._current_task.draw()
 
 
-class SoundPlayer:
+class SoundPlayer:  # TODO: change files extension because mp3 is not working with Sound
     def __init__(self, sounds_fp, extension=".mp3"):
         self._sound = sound.Sound()
 
