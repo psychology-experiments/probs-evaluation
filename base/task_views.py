@@ -125,7 +125,17 @@ class InhibitionTaskView(AbstractTaskView):
 
 
 class SoundPlayer:
-    pass
+    def __init__(self, sounds_fp, extension=".mp3"):
+        self._sound = sound.Sound()
+
+        self._sounds_paths = {sound_fp.stem: str(sound_fp)
+                              for sound_fp in Path(sounds_fp).glob(pattern=f"*{extension}")}
+
+    def prepare_sound(self, sound_name):
+        self._sound.setSound(self._sounds_paths[sound_name])
+
+    def play(self):
+        self._sound.play()
 
 
 class UpdateTaskView(AbstractTaskView):
