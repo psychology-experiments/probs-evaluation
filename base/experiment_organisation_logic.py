@@ -117,6 +117,7 @@ class ExperimentInsightTaskSequence:
                  probes: Tuple[str, ...],
                  probe_instructions_path: FilePath = "text/probe instructions.csv"):
         self._tasks = {}
+        self._load_tasks(tasks_fp)
 
     def _load_tasks(self, path: str):
         with open(path, mode="r", encoding="UTF-8") as instructions_file:
