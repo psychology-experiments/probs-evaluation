@@ -131,6 +131,9 @@ class SoundPlayer:
         self._sounds_paths = {sound_fp.stem: str(sound_fp)
                               for sound_fp in Path(sounds_fp).glob(pattern=f"*{extension}")}
 
+        if not self._sounds_paths:
+            raise ValueError(f"SoundPlayer did not find files in the directory {sounds_fp} with extension {extension}")
+
     def prepare_sound(self, sound_name):
         self._sound.setSound(self._sounds_paths[sound_name])
 
