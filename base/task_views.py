@@ -125,7 +125,7 @@ class InhibitionTaskView(AbstractTaskView):
 
 
 class SoundPlayer:  # TODO: change files extension because mp3 is not working with Sound
-    def __init__(self, sounds_fp, extension=".mp3"):
+    def __init__(self, sounds_fp, extension=".wav"):
         self._sound = sound.Sound()
 
         self._sounds_paths = {sound_fp.stem: str(sound_fp)
@@ -153,6 +153,7 @@ class UpdateTaskView(AbstractTaskView):
                  word_show_time: float,
                  blocks_finishing_task: int,
                  possible_task_sequences: Tuple[int, ...],
+                 sound_extension: str = ".wav",
                  ):
         self._word_presenter_timer = core.CountdownTimer()
         self._word_show_time = word_show_time
@@ -183,7 +184,7 @@ class UpdateTaskView(AbstractTaskView):
                                                                   height=answer_size,
                                                                   text="Назовите запомненные слова",
                                                                   color="black")
-        self._sound_player = SoundPlayer(sounds_fp=sounds_fp)
+        self._sound_player = SoundPlayer(sounds_fp=sounds_fp, extension=sound_extension)
 
     def __len__(self):
         return len(self._presenter)
