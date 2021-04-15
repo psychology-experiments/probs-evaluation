@@ -149,6 +149,7 @@ class UpdateTaskView(AbstractTaskView):
                  example_size: int,
                  answer_size: int,
                  stimuli_fp: str,
+                 sounds_fp: str,
                  word_show_time: float,
                  blocks_finishing_task: int,
                  possible_task_sequences: Tuple[int, ...],
@@ -182,6 +183,7 @@ class UpdateTaskView(AbstractTaskView):
                                                                   height=answer_size,
                                                                   text="Назовите запомненные слова",
                                                                   color="black")
+        self._sound_player = SoundPlayer(sounds_fp=sounds_fp)
 
     def __len__(self):
         return len(self._presenter)
@@ -215,6 +217,7 @@ class UpdateTaskView(AbstractTaskView):
 
         if not self._presenter.is_answer_time():
             self._word_stimuli.text = self._presenter.word
+            self._sound_player.prepare_sound(self._presenter.word)
             self._example_stimuli.text = self._presenter.example
 
     def new_task(self) -> None:
@@ -236,6 +239,7 @@ class UpdateTaskView(AbstractTaskView):
         if self._reset_word_timer:
             self._reset_word_timer = False
             self._word_presenter_timer.reset(t=self._word_show_time + next_flip_time)
+            self._sound_player.play()
 
         if self._word_presenter_timer.getTime() > 0:
             self._word_stimuli.draw()
