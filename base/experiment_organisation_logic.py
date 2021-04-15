@@ -113,7 +113,7 @@ class ExperimentInsightTaskSequence:
     """
 
     def __init__(self,
-                 tasks: FilePath,
+                 tasks_fp: FilePath,
                  probes: Tuple[str, ...],
                  probe_instructions_path: FilePath = "text/probe instructions.csv"):
         self._tasks = {}
