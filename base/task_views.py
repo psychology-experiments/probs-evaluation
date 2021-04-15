@@ -4,7 +4,7 @@ from typing import List, Tuple, Optional
 from pathlib import Path
 
 import numpy as np
-from psychopy import core, event, sound, visual
+from psychopy import core, event, visual
 
 from base import task_presenters
 
@@ -126,6 +126,11 @@ class InhibitionTaskView(AbstractTaskView):
 
 class SoundPlayer:  # TODO: change files extension because mp3 is not working with Sound
     def __init__(self, sounds_fp, extension=".wav"):
+        # noinspection PyProtectedMember
+        from psychopy import prefs
+        prefs.hardware['audioLib'] = ['ptb']
+        from psychopy import sound
+
         self._sound = sound.Sound()
 
         self._sounds_paths = {sound_fp.stem: str(sound_fp)
@@ -240,6 +245,7 @@ class UpdateTaskView(AbstractTaskView):
         if self._reset_word_timer:
             self._reset_word_timer = False
             self._word_presenter_timer.reset(t=self._word_show_time + next_flip_time)
+            print("ORA")
             self._sound_player.play()
 
         if self._word_presenter_timer.getTime() > 0:
