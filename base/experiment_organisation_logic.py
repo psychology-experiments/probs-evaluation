@@ -109,11 +109,18 @@ class ExperimentWMSequence:
 
 class ExperimentInsightTaskSequence:
     """
-    Create sequence of insight task
+    Create sequence of insight task and probes
     """
 
     def __init__(self,
-                 tasks: FilePath,
+                 tasks_fp: FilePath,
                  probes: Tuple[str, ...],
                  probe_instructions_path: FilePath = "text/probe instructions.csv"):
-        pass
+        self._tasks = {}
+        self._load_tasks(tasks_fp)
+
+    def _load_tasks(self, path: str):
+        with open(path, mode="r", encoding="UTF-8") as instructions_file:
+            reader = csv.DictReader(instructions_file)
+            for row in reader:
+                self._tasks[row["ID"]] = dict(Many=row["Many"], Few=row["Few"])
