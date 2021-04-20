@@ -161,7 +161,7 @@ class ExperimentInsightTaskSequence:
     def _load_participants_data(self):  # TODO: функция для сбора статистики о уже проведенных типах задач
         pass
 
-    def __getitem__(self, item):
+    def __getitem__(self, item) -> Tuple[InsightTaskInfo, ProbeInfo]:
         probe = self._probes_sequence[item]
         task = None
 
