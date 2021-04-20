@@ -1,6 +1,6 @@
 import csv
 from itertools import count, product
-from random import shuffle
+from random import choice, shuffle
 from typing import List, Union, Iterator, Dict, Optional, Tuple, NamedTuple, Any
 
 
@@ -116,6 +116,7 @@ class ExperimentInsightTaskSequence:
                  id_column: str,
                  tasks_fp: FilePath,
                  probes: Tuple[str, ...],
+                 tasks_conditions_per_probe: int = 2,
                  probe_instructions_path: FilePath = "text/probe instructions.csv"):
         self._tasks = {}
         self._load_tasks(tasks_fp, id_column)
@@ -124,6 +125,7 @@ class ExperimentInsightTaskSequence:
         self._probes_sequence = TrainingSequence(probes_sequence=probes_for_tasks,
                                                  trials=None,
                                                  probe_instructions_path=probe_instructions_path)
+        self._probes_conditions = self._generate_probe_conditions(probes, tasks_conditions_per_probe)
 
     def _generate_probes(self, probes) -> Tuple[Any, ...]:
         number_of_each_probe_use = len(self._tasks) / len(probes)
@@ -135,6 +137,10 @@ class ExperimentInsightTaskSequence:
         probes_for_tasks = list(probes * number_of_each_probe_use)
         shuffle(probes_for_tasks)
         return tuple(probes_for_tasks)
+
+    def _generate_probe_conditions(self, probes, repeat):
+        conditions = tuple(choice(tuple(self._tasks.values())).keys())
+        return {probe: conditions * repeat for probe in probes}
 
     def _load_tasks(self,
                     path: str,
