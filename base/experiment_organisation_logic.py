@@ -16,6 +16,12 @@ class WMTaskInfo(NamedTuple):
     trained: bool
 
 
+class InsightTaskInfo(NamedTuple):
+    name: str
+    instruction: str
+    content: str
+
+
 FilePath = str
 
 
