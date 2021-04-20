@@ -151,3 +151,6 @@ class ExperimentInsightTaskSequence:
                 self._tasks[row[id_column]] = {task_type: task_text
                                                for task_type, task_text in row.items()
                                                if task_type != id_column}
+
+    def _load_done_tasks_data(self):  # TODO: функция для сбора статистики о уже проведенных типах задач
+        pass
