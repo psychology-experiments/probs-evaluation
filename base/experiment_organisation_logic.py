@@ -10,7 +10,7 @@ class ProbeInfo(NamedTuple):
     trials: Iterator
 
 
-class TaskInfo(NamedTuple):
+class WMTaskInfo(NamedTuple):
     name: str
     instruction: Optional[str]
     trained: bool
@@ -100,9 +100,9 @@ class ExperimentWMSequence:
         if not self._task_showed[task_name]:
             self._task_showed[task_name] = True
 
-        task = TaskInfo(name=task_name,
-                        instruction=task_instruction,
-                        trained=showed)
+        task = WMTaskInfo(name=task_name,
+                          instruction=task_instruction,
+                          trained=showed)
 
         return task, probe
 
