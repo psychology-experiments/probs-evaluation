@@ -138,7 +138,7 @@ class ExperimentInsightTaskSequence:
 
     def _load_tasks(self,
                     path: str,
-                    id_column: str):
+                    id_column: str) -> None:
         with open(path, mode="r", encoding="UTF-8") as instructions_file:
             reader = csv.DictReader(instructions_file)
             for row in reader:
