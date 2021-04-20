@@ -96,7 +96,7 @@ class ExperimentWMSequence:
             for row in reader:
                 self._task_instructions[row["task"]] = row["instruction"]
 
-    def __getitem__(self, item):
+    def __getitem__(self, item) -> Tuple[WMTaskInfo, ProbeInfo]:
         probe = self._probes_sequence[item]
 
         task_name = self._tasks_sequence[item]
