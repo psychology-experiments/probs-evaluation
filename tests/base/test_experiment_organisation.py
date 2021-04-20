@@ -155,9 +155,9 @@ class TestExperimentWMSequence:
                                               f" probe but instead get:\n{probe.instruction}"
             assert probe.instruction == right_probe_instruction, wrong_probe_instruction_message
 
-        showed_too_many_times_error_message = f"ExperimentSequence must show task instruction only for first " \
+        showed_too_many_times_error_message = f"ExperimentSequence must show task instruction on every " \
                                               f"presentation. But showed:\n{tasks_instructions_showed}"
-        assert all(times_showed == 1
+        assert all(times_showed != 3
                    for times_showed in tasks_instructions_showed.values()), showed_too_many_times_error_message
 
 
