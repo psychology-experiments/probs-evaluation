@@ -123,7 +123,9 @@ class ExperimentInsightTaskSequence:
                  tasks_fp: FilePath,
                  probes: Tuple[str, ...],
                  tasks_conditions_per_probe: int = 2,
+                 task_instruction_path: FilePath = "images/Инструкции/Задания/Инсайтная задача.png",
                  probe_instructions_path: FilePath = "text/probe instructions.csv"):
+        self._task_instruction_path = task_instruction_path
         self._tasks = {}
         self._load_tasks(tasks_fp, id_column)
 
