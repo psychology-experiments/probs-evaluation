@@ -113,14 +113,24 @@ class ExperimentInsightTaskSequence:
     """
 
     def __init__(self,
+                 id_column: str,
+                 probes_per_condition: int,
                  tasks_fp: FilePath,
                  probes: Tuple[str, ...],
                  probe_instructions_path: FilePath = "text/probe instructions.csv"):
         self._tasks = {}
-        self._load_tasks(tasks_fp)
+        self._load_tasks(tasks_fp, id_column)
 
-    def _load_tasks(self, path: str):
+        # self._probes_sequence = TrainingSequence(probes_sequence=probes,
+        #                                          trials=None,
+        #                                          probe_instructions_path=probe_instructions_path)
+
+    def _load_tasks(self,
+                    path: str,
+                    id_column: str):
         with open(path, mode="r", encoding="UTF-8") as instructions_file:
             reader = csv.DictReader(instructions_file)
             for row in reader:
-                self._tasks[row["ID"]] = dict(Many=row["Many"], Few=row["Few"])
+                self._tasks[row[id_column]] = {task_type: task_text
+                                               for task_type, task_text in row.items()
+                                               if task_type != id_column}
