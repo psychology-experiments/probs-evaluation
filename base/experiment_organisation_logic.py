@@ -1,7 +1,7 @@
 import csv
 from itertools import count, product
 from random import shuffle
-from typing import List, Union, Iterator, Dict, Optional, Tuple, NamedTuple
+from typing import List, Union, Iterator, Dict, Optional, Tuple, NamedTuple, Any
 
 
 class ProbeInfo(NamedTuple):
@@ -120,16 +120,21 @@ class ExperimentInsightTaskSequence:
         self._tasks = {}
         self._load_tasks(tasks_fp, id_column)
 
-        if len(self._tasks) % len(probes) != 0:
-            raise ValueError(f"Quantity of tasks {self._tasks} is not multiple to probes {len(probes)}")
-
-        use_of_each_probe = len(self._tasks) // len(probes)
-        probes_for_tasks = list(probes * use_of_each_probe)
-
-        shuffle(probes_for_tasks)
-        self._probes_sequence = TrainingSequence(probes_sequence=tuple(probes_for_tasks),
+        probes_for_tasks = self._generate_probes(probes)
+        self._probes_sequence = TrainingSequence(probes_sequence=probes_for_tasks,
                                                  trials=None,
                                                  probe_instructions_path=probe_instructions_path)
+
+    def _generate_probes(self, probes) -> Tuple[Any, ...]:
+        number_of_each_probe_use = len(self._tasks) / len(probes)
+
+        if not number_of_each_probe_use.is_integer():
+            raise ValueError(f"Quantity of tasks {self._tasks} is not multiple to probes {len(probes)}")
+
+        number_of_each_probe_use = int(number_of_each_probe_use)
+        probes_for_tasks = list(probes * number_of_each_probe_use)
+        shuffle(probes_for_tasks)
+        return tuple(probes_for_tasks)
 
     def _load_tasks(self,
                     path: str,
