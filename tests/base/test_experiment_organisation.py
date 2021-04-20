@@ -157,7 +157,7 @@ class TestExperimentWMSequence:
 
         showed_too_many_times_error_message = f"ExperimentSequence must show task instruction on every " \
                                               f"presentation. But showed:\n{tasks_instructions_showed}"
-        assert all(times_showed != 3
+        assert all(times_showed == 3
                    for times_showed in tasks_instructions_showed.values()), showed_too_many_times_error_message
 
 
