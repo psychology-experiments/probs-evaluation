@@ -154,3 +154,9 @@ class ExperimentInsightTaskSequence:
 
     def _load_done_tasks_data(self):  # TODO: функция для сбора статистики о уже проведенных типах задач
         pass
+
+    def __getitem__(self, item):
+        probe = self._probes_sequence[item]
+        task = None
+
+        return task, probe
