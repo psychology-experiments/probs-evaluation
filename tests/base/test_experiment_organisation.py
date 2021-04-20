@@ -171,6 +171,7 @@ class TestExperimentInsightTaskSequence:
 
         return task_fp
 
+    @pytest.mark.skip
     def test_smth(self, default_tasks):
         print(default_tasks)
 
