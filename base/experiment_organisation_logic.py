@@ -1,4 +1,5 @@
 import csv
+import random
 from itertools import count, product
 from random import choice, shuffle
 from typing import List, Union, Iterator, Dict, Optional, Tuple, NamedTuple, Any
@@ -18,6 +19,7 @@ class WMTaskInfo(NamedTuple):
 
 class InsightTaskInfo(NamedTuple):
     name: str
+    type: str
     instruction: str
     content: str
 
@@ -126,7 +128,7 @@ class ExperimentInsightTaskSequence:
                  task_instruction_path: FilePath = "images/Инструкции/Задания/Инсайтная задача.png",
                  probe_instructions_path: FilePath = "text/probe instructions.csv"):
         self._task_instruction_path = task_instruction_path
-        self._tasks = {}
+        self._tasks: Dict[str, Dict[str, str]] = {}
         self._load_tasks(tasks_fp, id_column)
 
         probes_for_tasks = self._generate_probes(probes)
@@ -134,6 +136,7 @@ class ExperimentInsightTaskSequence:
                                                  trials=None,
                                                  probe_instructions_path=probe_instructions_path)
         self._probes_conditions = self._generate_probe_conditions(probes, tasks_conditions_per_probe)
+        self._participants_data: Optional[Dict[str, Tuple[float]]] = self._load_participants_data()
 
     def _generate_probes(self, probes) -> Tuple[Any, ...]:
         number_of_each_probe_use = len(self._tasks) / len(probes)
@@ -148,7 +151,7 @@ class ExperimentInsightTaskSequence:
 
     def _generate_probe_conditions(self, probes, repeat):
         conditions = tuple(choice(tuple(self._tasks.values())).keys())
-        return {probe: conditions * repeat for probe in probes}
+        return {probe: list(conditions * repeat) for probe in probes}
 
     def _load_tasks(self,
                     path: str,
@@ -163,14 +166,35 @@ class ExperimentInsightTaskSequence:
     def _load_participants_data(self):  # TODO: функция для сбора статистики о уже проведенных типах задач
         pass
 
-    def _chose_task(self, probe_name: str) -> Tuple[str, str]:
-        pass
+    def _get_task_type_based_on_participants_data(self, conditions, task):
+        if self._participants_data is None:
+            return random.choices(population=list(set(conditions)), weights=[0.5, 0.5])[0]
+
+        return random.choices(population=list(set(conditions)), weights=self._participants_data[task])[0]
+
+    def _choose_task(self, probe_name: str) -> Tuple[str, str, str]:
+        possible_conditions = self._probes_conditions[probe_name]
+        chosen_task_id, task_types = choice(list(self._tasks.items()))
+        del self._tasks[chosen_task_id]
+
+        task_type = possible_conditions[0]
+        if self._is_task_type_can_be_chosen(possible_conditions):
+            task_type = self._get_task_type_based_on_participants_data(possible_conditions, chosen_task_id)
+
+        self._probes_conditions[probe_name].remove(task_type)
+        task_content = task_types[task_type]
+        return chosen_task_id, task_type, task_content
+
+    @staticmethod
+    def _is_task_type_can_be_chosen(conditions):
+        return len(set(conditions)) == 2
 
     def __getitem__(self, item) -> Tuple[InsightTaskInfo, ProbeInfo]:
         probe = self._probes_sequence[item]
 
-        task_name, content = self._chose_task(probe_name=probe.name)
+        task_name, task_type, content = self._choose_task(probe_name=probe.name)
         task = InsightTaskInfo(name=task_name,
+                               type=task_type,
                                instruction=self._task_instruction_path,
                                content=content)
 
