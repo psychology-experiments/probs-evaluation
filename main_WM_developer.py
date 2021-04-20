@@ -37,6 +37,7 @@ TRAINING_TASK_POSITION = (0, 0)
 
 QUIT_KEYS = ["escape"]
 
+
 def change_mouse_visibility(mouse_component: event.Mouse,
                             task_name: str,
                             trial_task):
