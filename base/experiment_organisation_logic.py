@@ -114,16 +114,22 @@ class ExperimentInsightTaskSequence:
 
     def __init__(self,
                  id_column: str,
-                 probes_per_condition: int,
                  tasks_fp: FilePath,
                  probes: Tuple[str, ...],
                  probe_instructions_path: FilePath = "text/probe instructions.csv"):
         self._tasks = {}
         self._load_tasks(tasks_fp, id_column)
 
-        # self._probes_sequence = TrainingSequence(probes_sequence=probes,
-        #                                          trials=None,
-        #                                          probe_instructions_path=probe_instructions_path)
+        if len(self._tasks) % len(probes) != 0:
+            raise ValueError(f"Quantity of tasks {self._tasks} is not multiple to probes {len(probes)}")
+
+        use_of_each_probe = len(self._tasks) // len(probes)
+        probes_for_tasks = list(probes * use_of_each_probe)
+
+        shuffle(probes_for_tasks)
+        self._probes_sequence = TrainingSequence(probes_sequence=tuple(probes_for_tasks),
+                                                 trials=None,
+                                                 probe_instructions_path=probe_instructions_path)
 
     def _load_tasks(self,
                     path: str,
