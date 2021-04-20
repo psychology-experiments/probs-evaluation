@@ -12,7 +12,7 @@ class ProbeInfo(NamedTuple):
 
 class WMTaskInfo(NamedTuple):
     name: str
-    instruction: Optional[str]
+    instruction: str
     trained: bool
 
 
