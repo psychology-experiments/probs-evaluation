@@ -20,7 +20,7 @@ class DataSaver:
                                  "RT",
                                  "is_correct",
                                  "time_from_experiment_start",
-                                 ]  # TODO: заполнить в каком порядке сохранять данные + добавить НОМЕР СОЧЕТАНИЯ
+                                 ]
 
         self._combination_number: int = 0
 
