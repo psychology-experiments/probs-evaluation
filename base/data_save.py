@@ -15,18 +15,33 @@ class DataSaver:
                                              autoLog=False,
                                              savePickle=False)
 
-        self._saver.dataNames = ["experiment_part",
-                                 "stage",
-                                 "combination_number",
-                                 "task_trial",
-                                 "task",
-                                 "task_solution_time",
-                                 "probe_trial",
-                                 "probe",
-                                 "RT",
-                                 "is_correct",
-                                 "time_from_experiment_start",
-                                 ]
+        if experiment_part == "WM":
+            data_to_save = ["experiment_part",
+                            "stage",
+                            "combination_number",
+                            "task_trial",
+                            "task",
+                            "task_solution_time",
+                            "probe_trial",
+                            "probe",
+                            "RT",
+                            "is_correct",
+                            "time_from_experiment_start",
+                            ]  # TODO: add info about subtasks
+        else:
+            data_to_save = ["experiment_part",
+                            "stage",
+                            "task_trial",
+                            "task",
+                            "task_solution_time",
+                            "probe_trial",
+                            "probe",
+                            "RT",
+                            "is_correct",
+                            "time_from_experiment_start",
+                            ]
+
+        self._saver.dataNames = data_to_save
 
         self._experiment_part: str = experiment_part
         self._combination_number: int = 0
