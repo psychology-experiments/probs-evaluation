@@ -35,7 +35,7 @@ class TestDataSaver:
         time_from_experiment_start = prepared_data["time_from_experiment_start"]
 
         data_output_fp = tmpdir.join("test_save/test")
-        data_saver = data_save.DataSaver(save_fp=data_output_fp)
+        data_saver = data_save.DataSaver(save_fp=data_output_fp, experiment_part="WM")
 
         for trial in range(self.TRIALS_TO_SAVE):
             data_saver.save_probe_practice(probe_name=probe_name[trial],
