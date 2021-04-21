@@ -136,7 +136,8 @@ class ExperimentInsightTaskSequence:
                                                  trials=None,
                                                  probe_instructions_path=probe_instructions_path)
         self._probes_conditions = self._generate_probe_conditions(probes, tasks_conditions_per_probe)
-        self._participants_data: Optional[Dict[str, Tuple[float]]] = self._load_participants_data()
+        self._participants_data: Optional[Dict[str, Tuple[float]]] = None
+        self._load_participants_data()
 
     def _generate_probes(self, probes) -> Tuple[Any, ...]:
         number_of_each_probe_use = len(self._tasks) / len(probes)
