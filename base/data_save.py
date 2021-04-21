@@ -4,13 +4,19 @@ from psychopy import data
 
 
 class DataSaver:
-    def __init__(self, save_fp: str):
+    def __init__(self,
+                 save_fp: str,
+                 experiment_part: str):
+        if experiment_part not in ("WM", "Insight"):
+            raise ValueError(f'experiment_part must be "WM" or "Insight"')
+
         self._saver = data.ExperimentHandler(dataFileName=save_fp,
                                              version="2020.2.10",  # TODO: указать правильную версию
                                              autoLog=False,
                                              savePickle=False)
 
-        self._saver.dataNames = ["stage",
+        self._saver.dataNames = ["experiment_part",
+                                 "stage",
                                  "combination_number",
                                  "task_trial",
                                  "task",
@@ -22,6 +28,7 @@ class DataSaver:
                                  "time_from_experiment_start",
                                  ]
 
+        self._experiment_part: str = experiment_part
         self._combination_number: int = 0
 
         self._task: Optional[str] = None
@@ -47,6 +54,7 @@ class DataSaver:
                             time_from_experiment_start: float
                             ):
         self._probe_trial += 1
+        self._saver.addData("experiment_part", self._experiment_part)
         self._saver.addData("stage", "probe training")
         self._saver.addData("probe_trial", self._probe_trial)
         self._saver.addData("probe", probe_name)
@@ -61,6 +69,7 @@ class DataSaver:
                            time_from_experiment_start: float
                            ):
         self._task_trial += 1
+        self._saver.addData("experiment_part", self._experiment_part)
         self._saver.addData("stage", "task training")
         self._saver.addData("task_trial", self._task_trial)
         self._saver.addData("task", task_name)
@@ -76,6 +85,7 @@ class DataSaver:
                                      ):
         self._probe_trial += 1
 
+        self._saver.addData("experiment_part", self._experiment_part)
         self._saver.addData("stage", "experimental")
         self._saver.addData("combination_number", self._combination_number)
 
@@ -95,6 +105,7 @@ class DataSaver:
                                     ):
         self._task_trial += 1
 
+        self._saver.addData("experiment_part", self._experiment_part)
         self._saver.addData("stage", "experimental")
         self._saver.addData("combination_number", self._combination_number)
 
