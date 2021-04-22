@@ -1,14 +1,21 @@
+from enum import Enum
 from typing import List, Optional
 
 from psychopy import data
 
 
+class ExperimentPart(Enum):
+    WM = "WM"
+    INSIGHT = "Insight"
+
+
 class DataSaver:
     def __init__(self,
                  save_fp: str,
-                 experiment_part: str):
-        if experiment_part not in ("WM", "Insight"):
-            raise ValueError(f'experiment_part must be "WM" or "Insight"')
+                 experiment_part: ExperimentPart):
+        if experiment_part not in ExperimentPart:
+            parts = [part for part in ExperimentPart.__members__.keys()]
+            raise ValueError(f'experiment_part must be one of {parts}')
 
         self._saver = data.ExperimentHandler(dataFileName=save_fp,
                                              version="2020.2.10",  # TODO: указать правильную версию
@@ -27,7 +34,7 @@ class DataSaver:
                         "is_correct",
                         "time_from_experiment_start",
                         ]
-        if experiment_part == "WM":
+        if experiment_part is ExperimentPart.WM:
             # TODO: add info about subtasks
             data_to_save.insert(2, "combination_number")
         else:
@@ -35,7 +42,7 @@ class DataSaver:
 
         self._saver.dataNames = data_to_save
 
-        self._experiment_part: str = experiment_part
+        self._experiment_part: ExperimentPart = experiment_part
         self._task_type: Optional[str] = None
         self._combination_number: int = 0
 
@@ -98,11 +105,11 @@ class DataSaver:
 
         self._saver.addData("experiment_part", self._experiment_part)
         self._saver.addData("stage", "experimental")
-        if self._experiment_part == "WM":
+        if self._experiment_part == ExperimentPart.WM:
             self._saver.addData("combination_number", self._combination_number)
 
         self._saver.addData("task", self._task)
-        if self._experiment_part == "Insight":
+        if self._experiment_part == ExperimentPart.INSIGHT:
             self._saver.addData("task_type", self._task_type)
 
         self._saver.addData("probe_trial", self._probe_trial)
@@ -121,12 +128,12 @@ class DataSaver:
 
         self._saver.addData("experiment_part", self._experiment_part)
         self._saver.addData("stage", "experimental")
-        if self._experiment_part == "WM":
+        if self._experiment_part == ExperimentPart.WM:
             self._saver.addData("combination_number", self._combination_number)
 
         self._saver.addData("task_trial", self._task_trial)
         self._saver.addData("task", self._task)
-        if self._experiment_part == "Insight":
+        if self._experiment_part == ExperimentPart.INSIGHT:
             self._saver.addData("task_type", self._task_type)
         self._saver.addData("task_solution_time", solution_time)
 
