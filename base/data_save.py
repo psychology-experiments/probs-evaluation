@@ -9,6 +9,10 @@ class ExperimentPart(Enum):
     INSIGHT = "Insight"
 
 
+class ExperimentPartDataSaver:
+    pass
+
+
 class DataSaver:
     def __init__(self,
                  save_fp: str,
