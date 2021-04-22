@@ -15,6 +15,7 @@ class DataSaver:
                                              autoLog=False,
                                              savePickle=False)
 
+        # TODO: find a way to implement data_to_save cleaner
         data_to_save = ["experiment_part",
                         "stage",
                         "task",
