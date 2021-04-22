@@ -72,7 +72,7 @@ class DataSaver:
                             time_from_experiment_start: float
                             ):
         self._probe_trial += 1
-        self._saver.addData("experiment_part", self._experiment_part)
+        self._saver.addData("experiment_part", self._experiment_part.value)
         self._saver.addData("stage", "probe training")
         self._saver.addData("probe_trial", self._probe_trial)
         self._saver.addData("probe", probe_name)
@@ -87,7 +87,7 @@ class DataSaver:
                            time_from_experiment_start: float
                            ):
         self._task_trial += 1
-        self._saver.addData("experiment_part", self._experiment_part)
+        self._saver.addData("experiment_part", self._experiment_part.value)
         self._saver.addData("stage", "task training")
         self._saver.addData("task_trial", self._task_trial)
         self._saver.addData("task", task_name)
@@ -103,7 +103,7 @@ class DataSaver:
                                      ):
         self._probe_trial += 1
 
-        self._saver.addData("experiment_part", self._experiment_part)
+        self._saver.addData("experiment_part", self._experiment_part.value)
         self._saver.addData("stage", "experimental")
         if self._experiment_part == ExperimentPart.WM:
             self._saver.addData("combination_number", self._combination_number)
@@ -126,7 +126,7 @@ class DataSaver:
                                     ):
         self._task_trial += 1
 
-        self._saver.addData("experiment_part", self._experiment_part)
+        self._saver.addData("experiment_part", self._experiment_part.value)
         self._saver.addData("stage", "experimental")
         if self._experiment_part == ExperimentPart.WM:
             self._saver.addData("combination_number", self._combination_number)
