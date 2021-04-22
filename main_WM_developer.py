@@ -64,7 +64,7 @@ def finish_experiment(window: visual.Window):
 
 
 win = visual.Window(size=(1200, 800), color="white", units="pix", fullscr=FULL_SCREEN)
-data_saver = data_save.DataSaver(save_fp="data/test", experiment_part="WM")
+data_saver = data_save.DataSaver(save_fp="data/test", experiment_part=data_save.ExperimentPart.WM)
 instruction = experiment_organisation_stimuli.InstructionImage(window=win, skip=SKIP_INSTRUCTION)
 organisation_message = experiment_organisation_stimuli.GeneralInstructions(fp="images/Инструкции/Общие",
                                                                            window=win,
