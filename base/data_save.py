@@ -19,6 +19,7 @@ class DataSaver:
         data_to_save = ["experiment_part",
                         "stage",
                         "task",
+                        "task_trial",
                         "task_solution_time",
                         "probe_trial",
                         "probe",
@@ -29,13 +30,13 @@ class DataSaver:
         if experiment_part == "WM":
             # TODO: add info about subtasks
             data_to_save.insert(2, "combination_number")
-            data_to_save.insert(3, "task_trial")
         else:
             data_to_save.insert(3, "task_type")
 
         self._saver.dataNames = data_to_save
 
         self._experiment_part: str = experiment_part
+        self._task_type: Optional[str] = None
         self._combination_number: int = 0
 
         self._task: Optional[str] = None
@@ -44,12 +45,15 @@ class DataSaver:
         self._probe: Optional[str] = None
         self._probe_trial: int = 0
 
-    def new_task(self, task_name: str, stage: str):
+    def new_task(self, task_name: str, stage: str, task_type: Optional[str] = None):
         self._task_trial: int = 0
         self._task = task_name
 
         if stage == "experimental":
             self._combination_number += 1
+
+        if task_type is not None:
+            self._task_type = task_type
 
     def new_probe(self):
         self._probe_trial: int = 0
@@ -94,9 +98,12 @@ class DataSaver:
 
         self._saver.addData("experiment_part", self._experiment_part)
         self._saver.addData("stage", "experimental")
-        self._saver.addData("combination_number", self._combination_number)
+        if self._experiment_part == "WM":
+            self._saver.addData("combination_number", self._combination_number)
 
         self._saver.addData("task", self._task)
+        if self._experiment_part == "Insight":
+            self._saver.addData("task_type", self._task_type)
 
         self._saver.addData("probe_trial", self._probe_trial)
         self._saver.addData("probe", probe_name)
@@ -114,10 +121,13 @@ class DataSaver:
 
         self._saver.addData("experiment_part", self._experiment_part)
         self._saver.addData("stage", "experimental")
-        self._saver.addData("combination_number", self._combination_number)
+        if self._experiment_part == "WM":
+            self._saver.addData("combination_number", self._combination_number)
 
         self._saver.addData("task_trial", self._task_trial)
         self._saver.addData("task", self._task)
+        if self._experiment_part == "Insight":
+            self._saver.addData("task_type", self._task_type)
         self._saver.addData("task_solution_time", solution_time)
 
         self._saver.addData("time_from_experiment_start", time_from_experiment_start)
