@@ -68,6 +68,9 @@ class ProbeView(AbstractProbeViw):
     def get_press_correctness(self, pressed_key_name: str) -> bool:
         return self._presenter_probe.get_press_correctness(pressed_key_name)
 
+    def prepare_for_new_task(self) -> None:
+        self._presenter_probe.prepare_for_new_task()
+
     @property
     def position(self):
         return self._position
