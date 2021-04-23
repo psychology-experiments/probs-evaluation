@@ -51,6 +51,10 @@ def skip_all_tasks_except(task_name: str, show: str, mode=MODE) -> bool:
     return mode == "TEST" and task_name != show and show != "all"
 
 
+def skip_all_probes_except(_probe_name: str, show: str, mode=MODE) -> bool:
+    return mode == "TEST" and _probe_name != show and show != "all"
+
+
 def finish_experiment(window: visual.Window):
     """
     PsychoPy выдаёт ошибки при завершении скрипта, которые никак не мешают исполнению, но мешают отладке.
@@ -249,6 +253,9 @@ for task_info, probe_info in experiment_sequence:
     instruction.show(path=task_info.instruction)
 
     if skip_all_tasks_except(task_info.name, SETTINGS.get("show_task")):
+        continue
+
+    if skip_all_probes_except(task_info.name, SETTINGS.get("show_probe")):
         continue
 
     # тренировка с задачами
