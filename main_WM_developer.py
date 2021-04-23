@@ -255,7 +255,7 @@ for task_info, probe_info in experiment_sequence:
     if skip_all_tasks_except(task_info.name, SETTINGS.get("show_task")):
         continue
 
-    if skip_all_probes_except(task_info.name, SETTINGS.get("show_probe")):
+    if skip_all_probes_except(probe_info.name, SETTINGS.get("show_probe")):
         continue
 
     # тренировка с задачами
