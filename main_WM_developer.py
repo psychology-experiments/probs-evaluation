@@ -313,6 +313,7 @@ for task_info, probe_info in experiment_sequence:
     change_mouse_visibility(mouse, task_info.name, task)
 
     probe = experimental_probes[probe_info.name]
+    probe.prepare_for_new_task()
     # Подготовить позицию с зондами для задачи
     probe.position = EXPERIMENTAL_PROBE_POSITION[task_info.name]
 
