@@ -16,6 +16,10 @@ class AbstractProbeInformationHandler(ABC):
     def get_press_correctness(self, pressed_key_name: str) -> bool:
         pass
 
+    @abstractmethod
+    def prepare_for_new_task(self) -> None:
+        pass
+
 
 class ProbeInformationHandler(AbstractProbeInformationHandler):
     def __init__(self, probes: List[str]):
@@ -35,6 +39,9 @@ class ProbeInformationHandler(AbstractProbeInformationHandler):
 
     def get_press_correctness(self, pressed_key_name: str) -> bool:
         raise NotImplementedError
+
+    def prepare_for_new_task(self):
+        pass
 
 
 class ProbeInformationMapper(ProbeInformationHandler):
@@ -100,6 +107,9 @@ class ProbeInformationSequence(ProbeInformationHandler):
         else:
             raise ValueError(f"Key {pressed_key_name} is prohibited for this UpdateProbe")
 
+    def prepare_for_new_task(self):
+        self.previous_probe_idx = None
+
 
 class Probe:
     def __init__(self,
@@ -129,6 +139,9 @@ class Probe:
 
     def get_probe_number(self):
         return self._information_handler.current_probe_idx
+
+    def prepare_for_new_task(self):
+        self._information_handler.prepare_for_new_task()
 
 
 # TODO: change tests to accept Probe as UpdateProbe
