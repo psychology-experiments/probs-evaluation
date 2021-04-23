@@ -96,7 +96,6 @@ class ProbeInformationSequence(ProbeInformationHandler):
         super(ProbeInformationSequence, self).next_probe()
 
     def get_press_correctness(self, pressed_key_name: str) -> bool:
-        # TODO: First answer must be correct if right???
         if self.previous_probe_idx is None:
             return True
 
