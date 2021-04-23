@@ -8,6 +8,7 @@ from base import probe_presenters
 
 
 # TODO: for each probe add test to check that they work correctly
+# TODO: add test to check that use of the same probes is not breaking get_correctness
 
 class TestProbe:
     PROBE_TYPES = {
