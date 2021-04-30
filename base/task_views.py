@@ -555,3 +555,41 @@ class WisconsinTestTaskView(AbstractTaskView):
                               rule=self._test_presenter.rule_name,
                               correctness=int(self._test_presenter.streak > 0))
             return trial_data
+
+
+class InsightTask:
+    def __init__(self,
+                 window: visual.Window,
+                 position: ScreenPosition,
+                 text_size: int,
+                 ):
+        self._task_text = visual.TextStim(win=window,
+                                          text="",
+                                          height=text_size,
+                                          pos=position,
+                                          wrapWidth=window.size[0] * 0.8)
+
+        self._task_finished = False
+        self._position = position
+
+    @property
+    def position(self) -> ScreenPosition:
+        return self._position
+
+    @position.setter
+    def position(self, value: ScreenPosition) -> None:
+        self._task_text.pos = value
+        self._position = value
+
+    def finish_task(self) -> None:
+        self._task_finished = True
+
+    def is_task_finished(self) -> bool:
+        return self._task_finished
+
+    def new_task(self, text):
+        self._task_finished = False
+        self._task_text.text = text
+
+    def draw(self) -> None:
+        self._task_text.draw()
