@@ -117,8 +117,11 @@ all_probes = collections.OrderedDict((
     ("Торможение", probe_inhibition),
 ))
 
-experimental_probes = all_probes.copy()
-del experimental_probes["Выбор из 2 альтернатив"]
+experimental_probes = collections.OrderedDict((
+    ("Обновление", probes_update),
+    ("Переключение", probe_switch),
+    ("Торможение", probe_inhibition),
+))
 
 # Подготовка устройств ввода
 single_keyboard = keyboard.Keyboard()
