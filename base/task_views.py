@@ -562,8 +562,10 @@ class InsightTask:
                  window: visual.Window,
                  position: ScreenPosition,
                  text_size: int,
+                 color: str = "black",
                  ):
         self._task_text = visual.TextStim(win=window,
+                                          color=color,
                                           text="",
                                           height=text_size,
                                           pos=position,
