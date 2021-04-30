@@ -30,7 +30,6 @@ class DataSaver:
         data_to_save = ["experiment_part",
                         "stage",
                         "task",
-                        "task_trial",
                         "task_solution_time",
                         "probe_trial",
                         "probe",
@@ -41,6 +40,7 @@ class DataSaver:
         if experiment_part is ExperimentPart.WM:
             # TODO: add info about subtasks
             data_to_save.insert(2, "combination_number")
+            data_to_save.insert(4, "task_trial")
         else:
             data_to_save.insert(3, "task_type")
 
