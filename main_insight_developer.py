@@ -7,7 +7,7 @@ from psychopy.hardware import keyboard
 
 from base import data_save, experiment_organization_logic, experiment_organization_stimuli, probe_views, task_views
 
-MODE = "TEST"
+MODE = "EXPERIMENT"
 
 SETTINGS_FP = f"configurations/settings.ini"
 SETTINGS_PARSER = configparser.ConfigParser()
@@ -123,12 +123,12 @@ insight_task = task_views.InsightTask(window=win,
 # подготовка часов
 
 training_probe_sequence = experiment_organization_logic.TrainingSequence(probes_sequence=tuple(all_probes),
-                                                                         trials=50,
-                                                                         instruction_type="one")
+                                                                         trials=2,
+                                                                         )
 experiment_sequence = experiment_organization_logic.ExperimentInsightTaskSequence(id_column="ID",
                                                                                   tasks_fp="text/insight tasks.csv",
                                                                                   probes=tuple(experimental_probes),
-                                                                                  instruction_type="two")
+                                                                                  )
 
 trial_clock = core.Clock()
 task_solution_clock = core.Clock()
@@ -186,16 +186,12 @@ if not SKIP_PROBE_TRAINING:
 # ЭКСПЕРИМЕНТАЛЬНАЯ ЧАСТЬ
 for task_info, probe_info in experiment_sequence:
     # Часть с инструкциями
-    organisation_message.show()
-    instruction.show(path=task_info.instruction)
-
     if skip_all_tasks_except(task_info.name, SETTINGS.get("show_task")):
         continue
 
     if skip_all_probes_except(probe_info.name, SETTINGS.get("show_probe")):
         continue
 
-    organisation_message.show()
     instruction.show(path=probe_info.instruction)
     organisation_message.show()
 
