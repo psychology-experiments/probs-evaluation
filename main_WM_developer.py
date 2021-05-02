@@ -192,9 +192,11 @@ experimental_tasks = collections.OrderedDict((
 # подготовка часов
 
 training_probe_sequence = experiment_organisation_logic.TrainingSequence(probes_sequence=tuple(all_probes),
+                                                                         instruction_type="one",
                                                                          trials=50)
 experiment_sequence = experiment_organisation_logic.ExperimentWMSequence(tasks=tuple(experimental_tasks),
-                                                                         probes=tuple(experimental_probes))
+                                                                         probes=tuple(experimental_probes),
+                                                                         instruction_type="one")
 
 trial_clock = core.Clock()
 task_solution_clock = core.Clock()
