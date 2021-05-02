@@ -129,7 +129,6 @@ experiment_sequence = experiment_organization_logic.ExperimentInsightTaskSequenc
                                                                                   tasks_fp="text/insight tasks.csv",
                                                                                   probes=tuple(experimental_probes),
                                                                                   instruction_type="two")
-# TODO: create instructions for type two
 
 trial_clock = core.Clock()
 task_solution_clock = core.Clock()
