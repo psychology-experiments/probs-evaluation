@@ -65,6 +65,7 @@ probe_two_alternatives = probe_views.ProbeView(window=win,
                                                start_time=PROBE_START,
                                                image_path_dir="images/Выбор из 2 альтернатив/",
                                                position=PROBES_TRAINING_POSITION)
+
 probes_update = probe_views.ProbeView(window=win,
                                       probes=["1", "2", "3"],
                                       answers=None,
