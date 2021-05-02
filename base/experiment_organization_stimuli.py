@@ -1,6 +1,6 @@
 from itertools import cycle
 import os
-from typing import Optional, Iterator
+from typing import Optional, Iterator, Dict
 
 from psychopy.hardware import keyboard
 from psychopy import core, gui, visual
@@ -135,4 +135,7 @@ class EndMessage:
 class ParticipantInfoGetter:
     def __init__(self):
         info = dict(ФИО="", Возраст="", Пол=["Ж", "М"])
-        self._filled_info = gui.DlgFromDict(dictionary=info, order=["ФИО", "Возраст", "Пол"])
+        self._filled_info = gui.DlgFromDict(dictionary=info, order=["ФИО", "Возраст", "Пол"]).dictionary
+
+    def get_info(self) -> Dict[str, str]:
+        return self._filled_info
