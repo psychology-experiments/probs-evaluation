@@ -25,6 +25,7 @@ PROBE_START = 0.1
 # EXPERIMENTAL_PROBE_POSITION = dict(Торможение=(0, -300), Обновление=(0, -209), Переключение=(0, -275))
 EXPERIMENTAL_PROBE_POSITION = (0, -300)
 PROBES_TRAINING_POSITION = (0, 0)
+INSIGHT_TASK_POSITION = (0, 100)
 
 QUIT_KEYS = ["escape"]
 
@@ -114,7 +115,7 @@ mouse = event.Mouse(visible=False, win=win)
 
 # экспериментальная серия
 insight_task = task_views.InsightTask(window=win,
-                                      position=(0, 0),
+                                      position=INSIGHT_TASK_POSITION,
                                       text_size=40)
 
 # Начало эксперимента?
