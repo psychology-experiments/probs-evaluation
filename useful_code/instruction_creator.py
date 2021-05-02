@@ -17,7 +17,7 @@ GENERAL_INSTRUCTIONS_FP = "instructions/general instructions.txt"
 SAVE_TASK_INSTRUCTIONS_FP = "../images/Инструкции/Задания/"
 SAVE_PROBE_INSTRUCTIONS_WM_FP = "../images/Инструкции/Зонды/one/"
 SAVE_PROBE_INSTRUCTIONS_INSIGHT_FP = "../images/Инструкции/Зонды/two/"
-SAVE_GENERAL_INSTRUCTIONS_FP = "../images/Инструкции/Общие/"
+SAVE_GENERAL_INSTRUCTIONS_FP = "../images/Инструкции/Общие/WM/"
 
 
 class InstructionPart(NamedTuple):
@@ -180,6 +180,8 @@ if __name__ == '__main__':
     images_paths = [os.path.join(SAVE_TASK_INSTRUCTIONS_FP, fp) for fp in os.listdir(SAVE_TASK_INSTRUCTIONS_FP)] + \
                    [os.path.join(SAVE_PROBE_INSTRUCTIONS_WM_FP, fp) for fp in
                     os.listdir(SAVE_PROBE_INSTRUCTIONS_WM_FP)] + \
+                   [os.path.join(SAVE_PROBE_INSTRUCTIONS_INSIGHT_FP, fp) for fp in
+                    os.listdir(SAVE_PROBE_INSTRUCTIONS_INSIGHT_FP)] + \
                    [os.path.join(SAVE_GENERAL_INSTRUCTIONS_FP, fp) for fp in os.listdir(SAVE_GENERAL_INSTRUCTIONS_FP)]
     shuffle(images_paths)
     images_paths = iter(images_paths)
