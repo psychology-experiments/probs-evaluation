@@ -11,10 +11,12 @@ INSTRUCTION_TEXT_FONT_INFO = dict(font='C:/Windows/fonts/Arial.ttf', size=25)
 
 TASK_INSTRUCTIONS_FP = "instructions/task instructions.txt"
 PROBE_INSTRUCTIONS_WM_FP = "instructions/probe WM instructions.txt"
+PROBE_INSTRUCTIONS_INSIGHT_FP = "instructions/probe Insight instructions.txt"
 GENERAL_INSTRUCTIONS_FP = "instructions/general instructions.txt"
 
 SAVE_TASK_INSTRUCTIONS_FP = "../images/Инструкции/Задания/WM/"
-SAVE_PROBE_INSTRUCTIONS_WM_FP = "../images/Инструкции/Зонды/WM/"
+SAVE_PROBE_INSTRUCTIONS_WM_FP = "../images/Инструкции/Зонды/one/"
+SAVE_PROBE_INSTRUCTIONS_INSIGHT_FP = "../images/Инструкции/Зонды/two/"
 SAVE_GENERAL_INSTRUCTIONS_FP = "../images/Инструкции/Общие/"
 
 
