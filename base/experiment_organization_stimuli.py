@@ -101,7 +101,8 @@ class SingleMousePress:  # TODO: добавить в код main или убра
 
 class EndMessage:
     def __init__(self,
-                 window: visual.Window):
+                 window: visual.Window,
+                 end_phrase: str):
         from psychopy import sound
         self._win = window
         self._end_message = visual.TextStim(window,
@@ -109,7 +110,7 @@ class EndMessage:
                                             height=40,
                                             wrapWidth=window.size[0] * 0.9)
 
-        self._end_phrase = sound.Sound(value="audio/final_message_for_part_one.wav")
+        self._end_phrase = sound.Sound(value=end_phrase)
         self._timer = core.CountdownTimer()
 
     @staticmethod
