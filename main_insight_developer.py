@@ -274,6 +274,6 @@ for task_info, probe_info in experiment_sequence:
                 task_finished = True
                 break
 
-experiment_organization_stimuli.EndMessage(win).show(5, experiment_clock)
+experiment_organization_stimuli.EndMessage(win, "audio/final_message_for_part_two.wav").show(5, experiment_clock)
 data_saver.close()
 finish_experiment(window=win)
