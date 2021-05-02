@@ -30,8 +30,9 @@ FilePath = str
 class TrainingSequence:
     def __init__(self,
                  probes_sequence: Tuple[str, ...],
+                 instruction_type: str,
                  trials: Optional[Union[List[int], int]] = 30,
-                 probe_instructions_path: FilePath = "text/probe instructions.csv"):
+                 probe_instructions_path: FilePath = "text/probe instructions.csv", ):
 
         if trials is None:
             trials = [count() for _ in range(len(probes_sequence))]
@@ -44,6 +45,7 @@ class TrainingSequence:
 
         self._probe_number_of_trials_sequence: List[Iterator] = trials
         self._probes: Tuple[str, ...] = probes_sequence
+        self._instruction_type: str = instruction_type
 
         if len(self._probe_number_of_trials_sequence) != len(self._probes):
             raise ValueError(f"QTY of probes ({probes_sequence}) "
@@ -56,7 +58,8 @@ class TrainingSequence:
         with open(path, mode="r", encoding="UTF-8") as instructions_file:
             reader = csv.DictReader(instructions_file)
             probes_instructions: Dict[str, str] = {row["probe"]: row["instruction"]
-                                                   for row in reader}
+                                                   for row in reader
+                                                   if row["qty_instructions"] == self._instruction_type}
 
         for probe_name, trials in zip(self._probes, self._probe_number_of_trials_sequence):
             probe_info = ProbeInfo(name=probe_name,
