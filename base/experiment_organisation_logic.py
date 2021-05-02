@@ -79,6 +79,7 @@ class ExperimentWMSequence:
     def __init__(self,
                  tasks: Tuple[str, ...],
                  probes: Tuple[str, ...],
+                 instruction_type: str,
                  task_instructions_path: FilePath = "text/task instructions.csv",
                  probe_instructions_path: FilePath = "text/probe instructions.csv"):
         tasks_and_probes = list(product(tasks, probes))
@@ -88,6 +89,7 @@ class ExperimentWMSequence:
 
         self._probes_sequence = TrainingSequence(probes_sequence=probes,
                                                  trials=None,
+                                                 instruction_type=instruction_type,
                                                  probe_instructions_path=probe_instructions_path)
 
         self._task_instructions: Dict[str, str] = {}
@@ -127,6 +129,7 @@ class ExperimentInsightTaskSequence:
                  id_column: str,
                  tasks_fp: FilePath,
                  probes: Tuple[str, ...],
+                 instruction_type: str,
                  tasks_conditions_per_probe: int = 2,
                  task_instruction_path: FilePath = "images/Инструкции/Задания/Инсайтная задача.png",
                  probe_instructions_path: FilePath = "text/probe instructions.csv"):
@@ -137,6 +140,7 @@ class ExperimentInsightTaskSequence:
         probes_for_tasks = self._generate_probes(probes)
         self._probes_sequence = TrainingSequence(probes_sequence=probes_for_tasks,
                                                  trials=None,
+                                                 instruction_type=instruction_type,
                                                  probe_instructions_path=probe_instructions_path)
         self._probes_conditions = self._generate_probe_conditions(probes, tasks_conditions_per_probe)
         self._participants_data: Optional[Dict[str, Tuple[float]]] = None
