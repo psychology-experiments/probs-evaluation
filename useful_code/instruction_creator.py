@@ -10,11 +10,11 @@ INSTRUCTION_COLOR = (0, 0, 0)
 INSTRUCTION_TEXT_FONT_INFO = dict(font='C:/Windows/fonts/Arial.ttf', size=25)
 
 TASK_INSTRUCTIONS_FP = "instructions/task instructions.txt"
-PROBE_INSTRUCTIONS_FP = "instructions/probe instructions.txt"
+PROBE_INSTRUCTIONS_WM_FP = "instructions/probe instructions.txt"
 GENERAL_INSTRUCTIONS_FP = "instructions/general instructions.txt"
 
 SAVE_TASK_INSTRUCTIONS_FP = "../images/Инструкции/Задания/WM/"
-SAVE_PROBE_INSTRUCTIONS_FP = "../images/Инструкции/Зонды/"
+SAVE_PROBE_INSTRUCTIONS_WM_FP = "../images/Инструкции/Зонды/WM/"
 SAVE_GENERAL_INSTRUCTIONS_FP = "../images/Инструкции/Общие/"
 
 
@@ -159,7 +159,7 @@ def convert_instructions_to_image(instructions_fp, save_folder):
 
 
 convert_instructions_to_image(TASK_INSTRUCTIONS_FP, SAVE_TASK_INSTRUCTIONS_FP)
-convert_instructions_to_image(PROBE_INSTRUCTIONS_FP, SAVE_PROBE_INSTRUCTIONS_FP)
+convert_instructions_to_image(PROBE_INSTRUCTIONS_WM_FP, SAVE_PROBE_INSTRUCTIONS_WM_FP)
 convert_instructions_to_image(GENERAL_INSTRUCTIONS_FP, SAVE_GENERAL_INSTRUCTIONS_FP)
 
 if __name__ == '__main__':
@@ -175,7 +175,8 @@ if __name__ == '__main__':
                                           text="Демонстрация результата. Нажатие на ПРОБЕЛ выбирает следующий пример",
                                           color="red")
     images_paths = [os.path.join(SAVE_TASK_INSTRUCTIONS_FP, fp) for fp in os.listdir(SAVE_TASK_INSTRUCTIONS_FP)] + \
-                   [os.path.join(SAVE_PROBE_INSTRUCTIONS_FP, fp) for fp in os.listdir(SAVE_PROBE_INSTRUCTIONS_FP)] + \
+                   [os.path.join(SAVE_PROBE_INSTRUCTIONS_WM_FP, fp) for fp in
+                    os.listdir(SAVE_PROBE_INSTRUCTIONS_WM_FP)] + \
                    [os.path.join(SAVE_GENERAL_INSTRUCTIONS_FP, fp) for fp in os.listdir(SAVE_GENERAL_INSTRUCTIONS_FP)]
     shuffle(images_paths)
     images_paths = iter(images_paths)
