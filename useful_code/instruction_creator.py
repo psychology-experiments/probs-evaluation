@@ -14,7 +14,7 @@ PROBE_INSTRUCTIONS_WM_FP = "instructions/probe WM instructions.txt"
 PROBE_INSTRUCTIONS_INSIGHT_FP = "instructions/probe Insight instructions.txt"
 GENERAL_INSTRUCTIONS_FP = "instructions/general instructions.txt"
 
-SAVE_TASK_INSTRUCTIONS_FP = "../images/Инструкции/Задания/WM/"
+SAVE_TASK_INSTRUCTIONS_FP = "../images/Инструкции/Задания/"
 SAVE_PROBE_INSTRUCTIONS_WM_FP = "../images/Инструкции/Зонды/one/"
 SAVE_PROBE_INSTRUCTIONS_INSIGHT_FP = "../images/Инструкции/Зонды/two/"
 SAVE_GENERAL_INSTRUCTIONS_FP = "../images/Инструкции/Общие/"
