@@ -31,7 +31,7 @@ class TrainingSequence:
     def __init__(self,
                  probes_sequence: Tuple[str, ...],
                  trials: Optional[Union[List[int], int]] = 30,
-                 probe_instructions_path: FilePath = "text/probe instructions.csv", ):
+                 probe_instructions_path: FilePath = "text/probe instructions one.csv", ):
 
         if trials is None:
             trials = [count() for _ in range(len(probes_sequence))]
