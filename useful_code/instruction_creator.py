@@ -162,6 +162,7 @@ def convert_instructions_to_image(instructions_fp, save_folder):
 
 convert_instructions_to_image(TASK_INSTRUCTIONS_FP, SAVE_TASK_INSTRUCTIONS_FP)
 convert_instructions_to_image(PROBE_INSTRUCTIONS_WM_FP, SAVE_PROBE_INSTRUCTIONS_WM_FP)
+convert_instructions_to_image(PROBE_INSTRUCTIONS_INSIGHT_FP, SAVE_PROBE_INSTRUCTIONS_INSIGHT_FP)
 convert_instructions_to_image(GENERAL_INSTRUCTIONS_FP, SAVE_GENERAL_INSTRUCTIONS_FP)
 
 if __name__ == '__main__':
