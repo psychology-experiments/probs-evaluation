@@ -3,7 +3,7 @@ import os
 from typing import Optional, Iterator
 
 from psychopy.hardware import keyboard
-from psychopy import core, visual
+from psychopy import core, gui, visual
 
 
 class InstructionImage:
@@ -123,7 +123,6 @@ class EndMessage:
     def show(self,
              time_to_show: float,
              experiment_clock: core.Clock):
-
         self._timer.reset(time_to_show)
         self._end_phrase.play()
 
@@ -131,3 +130,9 @@ class EndMessage:
             self._end_message.text = f"Спасибо за участие!\nЭксперимент шёл: {self._show_time(experiment_clock)}"
             self._end_message.draw()
             self._win.flip()
+
+
+class ParticipantInfoGetter:
+    def __init__(self):
+        info = dict(ФИО="", Возраст="", Пол=["Ж", "М"])
+        self._filled_info = gui.DlgFromDict(dictionary=info, order=["ФИО", "Возраст", "Пол"])
