@@ -13,7 +13,7 @@ TASK_INSTRUCTIONS_FP = "instructions/task instructions.txt"
 PROBE_INSTRUCTIONS_FP = "instructions/probe instructions.txt"
 GENERAL_INSTRUCTIONS_FP = "instructions/general instructions.txt"
 
-SAVE_TASK_INSTRUCTIONS_FP = "../images/Инструкции/Задания/"
+SAVE_TASK_INSTRUCTIONS_FP = "../images/Инструкции/Задания/WM/"
 SAVE_PROBE_INSTRUCTIONS_FP = "../images/Инструкции/Зонды/"
 SAVE_GENERAL_INSTRUCTIONS_FP = "../images/Инструкции/Общие/"
 
