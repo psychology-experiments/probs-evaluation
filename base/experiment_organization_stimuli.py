@@ -109,7 +109,7 @@ class EndMessage:
                                             height=40,
                                             wrapWidth=window.size[0] * 0.9)
 
-        self._end_phrase = sound.Sound(value="audio/final_message.wav")
+        self._end_phrase = sound.Sound(value="audio/final_message_for_part_one.wav")
         self._timer = core.CountdownTimer()
 
     @staticmethod
