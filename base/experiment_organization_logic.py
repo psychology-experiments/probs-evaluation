@@ -30,7 +30,6 @@ FilePath = str
 class TrainingSequence:
     def __init__(self,
                  probes_sequence: Tuple[str, ...],
-                 instruction_type: str,
                  trials: Optional[Union[List[int], int]] = 30,
                  probe_instructions_path: FilePath = "text/probe instructions.csv", ):
 
@@ -45,7 +44,6 @@ class TrainingSequence:
 
         self._probe_number_of_trials_sequence: List[Iterator] = trials
         self._probes: Tuple[str, ...] = probes_sequence
-        self._instruction_type: str = instruction_type
 
         if len(self._probe_number_of_trials_sequence) != len(self._probes):
             raise ValueError(f"QTY of probes ({probes_sequence}) "
@@ -58,8 +56,7 @@ class TrainingSequence:
         with open(path, mode="r", encoding="UTF-8") as instructions_file:
             reader = csv.DictReader(instructions_file)
             probes_instructions: Dict[str, str] = {row["probe"]: row["instruction"]
-                                                   for row in reader
-                                                   if row["qty_instructions"] == self._instruction_type}
+                                                   for row in reader}
 
         for probe_name, trials in zip(self._probes, self._probe_number_of_trials_sequence):
             probe_info = ProbeInfo(name=probe_name,
@@ -79,9 +76,8 @@ class ExperimentWMSequence:
     def __init__(self,
                  tasks: Tuple[str, ...],
                  probes: Tuple[str, ...],
-                 instruction_type: str,
                  task_instructions_path: FilePath = "text/task instructions.csv",
-                 probe_instructions_path: FilePath = "text/probe instructions.csv"):
+                 probe_instructions_path: FilePath = "text/probe instructions one.csv"):
         tasks_and_probes = list(product(tasks, probes))
         shuffle(tasks_and_probes)
 
@@ -89,7 +85,6 @@ class ExperimentWMSequence:
 
         self._probes_sequence = TrainingSequence(probes_sequence=probes,
                                                  trials=None,
-                                                 instruction_type=instruction_type,
                                                  probe_instructions_path=probe_instructions_path)
 
         self._task_instructions: Dict[str, str] = {}
@@ -129,10 +124,9 @@ class ExperimentInsightTaskSequence:
                  id_column: str,
                  tasks_fp: FilePath,
                  probes: Tuple[str, ...],
-                 instruction_type: str,
                  tasks_conditions_per_probe: int = 2,
                  task_instruction_path: FilePath = "images/Инструкции/Задания/Инсайтная задача.png",
-                 probe_instructions_path: FilePath = "text/probe instructions.csv"):
+                 probe_instructions_path: FilePath = "text/probe instructions two.csv"):
         self._task_instruction_path = task_instruction_path
         self._tasks: Dict[str, Dict[str, str]] = {}
         self._load_tasks(tasks_fp, id_column)
@@ -140,7 +134,6 @@ class ExperimentInsightTaskSequence:
         probes_for_tasks = self._generate_probes(probes)
         self._probes_sequence = TrainingSequence(probes_sequence=probes_for_tasks,
                                                  trials=None,
-                                                 instruction_type=instruction_type,
                                                  probe_instructions_path=probe_instructions_path)
         self._probes_conditions = self._generate_probe_conditions(probes, tasks_conditions_per_probe)
         self._participants_data: Optional[Dict[str, Tuple[float]]] = None
