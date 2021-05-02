@@ -123,7 +123,7 @@ insight_task = task_views.InsightTask(window=win,
 # подготовка часов
 
 training_probe_sequence = experiment_organization_logic.TrainingSequence(probes_sequence=tuple(all_probes),
-                                                                         trials=2,
+                                                                         trials=50,
                                                                          )
 experiment_sequence = experiment_organization_logic.ExperimentInsightTaskSequence(id_column="ID",
                                                                                   tasks_fp="text/insight tasks.csv",
