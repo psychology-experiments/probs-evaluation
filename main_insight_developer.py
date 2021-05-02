@@ -121,10 +121,12 @@ insight_task = task_views.InsightTask(window=win,
 # подготовка часов
 
 training_probe_sequence = experiment_organisation_logic.TrainingSequence(probes_sequence=tuple(all_probes),
-                                                                         trials=50)
+                                                                         trials=50,
+                                                                         instruction_type="one")
 experiment_sequence = experiment_organisation_logic.ExperimentInsightTaskSequence(id_column="ID",
                                                                                   tasks_fp="text/insight tasks.csv",
-                                                                                  probes=tuple(experimental_probes))
+                                                                                  probes=tuple(experimental_probes),
+                                                                                  instruction_type="two")
 
 trial_clock = core.Clock()
 task_solution_clock = core.Clock()
