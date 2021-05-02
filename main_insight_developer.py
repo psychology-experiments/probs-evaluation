@@ -5,7 +5,7 @@ import itertools
 from psychopy import core, event, visual
 from psychopy.hardware import keyboard
 
-from base import data_save, experiment_organisation_logic, experiment_organisation_stimuli, probe_views, task_views
+from base import data_save, experiment_organization_logic, experiment_organization_stimuli, probe_views, task_views
 
 MODE = "TEST"
 
@@ -51,8 +51,8 @@ def finish_experiment(window: visual.Window):
 
 win = visual.Window(size=(1200, 800), color="white", units="pix", fullscr=FULL_SCREEN)
 data_saver = data_save.DataSaver(save_fp="data/insight/test", experiment_part=data_save.ExperimentPart.INSIGHT)
-instruction = experiment_organisation_stimuli.InstructionImage(window=win, skip=SKIP_INSTRUCTION)
-organisation_message = experiment_organisation_stimuli.GeneralInstructions(fp="images/Инструкции/Общие",
+instruction = experiment_organization_stimuli.InstructionImage(window=win, skip=SKIP_INSTRUCTION)
+organisation_message = experiment_organization_stimuli.GeneralInstructions(fp="images/Инструкции/Общие",
                                                                            window=win,
                                                                            skip=SKIP_INSTRUCTION)
 
@@ -120,10 +120,10 @@ insight_task = task_views.InsightTask(window=win,
 # Начало эксперимента?
 # подготовка часов
 
-training_probe_sequence = experiment_organisation_logic.TrainingSequence(probes_sequence=tuple(all_probes),
+training_probe_sequence = experiment_organization_logic.TrainingSequence(probes_sequence=tuple(all_probes),
                                                                          trials=50,
                                                                          instruction_type="one")
-experiment_sequence = experiment_organisation_logic.ExperimentInsightTaskSequence(id_column="ID",
+experiment_sequence = experiment_organization_logic.ExperimentInsightTaskSequence(id_column="ID",
                                                                                   tasks_fp="text/insight tasks.csv",
                                                                                   probes=tuple(experimental_probes),
                                                                                   instruction_type="two")
@@ -277,6 +277,6 @@ for task_info, probe_info in experiment_sequence:
                 task_finished = True
                 break
 
-experiment_organisation_stimuli.EndMessage(win).show(5, experiment_clock)
+experiment_organization_stimuli.EndMessage(win).show(5, experiment_clock)
 data_saver.close()
 finish_experiment(window=win)

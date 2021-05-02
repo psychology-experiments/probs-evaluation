@@ -3,7 +3,7 @@ from typing import Tuple, Dict
 
 import pytest
 
-from base import experiment_organisation_logic
+from base import experiment_organization_logic
 
 
 class TestTrainingSequence:
@@ -31,7 +31,7 @@ class TestTrainingSequence:
     def test_equal_number_of_finite_trials_for_probes(self,
                                                       trials,
                                                       default_training_settings):
-        sequence = experiment_organisation_logic.TrainingSequence(**default_training_settings,
+        sequence = experiment_organization_logic.TrainingSequence(**default_training_settings,
                                                                   trials=trials)
 
         quantity_of_trials = []
@@ -45,7 +45,7 @@ class TestTrainingSequence:
     def test_custom_number_of_trials_for_probes(self,
                                                 trials,
                                                 default_training_settings):
-        sequence = experiment_organisation_logic.TrainingSequence(**default_training_settings,
+        sequence = experiment_organization_logic.TrainingSequence(**default_training_settings,
                                                                   trials=trials)
 
         quantity_of_trials = []
@@ -59,7 +59,7 @@ class TestTrainingSequence:
     def test_independence_of_trials_for_probes(self,
                                                training_trials,
                                                default_training_settings):
-        sequence = experiment_organisation_logic.TrainingSequence(**default_training_settings,
+        sequence = experiment_organization_logic.TrainingSequence(**default_training_settings,
                                                                   trials=training_trials)
 
         for _, _, trials in sequence:
@@ -74,7 +74,7 @@ class TestTrainingSequence:
 
     def test_chosen_correct_instructions(self, default_training_settings, probe_instructions):
         right_probes_info = probe_instructions
-        sequence = experiment_organisation_logic.TrainingSequence(**default_training_settings,
+        sequence = experiment_organization_logic.TrainingSequence(**default_training_settings,
                                                                   trials=1)
 
         for idx, (probe_name, instruction, number_of_trials) in enumerate(sequence):
@@ -126,7 +126,7 @@ class TestExperimentWMSequence:
         actual_probes_task_sequences = []
 
         for trial in range(trials_to_check_randomisation):
-            sequence = experiment_organisation_logic.ExperimentWMSequence(**default_experiment_settings)
+            sequence = experiment_organization_logic.ExperimentWMSequence(**default_experiment_settings)
             single_result = tuple((task.name, probe.name) for task, probe in sequence)
             actual_probes_task_sequences.append(single_result)
 
@@ -138,7 +138,7 @@ class TestExperimentWMSequence:
 
     def test_tasks_and_probe_instructions_are_correct(self, default_experiment_settings, instructions):
         right_task_instructions, right_probe_instructions = instructions
-        sequence = experiment_organisation_logic.ExperimentWMSequence(**default_experiment_settings)
+        sequence = experiment_organization_logic.ExperimentWMSequence(**default_experiment_settings)
 
         tasks_instructions_showed = {task: 0 for task in default_experiment_settings["tasks"]}
         for idx, (task, probe) in enumerate(sequence):
