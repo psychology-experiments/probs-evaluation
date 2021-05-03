@@ -149,16 +149,20 @@ class ParticipantInfoLinker:
     """
 
     def __init__(self, participants_info_fp: str):
-        self._participants_info = self._load_info(participants_info_fp)
-        info = dict(Испытуемый=self._participants_info)
+        self._participant_info_to_save_by = []
+        self._participants_info_to_show = self._load_info(participants_info_fp)
+        info = dict(Испытуемый=self._participants_info_to_show)
         dialog_title = "Выберите имя испытуемого из первой части эксперимента"
-        self.filled_info = gui.DlgFromDict(dictionary=info, title=dialog_title).dictionary
+        self._filled_info = gui.DlgFromDict(dictionary=info, title=dialog_title).dictionary
+
+        index = self._participants_info_to_show.index(self._filled_info["Испытуемый"])
+        self.participant_wm_file = self._participant_info_to_save_by[index]
 
     def _load_info(self, fp) -> List[str]:
         with open(fp, mode="r", encoding="UTF-8") as csv_file:
             csv_reader = csv.DictReader(csv_file)
 
-            only_finished_first_part = []
+            only_finished_first_part_to_choose_from = []
             for row in csv_reader:
                 name, wm_file, insight_file = row["participant"], row["WM_name"], row["Insight_name"]
 
@@ -167,8 +171,9 @@ class ParticipantInfoLinker:
                 if insight_file != "":
                     continue
 
-                only_finished_first_part.append(f"{name} (файл {wm_file})")
-        return only_finished_first_part
+                only_finished_first_part_to_choose_from.append(f"{name} (файл {wm_file})")
+                self._participant_info_to_save_by.append(wm_file)
+        return only_finished_first_part_to_choose_from
 
     @staticmethod
     def _check_data(name, wm_file):
