@@ -1,5 +1,7 @@
+import csv
 from enum import Enum
-from typing import List, Optional
+import os
+from typing import List, Optional, Dict
 
 from psychopy import data
 
@@ -10,7 +12,24 @@ class ExperimentPart(Enum):
 
 
 class ExperimentFirstPartParticipantInfoSaver:
-    pass
+    def __init__(self,
+                 participant_data_filename: str,
+                 participants_info_fp: str,
+                 participant_name: str,
+                 participant_age: str,
+                 participant_gender: str):
+        self._participant_data_filename = os.path.basename(participant_data_filename) + ".csv"
+        self._participants_info_fp = participants_info_fp
+
+        self._participant_id = f"{participant_name} {participant_age} {participant_gender}"
+
+    def save(self):
+        with open(self._participants_info_fp, mode="a", encoding="UTF-8", newline="") as csv_file:
+            csv_writer = csv.DictWriter(csv_file, fieldnames=["participant", "WM_name", "Insight_name"])
+            row_info = dict(participant=self._participant_id,
+                            WM_name=self._participant_data_filename,
+                            Insight_name="")
+            csv_writer.writerow(row_info)
 
 
 class DataSaver:
