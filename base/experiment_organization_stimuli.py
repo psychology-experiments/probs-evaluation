@@ -1,6 +1,7 @@
+import csv
 from itertools import cycle
 import os
-from typing import Optional, Iterator, Dict
+from typing import Optional, Iterator, Dict, List
 
 from psychopy.hardware import keyboard
 from psychopy import core, gui, visual
@@ -150,5 +151,31 @@ class ParticipantInfoLinker:
     Class used in second part of experiment to link data from first and second part of experiment
     """
 
-    def __init__(self):
-        pass
+    def __init__(self, participants_info_fp: str):
+        self._participants_info = self._load_info(participants_info_fp)
+        info = dict(Испытуемый=self._participants_info)
+        dialog_title = "Выберите имя испытуемого из первой части эксперимента"
+        self.filled_info = gui.DlgFromDict(dictionary=info, title=dialog_title).dictionary
+
+    def _load_info(self, fp) -> List[str]:
+        with open(fp, mode="r", encoding="UTF-8") as csv_file:
+            csv_reader = csv.DictReader(csv_file)
+
+            only_finished_first_part = []
+            for row in csv_reader:
+                name, wm_file, insight_file = row["participant"], row["WM_name"], row["Insight_name"]
+
+                self._check_data(name, wm_file)
+
+                if insight_file != "":
+                    continue
+
+                only_finished_first_part.append(f"{name} (файл {wm_file})")
+        return only_finished_first_part
+
+    @staticmethod
+    def _check_data(name, wm_file):
+        if name == "" or wm_file == "":
+            raise ValueError(f"В файле с идентификторами испытуемых ошибка:\n"
+                             f"должны быть заполнены первый и второй столбец, а вместо этого\n"
+                             f"[{name}, {wm_file}]")
