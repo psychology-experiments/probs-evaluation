@@ -133,6 +133,10 @@ class EndMessage:
 
 
 class ParticipantInfoGetter:
+    """
+    Class used in first part of experiment to get necessary info about participant
+    """
+
     def __init__(self):
         info = dict(ФИО="", Возраст="", Пол=["Ж", "М"])
         self._filled_info = gui.DlgFromDict(dictionary=info, order=["ФИО", "Возраст", "Пол"]).dictionary
