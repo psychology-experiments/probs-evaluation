@@ -32,6 +32,10 @@ class ExperimentFirstPartParticipantInfoSaver:
             csv_writer.writerow(row_info)
 
 
+class ExperimentSecondPartParticipantInfoSaver:
+    pass
+
+
 class DataSaver:
     def __init__(self,
                  save_fp: str,
