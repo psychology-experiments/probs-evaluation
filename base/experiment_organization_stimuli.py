@@ -143,3 +143,12 @@ class ParticipantInfoGetter:
 
     def get_info(self) -> Dict[str, str]:
         return self._filled_info
+
+
+class ParticipantInfoLinker:
+    """
+    Class used in second part of experiment to link data from first and second part of experiment
+    """
+
+    def __init__(self):
+        pass
