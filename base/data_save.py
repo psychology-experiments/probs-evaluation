@@ -9,7 +9,7 @@ class ExperimentPart(Enum):
     INSIGHT = "Insight"
 
 
-class ExperimentPartDataSaver:
+class ExperimentFirstPartParticipantInfoSaver:
     pass
 
 
