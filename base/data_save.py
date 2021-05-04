@@ -66,15 +66,11 @@ class ExperimentSecondPartParticipantInfoSaver:
 class DataSaver:
     def __init__(self,
                  save_fp: str,
-                 experiment_part: ExperimentPart):
+                 experiment_part: ExperimentPart,
+                 participant_info: Dict[str, str]):
         if experiment_part not in ExperimentPart:
             parts = [part for part in ExperimentPart.__members__.keys()]
             raise ValueError(f'experiment_part must be one of {parts}')
-
-        self._saver = data.ExperimentHandler(dataFileName=save_fp,
-                                             version="2020.2.10",  # TODO: указать правильную версию
-                                             autoLog=False,
-                                             savePickle=False)
 
         # TODO: find a way to implement data_to_save cleaner
         data_to_save = ["experiment_part",
@@ -87,12 +83,34 @@ class DataSaver:
                         "is_correct",
                         "time_from_experiment_start",
                         ]
+
         if experiment_part is ExperimentPart.WM:
             # TODO: add info about subtasks
             data_to_save.insert(2, "combination_number")
             data_to_save.insert(4, "task_trial")
+
+            self._participant_part_info_saver = ExperimentFirstPartParticipantInfoSaver(
+                participant_data_filename=save_fp,
+                participants_info_fp="data/participants info.csv",
+                participant_name=participant_info["ФИО"],
+                participant_age=participant_info["Возраст"],
+                participant_gender=participant_info["Пол"],
+            )
+
         else:
             data_to_save.insert(3, "task_type")
+            self._participant_part_info_saver = ExperimentSecondPartParticipantInfoSaver(
+                chosen_wm_file_name=participant_info["wm_file_name"],
+                insight_file_name=save_fp,
+                participants_info_fp="data/participants info.csv",
+            )
+            del participant_info["wm_file_name"]
+
+        self._saver = data.ExperimentHandler(dataFileName=save_fp,
+                                             extraInfo=participant_info,
+                                             version="2020.2.10",  # TODO: указать правильную версию
+                                             autoLog=False,
+                                             savePickle=False)
 
         self._saver.dataNames = data_to_save
 
@@ -195,4 +213,5 @@ class DataSaver:
         self._saver.nextEntry()
 
     def close(self):
+        self._participant_part_info_saver.save()
         self._saver.close()
