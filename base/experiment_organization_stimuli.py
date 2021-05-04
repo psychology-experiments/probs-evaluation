@@ -194,5 +194,5 @@ class ParticipantInfoLinker:
 
     @staticmethod
     def _extract_participant_info(name_age_gender):
-        name, age, gender = name_age_gender.split()
+        name, age, gender = name_age_gender.rsplit(maxsplit=2)
         return dict(ФИО=name, Возраст=age, Пол=gender)
