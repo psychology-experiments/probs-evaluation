@@ -19,6 +19,7 @@ SKIP_INSTRUCTION = SETTINGS.getboolean("skip_instruction")
 SKIP_PROBE_TRAINING = SETTINGS.getboolean("skip_probe_training")
 SKIP_TASK_TRAINING = SETTINGS.getboolean("skip_task_training")
 SKIP_EXPERIMENTAL_TASK = SETTINGS.getboolean("skip_experimental_task")
+SKIP_PARTICIPANT_INFO_DIALOG = SETTINGS.getboolean("skip_participant_info_dialog")
 
 FRAME_TOLERANCE = 0.001  # how close to onset before 'same' frame TODO: проверить что используется правильно
 PROBE_START = 0.1
@@ -50,8 +51,19 @@ def finish_experiment(window: visual.Window):
         core.quit()
 
 
+if not SKIP_PARTICIPANT_INFO_DIALOG:
+    info_dialog = experiment_organization_stimuli.ParticipantInfoLinker(
+        participants_info_fp='data/participants info.csv')
+    if info_dialog.is_canceled:
+        core.quit()
+    participant_info = info_dialog.filled_info
+else:
+    participant_info = dict(ФИО="тест Insight", Возраст="тестовый_19", Пол="тестовый_танк")
+
 win = visual.Window(size=(1200, 800), color="white", units="pix", fullscr=FULL_SCREEN)
-data_saver = data_save.DataSaver(save_fp="data/insight/test", experiment_part=data_save.ExperimentPart.INSIGHT)
+data_saver = data_save.DataSaver(save_fp="data/insight/test",
+                                 experiment_part=data_save.ExperimentPart.INSIGHT,
+                                 participant_info=participant_info)
 instruction = experiment_organization_stimuli.InstructionImage(window=win, skip=SKIP_INSTRUCTION)
 organisation_message = experiment_organization_stimuli.GeneralInstructions(fp="images/Инструкции/Общие/Insight",
                                                                            window=win,
