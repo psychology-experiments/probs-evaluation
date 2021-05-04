@@ -62,7 +62,7 @@ class ExperimentSecondPartParticipantInfoSaver:
                 if row["WM_name"] == self._chosen_wm_file_name:
                     row["Insight_name"] = self._insight_file_name
 
-            updated_data.append(row)
+                updated_data.append(row)
 
         return updated_data
 
