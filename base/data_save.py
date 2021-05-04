@@ -1,6 +1,5 @@
 import csv
 from enum import Enum
-import fileinput
 import os
 from typing import List, Optional, Dict
 
