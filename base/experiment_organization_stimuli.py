@@ -195,6 +195,7 @@ class ParticipantInfoLinker:
 
     @staticmethod
     def _extract_participant_info(name_age_gender):
+        # TODO: add verification about data
         name, age, gender = name_age_gender.rsplit(maxsplit=2)
         return dict(ФИО=name, Возраст=age, Пол=gender)
 
