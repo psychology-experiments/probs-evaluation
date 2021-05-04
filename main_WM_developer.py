@@ -19,6 +19,7 @@ SKIP_INSTRUCTION = SETTINGS.getboolean("skip_instruction")
 SKIP_PROBE_TRAINING = SETTINGS.getboolean("skip_probe_training")
 SKIP_TASK_TRAINING = SETTINGS.getboolean("skip_task_training")
 SKIP_EXPERIMENTAL_TASK = SETTINGS.getboolean("skip_experimental_task")
+SKIP_PARTICIPANT_INFO_DIALOG = SETTINGS.getboolean("skip_participant_info_dialog")
 
 TASKS_SIZE = dict(Обновление=dict(word_size=40, example_size=40, answer_size=30))
 TRAINING_TRAILS_QTY = dict(Обновление=1, Переключение=10, Торможение=2)
