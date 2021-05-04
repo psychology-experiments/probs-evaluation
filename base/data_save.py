@@ -38,7 +38,7 @@ class ExperimentSecondPartParticipantInfoSaver:
                  insight_file_name: str,
                  participants_info_fp: str):
         self._chosen_wm_file_name = chosen_wm_file_name
-        self._insight_file_name = insight_file_name
+        self._insight_file_name = os.path.basename(insight_file_name) + ".csv"
         self._participants_info_fp = participants_info_fp
 
     def save(self):
