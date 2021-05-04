@@ -140,7 +140,12 @@ class ParticipantInfoGetter:
 
     def __init__(self):
         info = dict(ФИО="", Возраст="", Пол=["Ж", "М"])
-        self.filled_info = gui.DlgFromDict(dictionary=info, order=["ФИО", "Возраст", "Пол"]).dictionary
+        self._dialog = gui.DlgFromDict(dictionary=info, order=["ФИО", "Возраст", "Пол"])
+        self.filled_info = self._dialog.dictionary
+
+    @property
+    def is_canceled(self):
+        return not self._dialog.OK
 
 
 class ParticipantInfoLinker:
