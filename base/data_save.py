@@ -88,13 +88,14 @@ class DataSaver:
                         "time_from_experiment_start",
                         ]
 
+        file_name = f"{save_fp}_{data.getDateStr()}"
         if experiment_part is ExperimentPart.WM:
             # TODO: add info about subtasks
             data_to_save.insert(2, "combination_number")
             data_to_save.insert(4, "task_trial")
 
             self._participant_part_info_saver = ExperimentFirstPartParticipantInfoSaver(
-                participant_data_filename=save_fp,
+                participant_data_filename=file_name,
                 participants_info_fp="data/participants info.csv",
                 participant_name=participant_info["ФИО"],
                 participant_age=participant_info["Возраст"],
@@ -105,12 +106,12 @@ class DataSaver:
             data_to_save.insert(3, "task_type")
             self._participant_part_info_saver = ExperimentSecondPartParticipantInfoSaver(
                 chosen_wm_file_name=participant_info["wm_file_name"],
-                insight_file_name=save_fp,
+                insight_file_name=file_name,
                 participants_info_fp="data/participants info.csv",
             )
             del participant_info["wm_file_name"]
 
-        self._saver = data.ExperimentHandler(dataFileName=save_fp,
+        self._saver = data.ExperimentHandler(dataFileName=file_name,
                                              extraInfo=participant_info,
                                              version="2020.2.10",  # TODO: указать правильную версию
                                              autoLog=False,
