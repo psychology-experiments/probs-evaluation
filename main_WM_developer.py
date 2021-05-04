@@ -74,7 +74,7 @@ if not SKIP_PARTICIPANT_INFO_DIALOG:
         core.quit()
     participant_info = info_dialog.filled_info
 else:
-    participant_info = dict(ФИО="тест", Возраст="тестовый_17", Пол="тестовый_вертолёт")
+    participant_info = dict(ФИО="тест WM", Возраст="тестовый_17", Пол="тестовый_вертолёт")
 
 win = visual.Window(size=(1200, 800), color="white", units="pix", fullscr=FULL_SCREEN)
 data_saver = data_save.DataSaver(save_fp="data/WM/test",
