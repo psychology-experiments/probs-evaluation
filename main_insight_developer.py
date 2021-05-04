@@ -61,7 +61,7 @@ else:
     participant_info = dict(ФИО="тест Insight", Возраст="тестовый_19", Пол="тестовый_танк")
 
 win = visual.Window(size=(1200, 800), color="white", units="pix", fullscr=FULL_SCREEN)
-data_saver = data_save.DataSaver(save_fp="data/insight/test",
+data_saver = data_save.DataSaver(save_fp=f"data/insight/{participant_info['ФИО']}",
                                  experiment_part=data_save.ExperimentPart.INSIGHT,
                                  participant_info=participant_info)
 instruction = experiment_organization_stimuli.InstructionImage(window=win, skip=SKIP_INSTRUCTION)
