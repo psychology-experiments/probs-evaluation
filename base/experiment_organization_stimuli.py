@@ -159,7 +159,8 @@ class ParticipantInfoLinker:
         self._participants_info_to_show = self._load_info(participants_info_fp)
         info = dict(Испытуемый=self._participants_info_to_show)
         dialog_title = "Выберите имя испытуемого из первой части эксперимента"
-        self._filled_info = gui.DlgFromDict(dictionary=info, title=dialog_title).dictionary
+        self._dialog = gui.DlgFromDict(dictionary=info, title=dialog_title)
+        self._filled_info = self._dialog.dictionary
 
         index = self._participants_info_to_show.index(self._filled_info["Испытуемый"])
         participant_wm_file = self._participant_info_to_save_by[index]
@@ -196,3 +197,7 @@ class ParticipantInfoLinker:
     def _extract_participant_info(name_age_gender):
         name, age, gender = name_age_gender.rsplit(maxsplit=2)
         return dict(ФИО=name, Возраст=age, Пол=gender)
+
+    @property
+    def is_canceled(self):
+        return not self._dialog.OK
