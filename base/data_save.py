@@ -111,6 +111,7 @@ class DataSaver:
             )
             del participant_info["wm_file_name"]
 
+        participant_info["date_info"] = file_name
         self._saver = data.ExperimentHandler(dataFileName=file_name,
                                              extraInfo=participant_info,
                                              version="2020.2.10",  # TODO: указать правильную версию
