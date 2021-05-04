@@ -150,13 +150,17 @@ class ParticipantInfoLinker:
 
     def __init__(self, participants_info_fp: str):
         self._participant_info_to_save_by = []
+        self._participant_name_ids = []
         self._participants_info_to_show = self._load_info(participants_info_fp)
         info = dict(Испытуемый=self._participants_info_to_show)
         dialog_title = "Выберите имя испытуемого из первой части эксперимента"
         self._filled_info = gui.DlgFromDict(dictionary=info, title=dialog_title).dictionary
 
         index = self._participants_info_to_show.index(self._filled_info["Испытуемый"])
-        self.participant_wm_file = self._participant_info_to_save_by[index]
+        participant_wm_file = self._participant_info_to_save_by[index]
+        participant_info = self._extract_participant_info(self._participant_name_ids[index])
+        participant_info.update(dict(wm_file_name=participant_wm_file))
+        self.filled_info = participant_info
 
     def _load_info(self, fp) -> List[str]:
         with open(fp, mode="r", encoding="UTF-8") as csv_file:
@@ -164,15 +168,16 @@ class ParticipantInfoLinker:
 
             only_finished_first_part_to_choose_from = []
             for row in csv_reader:
-                name, wm_file, insight_file = row["participant"], row["WM_name"], row["Insight_name"]
+                name_age_gender, wm_file, insight_file = row["participant"], row["WM_name"], row["Insight_name"]
 
-                self._check_data(name, wm_file)
+                self._check_data(name_age_gender, wm_file)
 
                 if insight_file != "":
                     continue
 
-                only_finished_first_part_to_choose_from.append(f"{name} (файл {wm_file})")
+                only_finished_first_part_to_choose_from.append(f"{name_age_gender} (файл {wm_file})")
                 self._participant_info_to_save_by.append(wm_file)
+                self._participant_name_ids.append(name_age_gender)
         return only_finished_first_part_to_choose_from
 
     @staticmethod
@@ -181,3 +186,8 @@ class ParticipantInfoLinker:
             raise ValueError(f"В файле с идентификторами испытуемых ошибка:\n"
                              f"должны быть заполнены первый и второй столбец, а вместо этого\n"
                              f"[{name}, {wm_file}]")
+
+    @staticmethod
+    def _extract_participant_info(name_age_gender):
+        name, age, gender = name_age_gender.split()
+        return dict(ФИО=name, Возраст=age, Пол=gender)
