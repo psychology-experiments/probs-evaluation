@@ -68,8 +68,18 @@ def finish_experiment(window: visual.Window):
         core.quit()
 
 
+if not SKIP_PARTICIPANT_INFO_DIALOG:
+    info_dialog = experiment_organization_stimuli.ParticipantInfoGetter()
+    if info_dialog.is_canceled:
+        core.quit()
+    participant_info = info_dialog.filled_info
+else:
+    participant_info = dict(ФИО="тест", Возраст="тестовый_17", Пол="тестовый_вертолёт")
+
 win = visual.Window(size=(1200, 800), color="white", units="pix", fullscr=FULL_SCREEN)
-data_saver = data_save.DataSaver(save_fp="data/WM/test", experiment_part=data_save.ExperimentPart.WM)
+data_saver = data_save.DataSaver(save_fp="data/WM/test",
+                                 experiment_part=data_save.ExperimentPart.WM,
+                                 participant_info=participant_info)
 instruction = experiment_organization_stimuli.InstructionImage(window=win, skip=SKIP_INSTRUCTION)
 organisation_message = experiment_organization_stimuli.GeneralInstructions(fp="images/Инструкции/Общие",
                                                                            window=win,
