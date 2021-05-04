@@ -208,8 +208,8 @@ class DataSaver:
         self._saver.addData("stage", "experimental")
         if self._experiment_part == ExperimentPart.WM:
             self._saver.addData("combination_number", self._combination_number)
+            self._saver.addData("task_trial", self._task_trial)
 
-        self._saver.addData("task_trial", self._task_trial)
         self._saver.addData("task", self._task)
         if self._experiment_part == ExperimentPart.INSIGHT:
             self._saver.addData("task_type", self._task_type)
