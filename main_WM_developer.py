@@ -81,7 +81,7 @@ data_saver = data_save.DataSaver(save_fp="data/WM/test",
                                  experiment_part=data_save.ExperimentPart.WM,
                                  participant_info=participant_info)
 instruction = experiment_organization_stimuli.InstructionImage(window=win, skip=SKIP_INSTRUCTION)
-organisation_message = experiment_organization_stimuli.GeneralInstructions(fp="images/Инструкции/Общие",
+organisation_message = experiment_organization_stimuli.GeneralInstructions(fp="images/Инструкции/Общие/WM",
                                                                            window=win,
                                                                            skip=SKIP_INSTRUCTION)
 
