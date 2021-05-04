@@ -58,6 +58,7 @@ if not SKIP_PARTICIPANT_INFO_DIALOG:
         core.quit()
     participant_info = info_dialog.filled_info
 else:
+    # TODO: так работать тестовый режим не будет
     participant_info = dict(ФИО="тест Insight", Возраст="тестовый_19", Пол="тестовый_танк")
 
 win = visual.Window(size=(1200, 800), color="white", units="pix", fullscr=FULL_SCREEN)
