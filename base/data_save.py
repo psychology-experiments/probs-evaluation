@@ -24,8 +24,12 @@ class ExperimentFirstPartParticipantInfoSaver:
         self._participant_id = f"{participant_name} {participant_age} {participant_gender}"
 
     def save(self):
+        is_info_file_exist = os.path.exists(self._participants_info_fp)
         with open(self._participants_info_fp, mode="a", encoding="UTF-8", newline="") as csv_file:
             csv_writer = csv.DictWriter(csv_file, fieldnames=["participant", "WM_name", "Insight_name"])
+
+            if not is_info_file_exist:
+                csv_writer.writeheader()
             row_info = dict(participant=self._participant_id,
                             WM_name=self._participant_data_filename,
                             Insight_name="")
