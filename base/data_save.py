@@ -1,5 +1,6 @@
 import csv
 from enum import Enum
+import fileinput
 import os
 from typing import List, Optional, Dict
 
@@ -33,7 +34,34 @@ class ExperimentFirstPartParticipantInfoSaver:
 
 
 class ExperimentSecondPartParticipantInfoSaver:
-    pass
+    def __init__(self,
+                 chosen_wm_file_name: str,
+                 insight_file_name: str,
+                 participants_info_fp: str):
+        self._chosen_wm_file_name = chosen_wm_file_name
+        self._insight_file_name = insight_file_name
+        self._participants_info_fp = participants_info_fp
+
+    def save(self):
+        updated_data = self._read_and_add_info()
+        header = list(updated_data[0].keys())
+        with open(file=self._participants_info_fp, mode="w", encoding="UTF-8", newline="") as csv_file:
+            csv_writer = csv.DictWriter(csv_file, fieldnames=header)
+            csv_writer.writeheader()
+            csv_writer.writerows(updated_data)
+
+    def _read_and_add_info(self) -> List[Dict[str, str]]:
+        with open(file=self._participants_info_fp, mode="r", encoding="UTF-8", newline="") as csv_file:
+            csv_reader = csv.DictReader(csv_file)
+
+            updated_data = []
+            for row in csv_reader:
+                if row["WM_name"] == self._chosen_wm_file_name:
+                    row["Insight_name"] = self._insight_file_name
+
+            updated_data.append(row)
+
+        return updated_data
 
 
 class DataSaver:
