@@ -8,8 +8,8 @@ from PIL import Image
 logging.basicConfig(stream=sys.stdout, level=logging.INFO)
 
 START_FOLDER = "../images"
-WIDTH = 100
-HEIGHT = 100
+WIDTH = 128
+HEIGHT = 128
 
 
 def get_name_and_ext(name):
@@ -17,7 +17,7 @@ def get_name_and_ext(name):
 
 
 def save_as_png(image: Image,
-                width:  Optional[int] = None,
+                width: Optional[int] = None,
                 height: Optional[int] = None,
                 convert_from: str = "jpg",
                 convert_to: str = "png"):
