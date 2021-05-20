@@ -39,7 +39,7 @@ def save_as_png(image: Image,
     resized_image.close()
     image.close()
 
-    if extension == convert_from:
+    if extension == f".{convert_from}":
         os.remove(path=file_path)
     elif extension.endswith(convert_to):
         pass
@@ -51,8 +51,9 @@ def save_as_png(image: Image,
 
 
 for address, _, files in os.walk(START_FOLDER):
-    if address not in ("../images\Обновление", "../images\Переключение"):
+    if address not in ("../images\Обновление", "../images\Переключение", "../images\Выбор из 2 альтернатив"):
         continue
+
     for file in files:
         fp = os.path.join(address, file)
 
