@@ -2,7 +2,7 @@ from itertools import product
 
 from PIL import Image, ImageFont, ImageDraw
 
-TEXT_SIZE = (200, 100)
+TEXT_SIZE = (200, 128)
 COLOR_MODE = "RGBA"
 TEXT_FONT_INFO = dict(font='C:/Windows/fonts/Arial.ttf', size=50)
 BASE_COLOR = (0, 0, 0, 0)
@@ -12,14 +12,9 @@ def get_text_dimensions(text_string, font, obj):
     # https://stackoverflow.com/a/46220683/9263761
     ascent, descent = font.getmetrics()
 
-    text_width = font.getmask(text_string).getbbox()[2]
-    text_height = font.getmask(text_string).getbbox()[3] + descent
+    (width, baseline), (offset_x, offset_y) = font.font.getsize(text_string)
 
-    print("new", text_width, text_height)
-
-    text_width, text_height = obj.textsize(text_string, font)
-    print("old", text_width, text_height)
-    return text_width, text_height
+    return width, ascent + offset_y
 
 
 colors_rgb = dict(R=(255, 0, 0), G=(0, 255, 0), B=(0, 0, 255), Y=(255, 255, 0))
